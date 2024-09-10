@@ -7,13 +7,13 @@ import jakarta.persistence.Table
 
 @Table(name = "account_roles")
 @Entity
-class AccountRoleJpaEntity(
+class AccountRoleEntity(
 
     @EmbeddedId
     val id: AccountRoleId,
 
     @ManyToOne
-    val accountJpaEntity: AccountJpaEntity,
+    val accountEntity: AccountEntity,
 
     @ManyToOne
-    val roleJpaEntity: RoleJpaEntity)
+    val roleEntity: RoleEntity)

@@ -6,7 +6,7 @@ import org.sam.lms.infra.persistence.AuditEntity
 
 @Table(name = "role")
 @Entity
-class RoleJpaEntity(
+class RoleEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,

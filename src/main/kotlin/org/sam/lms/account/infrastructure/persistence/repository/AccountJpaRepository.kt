@@ -1,18 +1,18 @@
 package org.sam.lms.account.infrastructure.persistence.repository
 
 import org.sam.lms.account.domain.AccountRepository
-import org.sam.lms.account.infrastructure.persistence.entity.AccountJpaEntity
+import org.sam.lms.account.infrastructure.persistence.entity.AccountEntity
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import java.util.Optional
 
-interface AccountJpaRepository : JpaRepository<AccountJpaEntity, Long>, AccountRepository {
+interface AccountJpaRepository : AccountRepository, JpaRepository<AccountEntity, Long> {
 
     @Query("SELECT account, role " +
-            "FROM AccountJpaEntity account " +
+            "FROM AccountEntity account " +
             "JOIN FETCH account.accountRoles accountRole " +
-            "JOIN FETCH accountRole.roleJpaEntity role " +
+            "JOIN FETCH accountRole.roleEntity role " +
             "WHERE account.email = :email")
-    override fun findByEmail(email: String): Optional<AccountJpaEntity>
+    override fun findByEmail(email: String): Optional<AccountEntity>
 
 }

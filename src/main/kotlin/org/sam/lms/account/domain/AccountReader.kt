@@ -1,7 +1,5 @@
-package org.sam.lms.account.infrastructure.persistence.repository
+package org.sam.lms.account.domain
 
-import org.sam.lms.account.domain.Account
-import org.sam.lms.account.domain.AccountRepository
 import org.sam.lms.common.exception.ErrorCode
 import org.sam.lms.common.exception.NotFoundException
 import org.springframework.stereotype.Component

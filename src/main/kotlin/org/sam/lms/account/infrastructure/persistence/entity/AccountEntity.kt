@@ -6,7 +6,7 @@ import org.sam.lms.infra.persistence.AuditEntity
 
 @Table(name = "account")
 @Entity
-class AccountJpaEntity(
+class AccountEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
@@ -21,14 +21,14 @@ class AccountJpaEntity(
     val password: String,
 
     @OneToMany
-    val accountRoles: Set<AccountRoleJpaEntity> = setOf(),
+    val accountRoles: Set<AccountRoleEntity> = setOf(),
 ) : AuditEntity() {
     fun toDomain(): Account {
         return Account(
             id = this.id,
             email = this.email,
             name = this.name,
-            role = this.accountRoles.first().roleJpaEntity.name,
+            role = this.accountRoles.first().roleEntity.name,
             password = this.password
         )
     }

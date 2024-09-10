@@ -8,7 +8,7 @@ import org.sam.lms.infra.persistence.AuditEntity
 
 @Table(name = "course")
 @Entity
-class CourseJpaEntity(
+class CourseEntity(
     @Id
     val id: Long,
     @Column(nullable = false, columnDefinition = "varchar")

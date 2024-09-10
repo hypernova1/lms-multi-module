@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-class CourseJpaEntityServiceTest {
+class CourseEntityServiceTest {
 
     @Test
     @DisplayName("강의를 등록한다")
