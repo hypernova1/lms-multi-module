@@ -1,4 +1,13 @@
 package org.sam.lms.account.domain
 
-class Account(val id: Long, val email: String, val name: String, val role: RoleName, val password: String) {
+import java.time.LocalDateTime
+
+class Account(
+    val id: Long,
+    val email: String,
+    var name: String,
+    val role: RoleName,
+    var password: String,
+    val createdDate: LocalDateTime = LocalDateTime.now()
+) {
 }

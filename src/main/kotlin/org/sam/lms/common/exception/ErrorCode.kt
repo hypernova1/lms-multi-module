@@ -10,6 +10,6 @@ enum class ErrorCode(val code: String, val message: String) {
     ACCOUNT_MISMATCH("2000", "계정 정보가 일치하지 않습니다."),
     UNAUTHORIZED_TOKEN("2001", "토큰 정보가 유효하지 않습니다."),
 
-    // 요청
-    MISMATCH_PARAMETER("3000", ""),
+    // 카테고리
+    CATEGORY_NOT_FOUND("3000", "카테고리가 존재하지 않습니다."),
 }
