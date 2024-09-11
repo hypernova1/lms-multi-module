@@ -5,7 +5,7 @@ import jakarta.persistence.Entity
 import jakarta.persistence.ManyToOne
 
 @Entity
-class CourseCategory(
+class CourseCategoryEntity(
     @EmbeddedId
     val id: CourseCategoryId,
 

@@ -11,7 +11,7 @@ class CourseProcessor(private val courseRepository: CourseRepository) {
     }
 
     fun toEntity(course: Course): CourseEntity {
-        return CourseEntity(title = course.title, description = course.description, accountId = course.teacher.id)
+        return CourseEntity(title = course.title, description = course.description, accountId = course.teacherId)
     }
 
 }

@@ -17,7 +17,7 @@ class CourseController(private val courseService: CourseService) {
     @Secured("ROLE_TEACHER")
     @PostMapping
     fun create(@RequestBody createCourseDto: CreateCourseDto, @AuthUser account: Account) {
-        this.courseService.create(createCourseDto, account)
+        this.courseService.create(createCourseDto, account.id)
     }
 
 }
