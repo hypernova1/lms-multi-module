@@ -15,7 +15,7 @@ class Course(
 ) {
 
     fun update(updateCourseDto: UpdateCourseDto, category: Category, accountId: Long) {
-        if (!this.isModified(accountId)) {
+        if (!this.isModifiable(accountId)) {
             throw ForbiddenException()
         }
 
@@ -25,7 +25,7 @@ class Course(
         this.category = category
     }
 
-    private fun isModified(accountId: Long): Boolean {
+    private fun isModifiable(accountId: Long): Boolean {
         return this.teacherId == accountId;
     }
 
