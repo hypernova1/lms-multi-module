@@ -34,6 +34,7 @@ class CourseEntity(
                 this.courseCategories[0].categoryEntity.id,
                 this.courseCategories[0].categoryEntity.name
             ),
+            visible = this.visible,
             teacherId = this.accountId
         )
     }

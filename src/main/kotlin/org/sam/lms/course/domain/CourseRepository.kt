@@ -13,4 +13,6 @@ interface CourseRepository {
             "JOIN FETCH courseCategory.categoryEntity category " +
             "WHERE course.id = :id")
     fun findById(id: Long): Optional<CourseEntity>
+
+    fun deleteById(id: Long)
 }

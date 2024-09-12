@@ -13,4 +13,6 @@ enum class ErrorCode(val code: String, val message: String) {
     // 카테고리
     CATEGORY_NOT_FOUND("3000", "카테고리가 존재하지 않습니다."),
     COURSE_NOT_FOUND("3001", "강의가 존재하지 않습니다."),
+    ALREADY_VISIBLE("3002", "이미 오픈된 강의입니다."),
+    EXISTS_STUDENTS("3003", "수강 중인 학생이 존재합니다.")
 }

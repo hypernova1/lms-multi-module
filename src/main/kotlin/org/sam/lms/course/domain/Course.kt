@@ -1,5 +1,7 @@
 package org.sam.lms.course.domain
 
+import org.sam.lms.common.exception.ConflictException
+import org.sam.lms.common.exception.ErrorCode
 import org.sam.lms.common.exception.ForbiddenException
 import org.sam.lms.course.application.payload.`in`.CreateCourseDto
 import org.sam.lms.course.application.payload.`in`.UpdateCourseDto
@@ -11,13 +13,12 @@ class Course(
     var numberOfStudents: Int = 0,
     var category: Category,
     var price: Int = 0,
+    var visible: Boolean = false,
     val teacherId: Long,
 ) {
 
     fun update(updateCourseDto: UpdateCourseDto, category: Category, accountId: Long) {
-        if (!this.isModifiable(accountId)) {
-            throw ForbiddenException()
-        }
+        this.checkUpdatePermission(accountId)
 
         this.title = updateCourseDto.title
         this.description = updateCourseDto.description
@@ -25,8 +26,18 @@ class Course(
         this.category = category
     }
 
-    private fun isModifiable(accountId: Long): Boolean {
-        return this.teacherId == accountId;
+    fun open(accountId: Long) {
+        this.checkUpdatePermission(accountId)
+        if (this.visible) {
+            throw ConflictException(ErrorCode.ALREADY_VISIBLE)
+        }
+        this.visible = true
+    }
+
+    fun checkUpdatePermission(accountId: Long) {
+        if (this.teacherId != accountId) {
+            throw ForbiddenException()
+        }
     }
 
     companion object {

@@ -9,3 +9,9 @@
 * Application Layer는 Repository가 아닌 Reader, Processor를 의존한다.
   * Reader: Repository에서 읽어온 데이터를 Domain으로 변환한 후 반환한다.
   * Processor: Application Layer에서 받아온 Domain을 Entity로 변환한 후 저장한다. 
+
+## 구현
+  * [ ] 기본적인 API 기능 완성
+    * 강의, 수강, 교사, 학생
+  * [ ] 각 애그리거트를 모듈로 분리
+  * [ ] MSA 적용

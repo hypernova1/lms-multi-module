@@ -14,4 +14,8 @@ class CourseProcessor(private val courseRepository: CourseRepository) {
         return CourseEntity(title = course.title, description = course.description, accountId = course.teacherId)
     }
 
+    fun delete(id: Long) {
+        this.courseRepository.deleteById(id)
+    }
+
 }

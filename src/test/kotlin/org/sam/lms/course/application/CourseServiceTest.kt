@@ -10,13 +10,10 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
-import org.sam.lms.account.domain.Account
-import org.sam.lms.account.domain.RoleName
 import org.sam.lms.common.exception.ForbiddenException
 import org.sam.lms.course.application.payload.`in`.CreateCourseDto
 import org.sam.lms.course.application.payload.`in`.UpdateCourseDto
 import org.sam.lms.course.domain.*
-import java.time.LocalDateTime
 
 @ExtendWith(MockitoExtension::class)
 class CourseServiceTest {
@@ -59,7 +56,7 @@ class CourseServiceTest {
 
 
         `when`(categoryReader.findById(2L)).thenReturn(Category(2L, "카테고리 2"))
-        `when`(courseReader.findById(1L)).thenReturn(course)
+        `when`(courseReader.findOne(1L)).thenReturn(course)
 
         val categorySummary = courseService.update(dto, 1)
 
@@ -76,7 +73,7 @@ class CourseServiceTest {
 
 
         `when`(categoryReader.findById(2L)).thenReturn(Category(2L, "카테고리 2"))
-        `when`(courseReader.findById(1L)).thenReturn(course)
+        `when`(courseReader.findOne(1L)).thenReturn(course)
 
         assertThrows<ForbiddenException> { courseService.update(dto, 2) }
     }
