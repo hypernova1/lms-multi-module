@@ -13,12 +13,12 @@ class AccountProcessor(private val accountRepository: AccountRepository, private
         val roleEntity = this.roleRepository.findByName("ROLE_" + account.role.toString())
             .orElseThrow { NotFoundException(ErrorCode.CANNOT_FIND_ROLE_NAME) }
         val accountEntity = toEntity(account)
-        val savedEntity = this.accountRepository.save(accountEntity)
         accountEntity.accountRoles.add(
             AccountRoleEntity(
                 accountEntity = accountEntity, roleEntity = roleEntity,
             )
         )
+        val savedEntity = this.accountRepository.save(accountEntity)
         account.id = savedEntity.id
         return account
     }

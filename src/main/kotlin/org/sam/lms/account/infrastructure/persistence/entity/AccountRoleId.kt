@@ -5,6 +5,6 @@ import java.io.Serializable
 
 @Embeddable
 data class AccountRoleId(
-    val accountId: Long,
-    val roleId: Long,
+    val accountId: Long = 0,
+    val roleId: Long = 0,
 ) : Serializable

@@ -21,7 +21,7 @@ class AccountEntity(
     @Column(nullable = false, columnDefinition = "varchar")
     val password: String,
 
-    @OneToMany
+    @OneToMany(mappedBy = "accountEntity", cascade = [CascadeType.PERSIST, CascadeType.MERGE])
     val accountRoles: MutableSet<AccountRoleEntity> = mutableSetOf(),
 ) : AuditEntity() {
     fun toDomain(): Account {
@@ -36,11 +36,9 @@ class AccountEntity(
 
     companion object {
         fun from(account: Account): AccountEntity {
-            val accountEntity = AccountEntity(
+            return AccountEntity(
                 name = account.name, email = account.email, password = account.password
             )
-
-            return accountEntity
         }
     }
 }

@@ -13,7 +13,7 @@ enum class RoleName {
     companion object {
         fun from(name: String): RoleName {
             return try {
-                valueOf(name.removePrefix("_ROLE_"))
+                valueOf(name.removePrefix("ROLE_"))
             } catch (e: IllegalArgumentException) {
                 throw NotFoundException(ErrorCode.CANNOT_FIND_ROLE_NAME)
             }
