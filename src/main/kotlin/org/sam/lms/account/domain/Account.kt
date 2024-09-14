@@ -1,13 +1,25 @@
 package org.sam.lms.account.domain
 
+import org.sam.lms.account.application.payload.`in`.AccountJoinRequest
+import org.springframework.security.crypto.password.PasswordEncoder
 import java.time.LocalDateTime
 
 class Account(
-    val id: Long,
+    var id: Long = 0,
     val email: String,
     var name: String,
     val role: RoleName,
     var password: String,
     val createdDate: LocalDateTime = LocalDateTime.now()
 ) {
+    companion object {
+        fun of(accountJoinRequest: AccountJoinRequest, passwordEncoder: PasswordEncoder): Account {
+            return Account(
+                email = accountJoinRequest.email,
+                name = accountJoinRequest.name,
+                password = passwordEncoder.encode(accountJoinRequest.password),
+                role = accountJoinRequest.type
+            )
+        }
+    }
 }

@@ -10,12 +10,12 @@ class CourseProcessor(private val courseRepository: CourseRepository) {
         this.courseRepository.save(toEntity(course))
     }
 
-    fun toEntity(course: Course): CourseEntity {
-        return CourseEntity(title = course.title, description = course.description, accountId = course.teacherId)
-    }
-
     fun delete(id: Long) {
         this.courseRepository.deleteById(id)
+    }
+
+    private fun toEntity(course: Course): CourseEntity {
+        return CourseEntity(title = course.title, description = course.description, accountId = course.teacherId)
     }
 
 }

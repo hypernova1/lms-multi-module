@@ -34,8 +34,8 @@ class SecurityConfig(
             .authorizeHttpRequests { authorizeRequests ->
                 authorizeRequests
                     .requestMatchers(
-                        AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/api/v1/login"),
-                        AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/api/v1/signup")
+                        AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/api/v1/accounts"),
+                        AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/api/v1/auth")
                     ).permitAll()
                     .requestMatchers(
                         "/h2-console/**",

@@ -14,4 +14,8 @@ class AccountReader(private val accountRepository: AccountRepository) {
         return accountEntity.toDomain();
     }
 
+    fun existsByEmail(email: String): Boolean {
+        return this.accountRepository.existsByEmail(email)
+    }
+
 }

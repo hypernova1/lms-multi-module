@@ -26,7 +26,7 @@ class CourseService(
      * */
     @Transactional
     fun create(createCourseDto: CreateCourseDto, accountId: Long): CourseSummary {
-        val category = this.categoryReader.findById(createCourseDto.categoryId)
+        val category = this.categoryReader.findOne(createCourseDto.categoryId)
         val course = Course.of(createCourseDto, category, accountId);
         this.courseProcessor.save(course)
         return CourseSummary(id = course.id, title = course.title)
@@ -41,8 +41,9 @@ class CourseService(
     @Transactional
     fun update(updateCourseDto: UpdateCourseDto, accountId: Long): CourseSummary {
         val course = this.courseReader.findOne(updateCourseDto.id)
-        val category = this.categoryReader.findById(updateCourseDto.categoryId)
+        val category = this.categoryReader.findOne(updateCourseDto.categoryId)
         course.update(updateCourseDto, category, accountId)
+        this.courseProcessor.save(course)
         return CourseSummary(id = course.id, title = course.title)
     }
 
@@ -68,5 +69,10 @@ class CourseService(
         }
 
         this.courseProcessor.delete(id)
+    }
+
+    @Transactional
+    fun enroll() {
+
     }
 }

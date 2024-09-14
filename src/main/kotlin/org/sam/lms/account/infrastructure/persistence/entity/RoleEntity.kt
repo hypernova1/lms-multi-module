@@ -9,10 +9,9 @@ import org.sam.lms.infra.persistence.AuditEntity
 class RoleEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
+    val id: Long = 0,
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    val name: RoleName,
+    val name: String,
 ) : AuditEntity() {
 }

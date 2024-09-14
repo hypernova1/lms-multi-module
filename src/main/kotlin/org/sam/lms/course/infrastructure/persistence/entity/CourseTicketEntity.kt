@@ -1,6 +1,7 @@
 package org.sam.lms.course.infrastructure.persistence.entity
 
 import jakarta.persistence.*
+import org.sam.lms.course.domain.CourseTicket
 import org.sam.lms.infra.persistence.AuditEntity
 import java.time.LocalDateTime
 
@@ -14,4 +15,7 @@ class CourseTicketEntity(
     val courseId: Long,
     val applicationDate: LocalDateTime = LocalDateTime.now(),
 ) : AuditEntity() {
+    fun toDomain(): CourseTicket {
+        return CourseTicket(id = this.id, courseId = this.courseId, studentId = this.studentId)
+    }
 }

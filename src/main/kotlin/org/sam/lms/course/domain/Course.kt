@@ -17,6 +17,13 @@ class Course(
     val teacherId: Long,
 ) {
 
+    /**
+     * 강의 정보를 수정한다.
+     *
+     * @param updateCourseDto 업데이트할 정보
+     * @param category 카테고리
+     * @param accountId 수정할 강사 아이디
+     * */
     fun update(updateCourseDto: UpdateCourseDto, category: Category, accountId: Long) {
         this.checkUpdatePermission(accountId)
 
@@ -26,6 +33,11 @@ class Course(
         this.category = category
     }
 
+    /**
+     * 강의를 오픈한다.
+     *
+     * @param accountId 강사 아이디
+     * */
     fun open(accountId: Long) {
         this.checkUpdatePermission(accountId)
         if (this.visible) {
@@ -34,6 +46,11 @@ class Course(
         this.visible = true
     }
 
+    /**
+     * 수정 권한이 있는지 체크한다
+     *
+     * @param accountId 수정할 강사 아이디
+     * */
     fun checkUpdatePermission(accountId: Long) {
         if (this.teacherId != accountId) {
             throw ForbiddenException()

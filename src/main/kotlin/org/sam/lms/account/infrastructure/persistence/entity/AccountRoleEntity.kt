@@ -10,7 +10,7 @@ import jakarta.persistence.Table
 class AccountRoleEntity(
 
     @EmbeddedId
-    val id: AccountRoleId,
+    val id: AccountRoleId? = null,
 
     @ManyToOne
     val accountEntity: AccountEntity,

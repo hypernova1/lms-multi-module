@@ -29,9 +29,12 @@ class CourseServiceTest {
     @Mock
     private lateinit var categoryReader: CategoryReader
 
+    @Mock
+    private lateinit var courseTicketReader: CourseTicketReader
+
     @BeforeEach
     fun init() {
-        this.courseService = CourseService(courseReader, courseProcessor, categoryReader)
+        this.courseService = CourseService(courseReader, courseProcessor, categoryReader, courseTicketReader)
     }
 
     @Test
@@ -39,7 +42,7 @@ class CourseServiceTest {
     fun create_course() {
         val dto = CreateCourseDto(title = "테스트 강의", description = "테스트 강의 설명입니다.", categoryId = 1, price = 1_000)
 
-        `when`(categoryReader.findById(1L)).thenReturn(Category(1L, "테스트 카테고리"))
+        `when`(categoryReader.findOne(1L)).thenReturn(Category(1L, "테스트 카테고리"))
 
         val categorySummary = courseService.create(dto, 1)
 
@@ -55,7 +58,7 @@ class CourseServiceTest {
         val course = Course(1L, preTitle, description = "테스트 강의 1 설명입니다.", category = Category(2L, "카테고리 2"), teacherId = 1)
 
 
-        `when`(categoryReader.findById(2L)).thenReturn(Category(2L, "카테고리 2"))
+        `when`(categoryReader.findOne(2L)).thenReturn(Category(2L, "카테고리 2"))
         `when`(courseReader.findOne(1L)).thenReturn(course)
 
         val categorySummary = courseService.update(dto, 1)
@@ -72,7 +75,7 @@ class CourseServiceTest {
         val course = Course(1L, preTitle, description = "테스트 강의 1 설명입니다.", category = Category(2L, "카테고리 2"), teacherId = 1)
 
 
-        `when`(categoryReader.findById(2L)).thenReturn(Category(2L, "카테고리 2"))
+        `when`(categoryReader.findOne(2L)).thenReturn(Category(2L, "카테고리 2"))
         `when`(courseReader.findOne(1L)).thenReturn(course)
 
         assertThrows<ForbiddenException> { courseService.update(dto, 2) }

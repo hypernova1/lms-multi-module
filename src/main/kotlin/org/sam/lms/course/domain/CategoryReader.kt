@@ -11,7 +11,7 @@ class CategoryReader(private val categoryRepository: CategoryRepository) {
         return this.categoryRepository.existsById(id)
     }
 
-    fun findById(id: Long): Category {
+    fun findOne(id: Long): Category {
         val categoryEntity = this.categoryRepository.findById(id).orElseThrow { NotFoundException(ErrorCode.CATEGORY_NOT_FOUND) }
         return categoryEntity.toDomain()
     }
