@@ -10,11 +10,12 @@ class CourseTicketProcessor(private val courseTicketRepository: CourseTicketRepo
         val courseTicketEntity = toEntity(courseTicket)
         this.courseTicketRepository.save(courseTicketEntity)
         courseTicket.id = courseTicketEntity.id
+        courseTicket.applicationDate = courseTicketEntity.applicationDate
         return courseTicket
     }
 
     private fun toEntity(courseTicket: CourseTicket): CourseTicketEntity {
-        return CourseTicketEntity(studentId = courseTicket.studentId, courseId = courseTicket.courseId)
+        return CourseTicketEntity(studentId = courseTicket.studentId, courseId = courseTicket.courseId, applicationDate = courseTicket.applicationDate)
     }
 
 }

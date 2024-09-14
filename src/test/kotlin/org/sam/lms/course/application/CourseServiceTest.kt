@@ -8,7 +8,8 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mock
-import org.mockito.Mockito.`when`
+import org.mockito.Mockito.*
+import org.mockito.kotlin.any
 import org.mockito.junit.jupiter.MockitoExtension
 import org.sam.lms.common.exception.ForbiddenException
 import org.sam.lms.course.application.payload.`in`.CreateCourseDto
@@ -85,6 +86,39 @@ class CourseServiceTest {
         `when`(courseReader.findOne(1L)).thenReturn(course)
 
         assertThrows<ForbiddenException> { courseService.update(dto, 2) }
+    }
+
+    @Test
+    @DisplayName("수강 신청을 한다.")
+    fun enroll_test() {
+        //given
+        val course = Course(
+            id = 1L,
+            title = "테스트 강의",
+            description = "",
+            numberOfStudents = 0,
+            category = Category(1L, "테스트 카테고리"),
+            price = 0,
+            visible = true,
+            teacherId = 1L
+        )
+        val studentId = 1L
+        val courseTicket = CourseTicket(
+            courseId =  1L,
+            studentId = 1L,
+        )
+
+        `when`(courseReader.findOne(course.id)).thenReturn(course)
+        doNothing().`when`(courseTicketReader).checkAlreadyEnrolled(studentId)
+        `when`(courseTicketProcessor.save(any())).thenReturn(courseTicket)
+        `when`(courseProcessor.save(any())).thenReturn(course)
+
+        // when
+        val result = courseService.enroll(course.id, studentId)
+
+        // then
+        assertEquals(courseTicket.id, result.id)
+        assertEquals(course.numberOfStudents, 1)
     }
 
 }

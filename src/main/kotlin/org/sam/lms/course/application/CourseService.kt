@@ -1,12 +1,10 @@
 package org.sam.lms.course.application
 
 import jakarta.transaction.Transactional
-import org.sam.lms.common.exception.BadRequestException
-import org.sam.lms.common.exception.ConflictException
-import org.sam.lms.common.exception.ErrorCode
 import org.sam.lms.course.application.payload.`in`.CreateCourseDto
 import org.sam.lms.course.application.payload.`in`.UpdateCourseDto
 import org.sam.lms.course.application.payload.out.CourseSummary
+import org.sam.lms.course.application.payload.out.CourseTicketSummary
 import org.sam.lms.course.domain.*
 import org.springframework.stereotype.Service
 
@@ -56,6 +54,7 @@ class CourseService(
     fun open(id: Long, accountId: Long) {
         val course = this.courseReader.findOne(id)
         course.open(accountId)
+        this.courseProcessor.save(course)
     }
 
     /**
@@ -65,11 +64,7 @@ class CourseService(
     fun delete(id: Long, accountId: Long) {
         val course = this.courseReader.findOne(id)
         course.checkUpdatePermission(accountId)
-        val existTickets = this.courseTicketReader.existsByCourseId(id)
-        if (existTickets) {
-            throw BadRequestException(ErrorCode.EXISTS_STUDENTS)
-        }
-
+        this.courseTicketReader.checkEnrolledStudents(id)
         this.courseProcessor.delete(id)
     }
 
@@ -77,20 +72,18 @@ class CourseService(
      * 수강 신청을 한다. 이미 수강 중인 강의는 신청할 수 없다.
      *
      * @param id 강의 아이디
-     * @param accountId 수강할 학생 아이디
+     * @param studentId 수강할 학생 아이디
      * */
     @Transactional
-    fun enroll(id: Long, accountId: Long) {
+    fun enroll(id: Long, studentId: Long): CourseTicketSummary {
         val course = this.courseReader.findOne(id)
-        val existsStudent = this.courseTicketReader.existsByStudentId(accountId)
-        if (existsStudent) {
-            throw ConflictException(ErrorCode.ALREADY_JOINED_STUDENT)
-        }
-        println(course)
-        println(course.category)
-        val courseTicket = course.enroll(accountId)
+        this.courseTicketReader.checkAlreadyEnrolled(studentId)
+
+        val courseTicket = course.enroll(studentId)
 
         this.courseTicketProcessor.save(courseTicket)
         this.courseProcessor.save(course)
+
+        return CourseTicketSummary(courseTicket.id, courseTicket.applicationDate)
     }
 }

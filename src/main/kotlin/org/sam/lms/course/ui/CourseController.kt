@@ -4,6 +4,7 @@ import org.sam.lms.account.domain.Account
 import org.sam.lms.course.application.CourseService
 import org.sam.lms.course.application.payload.`in`.CreateCourseDto
 import org.sam.lms.course.application.payload.out.CourseSummary
+import org.sam.lms.course.application.payload.out.CourseTicketSummary
 import org.sam.lms.infra.security.annotation.AuthUser
 import org.sam.lms.infra.security.annotation.StudentOnly
 import org.sam.lms.infra.security.annotation.TeacherOnly
@@ -30,8 +31,9 @@ class CourseController(private val courseService: CourseService) {
 
     @StudentOnly
     @PostMapping("/{id}/enroll")
-    fun enroll(@PathVariable id: Long, @AuthUser account: Account) {
-        this.courseService.enroll(id, account.id)
+    fun enroll(@PathVariable id: Long, @AuthUser account: Account): ResponseEntity<CourseTicketSummary> {
+        val courseTicketSummary = this.courseService.enroll(id, account.id)
+        return ResponseEntity.ok(courseTicketSummary)
     }
 
 
