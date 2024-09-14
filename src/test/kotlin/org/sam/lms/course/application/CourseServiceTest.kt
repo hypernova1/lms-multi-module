@@ -1,5 +1,6 @@
 package org.sam.lms.course.application
 
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.BeforeEach
@@ -45,18 +46,22 @@ class CourseServiceTest {
     @Test
     @DisplayName("강의를 등록한다")
     fun create_course() {
+        //given
         val dto = CreateCourseDto(title = "테스트 강의", description = "테스트 강의 설명입니다.", categoryId = 1, price = 1_000)
 
         `when`(categoryReader.findOne(1L)).thenReturn(Category(1L, "테스트 카테고리"))
 
+        //when
         val categorySummary = courseService.create(dto, 1)
 
+        //then
         assertEquals(categorySummary.title, dto.title)
     }
 
     @Test
     @DisplayName("강의를 수정한다.")
     fun update_course() {
+        //given
         val preTitle = "테스트 강의1"
         val dto =
             UpdateCourseDto(id = 1L, title = "테스트 강의2", description = "테스트 강의2 설명입니다.", categoryId = 2L, price = 1_000)
@@ -67,14 +72,17 @@ class CourseServiceTest {
         `when`(categoryReader.findOne(2L)).thenReturn(Category(2L, "카테고리 2"))
         `when`(courseReader.findOne(1L)).thenReturn(course)
 
+        //when
         val categorySummary = courseService.update(dto, 1)
 
+        //then
         assertNotEquals(preTitle, categorySummary.title)
     }
 
     @Test
     @DisplayName("강의를 수정한다 (수정하려는 강사가 다를 경우)")
     fun update_course_forbidden() {
+        //given
         val preTitle = "테스트 강의1"
         val dto =
             UpdateCourseDto(id = 1L, title = "테스트 강의2", description = "테스트 강의2 설명입니다.", categoryId = 2L, price = 1_000)
@@ -85,6 +93,7 @@ class CourseServiceTest {
         `when`(categoryReader.findOne(2L)).thenReturn(Category(2L, "카테고리 2"))
         `when`(courseReader.findOne(1L)).thenReturn(course)
 
+        //when, then
         assertThrows<ForbiddenException> { courseService.update(dto, 2) }
     }
 
@@ -119,6 +128,7 @@ class CourseServiceTest {
         // then
         assertEquals(courseTicket.id, result.id)
         assertEquals(course.numberOfStudents, 1)
+        assertThat(courseTicket.applicationDate).isNotNull()
     }
 
 }
