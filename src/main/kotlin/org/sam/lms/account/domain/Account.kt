@@ -1,6 +1,8 @@
 package org.sam.lms.account.domain
 
 import org.sam.lms.account.application.payload.`in`.AccountJoinRequest
+import org.sam.lms.common.exception.ErrorCode
+import org.sam.lms.common.exception.UnauthorizedException
 import org.springframework.security.crypto.password.PasswordEncoder
 import java.time.LocalDateTime
 
@@ -12,6 +14,13 @@ class Account(
     var password: String,
     val createdDate: LocalDateTime = LocalDateTime.now()
 ) {
+    fun matchPassword(password: String, passwordEncoder: PasswordEncoder) {
+        val matched = passwordEncoder.matches(password, this.password)
+        if (!matched) {
+            throw UnauthorizedException(ErrorCode.ACCOUNT_NOT_FOUND)
+        }
+    }
+
     companion object {
         fun of(accountJoinRequest: AccountJoinRequest, passwordEncoder: PasswordEncoder): Account {
             return Account(

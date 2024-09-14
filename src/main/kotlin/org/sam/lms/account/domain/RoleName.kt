@@ -15,7 +15,7 @@ enum class RoleName {
             return try {
                 valueOf(name.removePrefix("ROLE_"))
             } catch (e: IllegalArgumentException) {
-                throw NotFoundException(ErrorCode.CANNOT_FIND_ROLE_NAME)
+                throw NotFoundException(ErrorCode.ROLE_NAME_NOT_FOUND)
             }
         }
     }

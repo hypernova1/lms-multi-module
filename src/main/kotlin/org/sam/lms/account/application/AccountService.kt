@@ -26,4 +26,8 @@ class AccountService(
         this.accountProcessor.save(account)
         return AccountSummary(id = account.id, email = account.email, name = account.name)
     }
+
+    fun findOne(email: String): Account? {
+        return this.accountReader.findByEmail(email)
+    }
 }
