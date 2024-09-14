@@ -1,5 +1,6 @@
 package org.sam.lms.course.domain
 
+import org.sam.lms.common.exception.BadRequestException
 import org.sam.lms.common.exception.ConflictException
 import org.sam.lms.common.exception.ErrorCode
 import org.sam.lms.common.exception.ForbiddenException
@@ -71,8 +72,20 @@ class Course(
      * @return 수강권
      * */
     fun enroll(studentId: Long): CourseTicket {
+        checkMaxEnrollment()
         this.numberOfStudents++
         return CourseTicket(courseId = this.id, studentId = studentId)
+    }
+
+    private fun checkMaxEnrollment() {
+        if (this.type == CourseType.ONLINE) {
+            return
+        }
+
+        println("hello" + this.numberOfStudents)
+        if (this.offlineInfo?.maxEnrollment != null && this.offlineInfo?.maxEnrollment!! == this.numberOfStudents) {
+            throw BadRequestException(ErrorCode.ENROLLMENT_FULL)
+        }
     }
 
     companion object {

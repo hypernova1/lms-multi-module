@@ -6,4 +6,5 @@ interface CourseTicketRepository {
     fun existsByCourseId(courseId: Long): Boolean
     fun existsByStudentId(studentId: Long): Boolean
     fun save(courseTicketEntity: CourseTicketEntity): CourseTicketEntity
+    fun countByCourseId(courseId: Long): Int
 }

@@ -2,11 +2,13 @@ package org.sam.lms.course.application
 
 import jakarta.transaction.Transactional
 import org.sam.lms.address.application.AddressService
+import org.sam.lms.common.util.DateUtil
 import org.sam.lms.course.application.payload.`in`.CreateCourseDto
 import org.sam.lms.course.application.payload.`in`.UpdateCourseDto
 import org.sam.lms.course.application.payload.out.CourseSummary
 import org.sam.lms.course.application.payload.out.CourseTicketSummary
 import org.sam.lms.course.domain.*
+import org.sam.lms.infra.lock.DistributedLock
 import org.springframework.stereotype.Service
 
 @Service
@@ -95,16 +97,17 @@ class CourseService(
      * @param id 강의 아이디
      * @param studentId 수강할 학생 아이디
      * */
+    @DistributedLock(key = "#id")
     @Transactional
     fun enroll(id: Long, studentId: Long): CourseTicketSummary {
         val course = this.courseReader.findOne(id)
+        println("numberOfStudents:" + course.numberOfStudents)
         this.courseTicketReader.checkAlreadyEnrolled(studentId)
-
         val courseTicket = course.enroll(studentId)
-
-        this.courseTicketProcessor.save(courseTicket)
         this.courseProcessor.save(course)
+        this.courseTicketProcessor.save(courseTicket)
 
-        return CourseTicketSummary(courseTicket.id, courseTicket.applicationDate)
+        return CourseTicketSummary(courseTicket.id, DateUtil.toString(courseTicket.applicationDate))
     }
+
 }

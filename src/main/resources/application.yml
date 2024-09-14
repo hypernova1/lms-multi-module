@@ -16,6 +16,10 @@ spring:
       hibernate:
         format_sql: true
         show_sql: true
+  data:
+    redis:
+      host: localhost
+      port: 6379
 
 server:
   servlet:
@@ -40,6 +44,7 @@ logging:
     org.springframework.web: DEBUG
     org.sam.lms: DEBUG
     org.hibernate.orm.jdbc.bind: trace
+    org.springframework.orm.jpa: TRACE
 
 secret:
   x-api-key: aXC8zK6puHIf9l53L8TiQg==

@@ -29,6 +29,8 @@ dependencies {
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.5")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.5")
     implementation("org.postgresql:postgresql:42.7.4")
+    implementation("org.redisson:redisson-spring-boot-starter:3.36.0")
+
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")

@@ -20,4 +20,8 @@ class CourseTicketReader(private val courseTicketRepository: CourseTicketReposit
             throw ConflictException(ErrorCode.ALREADY_JOINED_STUDENT)
         }
     }
+
+    fun countByCourseId(id: Long): Int {
+        return this.courseTicketRepository.countByCourseId(id)
+    }
 }

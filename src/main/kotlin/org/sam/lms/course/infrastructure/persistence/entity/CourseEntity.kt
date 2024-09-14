@@ -21,9 +21,11 @@ class CourseEntity(
     var numberOfStudents: Int = 0,
 
     @Column(nullable = false, columnDefinition = "varchar")
+    @Enumerated(EnumType.STRING)
     var status: CourseStatus = CourseStatus.HIDDEN,
 
     @Column(nullable = false, columnDefinition = "varchar")
+    @Enumerated(EnumType.STRING)
     var type: CourseType = CourseType.ONLINE,
 
     @Column(nullable = false, columnDefinition = "integer")
@@ -67,6 +69,7 @@ class CourseEntity(
         this.numberOfStudents = course.numberOfStudents
         this.status = course.status
         this.courseCategories.first().id.categoryId = categoryEntity.id
+        this.type = course.type
 
         if (course.offlineInfo == null) {
             return
