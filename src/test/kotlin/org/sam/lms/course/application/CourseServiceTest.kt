@@ -32,9 +32,13 @@ class CourseServiceTest {
     @Mock
     private lateinit var courseTicketReader: CourseTicketReader
 
+    @Mock
+    private lateinit var courseTicketProcessor: CourseTicketProcessor
+
     @BeforeEach
     fun init() {
-        this.courseService = CourseService(courseReader, courseProcessor, categoryReader, courseTicketReader)
+        this.courseService =
+            CourseService(courseReader, courseProcessor, categoryReader, courseTicketReader, courseTicketProcessor)
     }
 
     @Test
@@ -55,7 +59,8 @@ class CourseServiceTest {
         val preTitle = "테스트 강의1"
         val dto =
             UpdateCourseDto(id = 1L, title = "테스트 강의2", description = "테스트 강의2 설명입니다.", categoryId = 2L, price = 1_000)
-        val course = Course(1L, preTitle, description = "테스트 강의 1 설명입니다.", category = Category(2L, "카테고리 2"), teacherId = 1)
+        val course =
+            Course(1L, preTitle, description = "테스트 강의 1 설명입니다.", category = Category(2L, "카테고리 2"), teacherId = 1)
 
 
         `when`(categoryReader.findOne(2L)).thenReturn(Category(2L, "카테고리 2"))
@@ -72,7 +77,8 @@ class CourseServiceTest {
         val preTitle = "테스트 강의1"
         val dto =
             UpdateCourseDto(id = 1L, title = "테스트 강의2", description = "테스트 강의2 설명입니다.", categoryId = 2L, price = 1_000)
-        val course = Course(1L, preTitle, description = "테스트 강의 1 설명입니다.", category = Category(2L, "카테고리 2"), teacherId = 1)
+        val course =
+            Course(1L, preTitle, description = "테스트 강의 1 설명입니다.", category = Category(2L, "카테고리 2"), teacherId = 1)
 
 
         `when`(categoryReader.findOne(2L)).thenReturn(Category(2L, "카테고리 2"))

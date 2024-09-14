@@ -9,7 +9,7 @@ import org.sam.lms.infra.persistence.AuditEntity
 class CategoryEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
+    val id: Long = 0,
     @Column(name = "name", nullable = false)
     val name: String,
 ) : AuditEntity() {

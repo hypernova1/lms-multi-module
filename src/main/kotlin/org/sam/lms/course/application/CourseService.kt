@@ -2,6 +2,7 @@ package org.sam.lms.course.application
 
 import jakarta.transaction.Transactional
 import org.sam.lms.common.exception.BadRequestException
+import org.sam.lms.common.exception.ConflictException
 import org.sam.lms.common.exception.ErrorCode
 import org.sam.lms.course.application.payload.`in`.CreateCourseDto
 import org.sam.lms.course.application.payload.`in`.UpdateCourseDto
@@ -14,7 +15,8 @@ class CourseService(
     private val courseReader: CourseReader,
     private val courseProcessor: CourseProcessor,
     private val categoryReader: CategoryReader,
-    private val courseTicketReader: CourseTicketReader
+    private val courseTicketReader: CourseTicketReader,
+    private val courseTicketProcessor: CourseTicketProcessor,
 ) {
 
     /**
@@ -71,8 +73,24 @@ class CourseService(
         this.courseProcessor.delete(id)
     }
 
+    /**
+     * 수강 신청을 한다. 이미 수강 중인 강의는 신청할 수 없다.
+     *
+     * @param id 강의 아이디
+     * @param accountId 수강할 학생 아이디
+     * */
     @Transactional
-    fun enroll() {
+    fun enroll(id: Long, accountId: Long) {
+        val course = this.courseReader.findOne(id)
+        val existsStudent = this.courseTicketReader.existsByStudentId(accountId)
+        if (existsStudent) {
+            throw ConflictException(ErrorCode.ALREADY_JOINED_STUDENT)
+        }
+        println(course)
+        println(course.category)
+        val courseTicket = course.enroll(accountId)
 
+        this.courseTicketProcessor.save(courseTicket)
+        this.courseProcessor.save(course)
     }
 }

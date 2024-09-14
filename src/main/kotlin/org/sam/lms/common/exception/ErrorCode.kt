@@ -17,6 +17,10 @@ enum class ErrorCode(val code: String, val message: String) {
     ALREADY_VISIBLE("3002", "이미 오픈된 강의입니다."),
     EXISTS_STUDENTS("3003", "수강 중인 학생이 존재합니다."),
 
-    MISMATCH_PARAMETER("3000", "");
+    // 수강생
+    ALREADY_JOINED_STUDENT("4000,", "이미 수강 중입니다."),
+
+
+    MISMATCH_PARAMETER("9999", "")
 
 }

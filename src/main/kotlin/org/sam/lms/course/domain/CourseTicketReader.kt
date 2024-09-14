@@ -7,4 +7,8 @@ class CourseTicketReader(private val courseTicketRepository: CourseTicketReposit
     fun existsByCourseId(courseId: Long): Boolean {
         return this.courseTicketRepository.existsByCourseId(courseId)
     }
+
+    fun existsByStudentId(studentId: Long): Boolean {
+        return this.courseTicketRepository.existsByStudentId(studentId)
+    }
 }

@@ -7,7 +7,7 @@ import org.sam.lms.course.application.payload.`in`.CreateCourseDto
 import org.sam.lms.course.application.payload.`in`.UpdateCourseDto
 
 class Course(
-    val id: Long = 0L,
+    var id: Long = 0L,
     var title: String,
     var description: String,
     var numberOfStudents: Int = 0,
@@ -57,6 +57,17 @@ class Course(
         }
     }
 
+    /**
+     * 강의 수강 신청한다.
+     *
+     * @param studentId 수강할 학생 아이디
+     * @return 수강권
+     * */
+    fun enroll(studentId: Long): CourseTicket {
+        this.numberOfStudents++
+        return CourseTicket(courseId = this.id, studentId = studentId)
+    }
+
     companion object {
         fun of(createCourseDto: CreateCourseDto, category: Category, accountId: Long): Course {
             return Course(
@@ -69,4 +80,7 @@ class Course(
         }
     }
 
+    override fun toString(): String {
+        return "id=${this.id} title=${this.title}"
+    }
 }

@@ -46,6 +46,7 @@ class GlobalExceptionHandler(
 
     @ExceptionHandler(Exception::class)
     protected fun exception(e: Exception): ResponseEntity<*> {
+        e.printStackTrace()
         log.error(e.message)
         return ResponseEntity.internalServerError().body(ErrorResult("9999", "서버에 오류가 발생했습니다."))
     }
