@@ -13,8 +13,10 @@ class Course(
     var numberOfStudents: Int = 0,
     var category: Category,
     var price: Int = 0,
-    var visible: Boolean = false,
+    var status: CourseStatus = CourseStatus.HIDDEN,
+    var type: CourseType,
     val teacherId: Long,
+    var offlineInfo: OfflineCourseInfo? = null
 ) {
 
     /**
@@ -24,13 +26,18 @@ class Course(
      * @param category 카테고리
      * @param accountId 수정할 강사 아이디
      * */
-    fun update(updateCourseDto: UpdateCourseDto, category: Category, accountId: Long) {
+    fun update(updateCourseDto: UpdateCourseDto, category: Category, accountId: Long, addressId: Long) {
         this.checkUpdatePermission(accountId)
 
         this.title = updateCourseDto.title
         this.description = updateCourseDto.description
+        this.type = updateCourseDto.type
         this.price = updateCourseDto.price
         this.category = category
+
+        if (this.type == CourseType.OFFLINE) {
+            this.offlineInfo = OfflineCourseInfo(maxEnrollment = updateCourseDto.maxEnrollment, addressId = addressId)
+        }
     }
 
     /**
@@ -40,10 +47,10 @@ class Course(
      * */
     fun open(accountId: Long) {
         this.checkUpdatePermission(accountId)
-        if (this.visible) {
+        if (this.status !== CourseStatus.HIDDEN) {
             throw ConflictException(ErrorCode.ALREADY_VISIBLE)
         }
-        this.visible = true
+        this.status = CourseStatus.VISIBLE
     }
 
     /**
@@ -69,14 +76,21 @@ class Course(
     }
 
     companion object {
-        fun of(createCourseDto: CreateCourseDto, category: Category, accountId: Long): Course {
-            return Course(
+        fun of(createCourseDto: CreateCourseDto, category: Category, accountId: Long, addressId: Long): Course {
+            val course = Course(
                 title = createCourseDto.title,
                 description = createCourseDto.description,
                 category = category,
                 teacherId = accountId,
                 price = createCourseDto.price,
+                type = createCourseDto.type,
             )
+
+            if (createCourseDto.type == CourseType.OFFLINE) {
+                course.offlineInfo = OfflineCourseInfo(maxEnrollment = createCourseDto.maxEnrollment, addressId = addressId)
+            }
+
+            return course
         }
     }
 

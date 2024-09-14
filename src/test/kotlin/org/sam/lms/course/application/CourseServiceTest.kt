@@ -12,6 +12,7 @@ import org.mockito.Mock
 import org.mockito.Mockito.*
 import org.mockito.kotlin.any
 import org.mockito.junit.jupiter.MockitoExtension
+import org.sam.lms.address.application.AddressService
 import org.sam.lms.common.exception.ForbiddenException
 import org.sam.lms.course.application.payload.`in`.CreateCourseDto
 import org.sam.lms.course.application.payload.`in`.UpdateCourseDto
@@ -21,6 +22,9 @@ import org.sam.lms.course.domain.*
 class CourseServiceTest {
 
     private lateinit var courseService: CourseService
+
+    @Mock
+    private lateinit var addressService: AddressService
 
     @Mock
     private lateinit var courseReader: CourseReader
@@ -40,7 +44,14 @@ class CourseServiceTest {
     @BeforeEach
     fun init() {
         this.courseService =
-            CourseService(courseReader, courseProcessor, categoryReader, courseTicketReader, courseTicketProcessor)
+            CourseService(
+                courseReader,
+                courseProcessor,
+                categoryReader,
+                courseTicketReader,
+                courseTicketProcessor,
+                addressService
+            )
     }
 
     @Test
@@ -66,7 +77,14 @@ class CourseServiceTest {
         val dto =
             UpdateCourseDto(id = 1L, title = "테스트 강의2", description = "테스트 강의2 설명입니다.", categoryId = 2L, price = 1_000)
         val course =
-            Course(1L, preTitle, description = "테스트 강의 1 설명입니다.", category = Category(2L, "카테고리 2"), teacherId = 1)
+            Course(
+                1L,
+                preTitle,
+                description = "테스트 강의 1 설명입니다.",
+                category = Category(2L, "카테고리 2"),
+                teacherId = 1,
+                type = CourseType.ONLINE
+            )
 
 
         `when`(categoryReader.findOne(2L)).thenReturn(Category(2L, "카테고리 2"))
@@ -87,7 +105,14 @@ class CourseServiceTest {
         val dto =
             UpdateCourseDto(id = 1L, title = "테스트 강의2", description = "테스트 강의2 설명입니다.", categoryId = 2L, price = 1_000)
         val course =
-            Course(1L, preTitle, description = "테스트 강의 1 설명입니다.", category = Category(2L, "카테고리 2"), teacherId = 1)
+            Course(
+                1L,
+                preTitle,
+                description = "테스트 강의 1 설명입니다.",
+                category = Category(2L, "카테고리 2"),
+                teacherId = 1,
+                type = CourseType.ONLINE
+            )
 
 
         `when`(categoryReader.findOne(2L)).thenReturn(Category(2L, "카테고리 2"))
@@ -108,12 +133,12 @@ class CourseServiceTest {
             numberOfStudents = 0,
             category = Category(1L, "테스트 카테고리"),
             price = 0,
-            visible = true,
-            teacherId = 1L
+            teacherId = 1L,
+            type = CourseType.ONLINE
         )
         val studentId = 1L
         val courseTicket = CourseTicket(
-            courseId =  1L,
+            courseId = 1L,
             studentId = 1L,
         )
 

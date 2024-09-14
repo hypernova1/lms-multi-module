@@ -7,10 +7,11 @@ import java.util.*
 interface CourseRepository {
     fun save(courseEntity: CourseEntity): CourseEntity
 
-    @Query("SELECT course, category " +
+    @Query("SELECT course, category, offlineCourse " +
             "FROM CourseEntity course " +
             "JOIN FETCH course.courseCategories courseCategory " +
             "JOIN FETCH courseCategory.categoryEntity category " +
+            "LEFT JOIN FETCH course.offlineCourseEntity offlineCourse " +
             "WHERE course.id = :id")
     fun findById(id: Long): Optional<CourseEntity>
 

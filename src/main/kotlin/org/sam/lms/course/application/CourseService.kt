@@ -1,6 +1,7 @@
 package org.sam.lms.course.application
 
 import jakarta.transaction.Transactional
+import org.sam.lms.address.application.AddressService
 import org.sam.lms.course.application.payload.`in`.CreateCourseDto
 import org.sam.lms.course.application.payload.`in`.UpdateCourseDto
 import org.sam.lms.course.application.payload.out.CourseSummary
@@ -15,6 +16,7 @@ class CourseService(
     private val categoryReader: CategoryReader,
     private val courseTicketReader: CourseTicketReader,
     private val courseTicketProcessor: CourseTicketProcessor,
+    private val addressService: AddressService,
 ) {
 
     /**
@@ -27,7 +29,20 @@ class CourseService(
     @Transactional
     fun create(createCourseDto: CreateCourseDto, accountId: Long): CourseSummary {
         val category = this.categoryReader.findOne(createCourseDto.categoryId)
-        val course = Course.of(createCourseDto, category, accountId);
+
+        val addressId: Long = if (createCourseDto.address != null) {
+            val address = this.addressService.save(createCourseDto.address)
+            address.id
+        } else {
+            0
+        }
+
+        val course = Course.of(
+            createCourseDto = createCourseDto,
+            category = category,
+            accountId = accountId,
+            addressId = addressId
+        );
         this.courseProcessor.save(course)
         return CourseSummary(id = course.id, title = course.title)
     }
@@ -42,7 +57,13 @@ class CourseService(
     fun update(updateCourseDto: UpdateCourseDto, accountId: Long): CourseSummary {
         val course = this.courseReader.findOne(updateCourseDto.id)
         val category = this.categoryReader.findOne(updateCourseDto.categoryId)
-        course.update(updateCourseDto, category, accountId)
+        val addressId: Long = if (updateCourseDto.address != null) {
+            val address = this.addressService.save(updateCourseDto.address)
+            address.id
+        } else {
+            0
+        }
+        course.update(updateCourseDto, category, accountId, addressId)
         this.courseProcessor.save(course)
         return CourseSummary(id = course.id, title = course.title)
     }

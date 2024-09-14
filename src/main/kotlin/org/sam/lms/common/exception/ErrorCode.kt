@@ -21,6 +21,7 @@ enum class ErrorCode(val code: String, val message: String) {
     ALREADY_JOINED_STUDENT("4000,", "이미 수강 중입니다."),
 
 
-    MISMATCH_PARAMETER("9999", "")
+    MISMATCH_PARAMETER("9999", ""),
+    ADDRESS_NOT_FOUND("", "주소를 찾을 수 없습니다.")
 
 }

@@ -3,6 +3,7 @@ package org.sam.lms.course.ui
 import org.sam.lms.account.domain.Account
 import org.sam.lms.course.application.CourseService
 import org.sam.lms.course.application.payload.`in`.CreateCourseDto
+import org.sam.lms.course.application.payload.`in`.UpdateCourseDto
 import org.sam.lms.course.application.payload.out.CourseSummary
 import org.sam.lms.course.application.payload.out.CourseTicketSummary
 import org.sam.lms.infra.security.annotation.AuthUser
@@ -27,6 +28,13 @@ class CourseController(private val courseService: CourseService) {
             .buildAndExpand(courseSummary.id)
             .toUri()
         return ResponseEntity.created(location).body(courseSummary)
+    }
+
+    @TeacherOnly
+    @PutMapping("/{id}")
+    fun update(@RequestBody updateCourseDto: UpdateCourseDto, @AuthUser account: Account): ResponseEntity<CourseSummary> {
+        val courseSummary = this.courseService.update(updateCourseDto, account.id)
+        return ResponseEntity.ok(courseSummary)
     }
 
     @StudentOnly

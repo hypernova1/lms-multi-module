@@ -1,7 +1,6 @@
 package org.sam.lms
 
 import org.sam.lms.account.domain.RoleName
-import org.sam.lms.account.domain.RoleRepository
 import org.sam.lms.account.infrastructure.persistence.entity.RoleEntity
 import org.sam.lms.account.infrastructure.persistence.repository.RoleJpaRepository
 import org.sam.lms.course.infrastructure.persistence.entity.CategoryEntity
@@ -23,9 +22,9 @@ class Application {
             if (numberOfRoleEntities == 0L) {
                 roleRepository.saveAll(
                     listOf(
-                        RoleEntity(name = RoleName.ADMIN.toEntity()),
-                        RoleEntity(name = RoleName.TEACHER.toEntity()),
-                        RoleEntity(name = RoleName.STUDENT.toEntity())
+                        RoleEntity(name = RoleName.ADMIN.toEntityName()),
+                        RoleEntity(name = RoleName.TEACHER.toEntityName()),
+                        RoleEntity(name = RoleName.STUDENT.toEntityName())
                     )
                 )
             }

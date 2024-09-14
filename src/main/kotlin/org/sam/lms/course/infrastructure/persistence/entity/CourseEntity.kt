@@ -1,8 +1,7 @@
 package org.sam.lms.course.infrastructure.persistence.entity
 
 import jakarta.persistence.*
-import org.sam.lms.course.domain.Category
-import org.sam.lms.course.domain.Course
+import org.sam.lms.course.domain.*
 import org.sam.lms.infra.persistence.AuditEntity
 
 @Table(name = "course")
@@ -21,17 +20,23 @@ class CourseEntity(
     @Column(nullable = false, columnDefinition = "integer")
     var numberOfStudents: Int = 0,
 
-    @Column(nullable = false, columnDefinition = "boolean")
-    var visible: Boolean = false,
+    @Column(nullable = false, columnDefinition = "varchar")
+    var status: CourseStatus = CourseStatus.HIDDEN,
+
+    @Column(nullable = false, columnDefinition = "varchar")
+    var type: CourseType = CourseType.ONLINE,
 
     @Column(nullable = false, columnDefinition = "integer")
     val accountId: Long,
+
+    @OneToOne(mappedBy = "courseEntity", cascade = [CascadeType.ALL])
+    var offlineCourseEntity: OfflineCourseEntity? = null,
 
     @OneToMany(mappedBy = "courseEntity", cascade = [CascadeType.ALL])
     val courseCategories: MutableList<CourseCategoryEntity> = mutableListOf()
 ) : AuditEntity() {
     fun toDomain(): Course {
-        return Course(
+        val course = Course(
             id = this.id,
             title = this.title,
             description = this.description,
@@ -40,16 +45,56 @@ class CourseEntity(
                 this.courseCategories[0].categoryEntity.id,
                 this.courseCategories[0].categoryEntity.name
             ),
-            visible = this.visible,
-            teacherId = this.accountId
+            status = this.status,
+            teacherId = this.accountId,
+            type = this.type,
         )
+
+        if (this.offlineCourseEntity != null) {
+            course.offlineInfo = OfflineCourseInfo(
+                id = this.offlineCourseEntity!!.id,
+                maxEnrollment = this.offlineCourseEntity!!.maxEnrollment,
+                addressId = this.offlineCourseEntity!!.addressId
+            )
+        }
+
+        return course
     }
 
     fun update(course: Course, categoryEntity: CategoryEntity) {
         this.title = course.title
         this.description = course.description
         this.numberOfStudents = course.numberOfStudents
-        this.visible = course.visible
+        this.status = course.status
         this.courseCategories.first().id.categoryId = categoryEntity.id
+
+        if (course.offlineInfo == null) {
+            return
+        }
+
+        if (this.offlineCourseEntity == null) {
+            this.offlineCourseEntity = OfflineCourseEntity(
+                maxEnrollment = course.offlineInfo!!.maxEnrollment,
+                addressId = course.offlineInfo!!.addressId,
+                courseEntity = this
+            )
+        } else {
+            this.offlineCourseEntity!!.update(course.offlineInfo!!)
+        }
+    }
+
+    companion object {
+        fun from(course: Course): CourseEntity {
+            val courseEntity =
+                CourseEntity(title = course.title, description = course.description, accountId = course.teacherId)
+            if (course.offlineInfo != null) {
+                courseEntity.offlineCourseEntity = OfflineCourseEntity(
+                    maxEnrollment = course.offlineInfo!!.maxEnrollment,
+                    addressId = course.offlineInfo!!.addressId,
+                    courseEntity = courseEntity
+                )
+            }
+            return courseEntity
+        }
     }
 }

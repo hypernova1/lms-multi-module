@@ -30,8 +30,7 @@ class CourseProcessor(private val courseRepository: CourseRepository, private va
                 .orElseThrow { NotFoundException(ErrorCode.COURSE_NOT_FOUND) }
             courseEntity.update(course, categoryEntity)
         } else {
-            courseEntity =
-                CourseEntity(title = course.title, description = course.description, accountId = course.teacherId)
+            courseEntity = CourseEntity.from(course)
             courseEntity.courseCategories.add(CourseCategoryEntity(courseEntity = courseEntity, categoryEntity = categoryEntity))
         }
         return courseEntity

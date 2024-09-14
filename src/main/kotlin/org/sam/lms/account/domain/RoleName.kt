@@ -6,12 +6,12 @@ import org.sam.lms.common.exception.NotFoundException
 enum class RoleName {
     TEACHER, STUDENT, ADMIN;
 
-    fun toEntity(): String {
+    fun toEntityName(): String {
         return "ROLE_$this"
     }
 
     companion object {
-        fun from(name: String): RoleName {
+        fun fromEntityName(name: String): RoleName {
             return try {
                 valueOf(name.removePrefix("ROLE_"))
             } catch (e: IllegalArgumentException) {
