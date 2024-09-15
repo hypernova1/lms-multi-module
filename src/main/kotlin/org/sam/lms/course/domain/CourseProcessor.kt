@@ -9,7 +9,10 @@ import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
 @Component
-class CourseProcessor(private val courseRepository: CourseRepository, private val categoryRepository: CategoryRepository) {
+class CourseProcessor(
+    private val courseRepository: CourseRepository,
+    private val categoryRepository: CategoryRepository
+) {
 
     @Transactional
     fun save(course: Course): Course {
@@ -21,12 +24,17 @@ class CourseProcessor(private val courseRepository: CourseRepository, private va
         return course
     }
 
+    @Transactional
+    fun saveAll(courses: List<Course>): List<Course> {
+        return courses.map { save(it) }
+    }
+
     fun delete(id: Long) {
         this.courseRepository.deleteById(id)
     }
 
     private fun toEntity(course: Course, categoryEntity: CategoryEntity): CourseEntity {
-        val courseEntity = if (course.id != 0L) {
+        return if (course.id != 0L) {
             this.courseRepository.findById(course.id)
                 .orElseThrow { NotFoundException(ErrorCode.COURSE_NOT_FOUND) }
                 .apply { update(course, categoryEntity) }
@@ -35,7 +43,6 @@ class CourseProcessor(private val courseRepository: CourseRepository, private va
                 courseCategories.add(CourseCategoryEntity(courseEntity = this, categoryEntity = categoryEntity))
             }
         }
-        return courseEntity
     }
 
 }

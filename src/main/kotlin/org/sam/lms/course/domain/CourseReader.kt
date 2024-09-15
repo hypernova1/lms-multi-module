@@ -11,4 +11,8 @@ class CourseReader(private val courseRepository: CourseRepository) {
         return course.toDomain()
     }
 
+    fun findAllWithLock(ids: List<Long>): List<Course> {
+        return this.courseRepository.findByIdsWithPessimisticLock(ids).map { it.toDomain() }
+    }
+
 }

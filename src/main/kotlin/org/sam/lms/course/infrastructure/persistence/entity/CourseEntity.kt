@@ -1,9 +1,13 @@
 package org.sam.lms.course.infrastructure.persistence.entity
 
 import jakarta.persistence.*
+import org.hibernate.annotations.Filter
+import org.hibernate.annotations.SQLDelete
 import org.sam.lms.course.domain.*
 import org.sam.lms.infra.persistence.AuditEntity
 
+@Filter(name = "deletedAccountFilter", condition = "deleted_date IS NULL OR :deletedDate = true")
+@SQLDelete(sql = "UPDATE course SET deleted_date = current_timestamp WHERE id = ?")
 @Table(name = "course")
 @Entity
 class CourseEntity(

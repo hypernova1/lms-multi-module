@@ -73,8 +73,16 @@ class Course(
      * */
     fun enroll(studentId: Long): CourseTicket {
         checkMaxEnrollment()
-        this.numberOfStudents++
+        increaseNumberOfStudents()
         return CourseTicket(courseId = this.id, studentId = studentId)
+    }
+
+    fun increaseNumberOfStudents() {
+        this.numberOfStudents++
+    }
+
+    fun decreaseNumberOfStudents() {
+        this.numberOfStudents--
     }
 
     private fun checkMaxEnrollment() {

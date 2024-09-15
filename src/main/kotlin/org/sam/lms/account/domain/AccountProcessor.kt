@@ -25,4 +25,8 @@ class AccountProcessor(private val accountRepository: AccountRepository, private
     private fun toEntity(account: Account): AccountEntity {
         return AccountEntity.from(account)
     }
+
+    fun delete(id: Long) {
+        accountRepository.deleteById(id)
+    }
 }

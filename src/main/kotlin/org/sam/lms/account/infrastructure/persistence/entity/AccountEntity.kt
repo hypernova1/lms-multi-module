@@ -1,10 +1,14 @@
 package org.sam.lms.account.infrastructure.persistence.entity
 
 import jakarta.persistence.*
+import org.hibernate.annotations.Filter
+import org.hibernate.annotations.SQLDelete
 import org.sam.lms.account.domain.Account
 import org.sam.lms.account.domain.RoleName
 import org.sam.lms.infra.persistence.AuditEntity
 
+@Filter(name = "deletedAccountFilter", condition = "deleted_date IS NULL OR :deletedDate = true")
+@SQLDelete(sql = "UPDATE account SET deleted_date = current_timestamp WHERE id = ?")
 @Table(name = "account")
 @Entity
 class AccountEntity(
@@ -21,7 +25,7 @@ class AccountEntity(
     @Column(nullable = false, columnDefinition = "varchar")
     val password: String,
 
-    @OneToMany(mappedBy = "accountEntity", cascade = [CascadeType.PERSIST, CascadeType.MERGE])
+    @OneToMany(mappedBy = "accountEntity", cascade = [CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE])
     val accountRoles: MutableSet<AccountRoleEntity> = mutableSetOf(),
 ) : AuditEntity() {
     fun toDomain(): Account {

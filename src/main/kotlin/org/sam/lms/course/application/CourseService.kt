@@ -104,7 +104,6 @@ class CourseService(
         val courseTicket = course.enroll(studentId)
         this.courseProcessor.save(course)
         this.courseTicketProcessor.save(courseTicket)
-
         return CourseTicketSummary(courseTicket.id, DateUtil.toString(courseTicket.applicationDate))
     }
 

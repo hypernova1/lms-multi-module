@@ -18,4 +18,8 @@ class CourseTicketProcessor(private val courseTicketRepository: CourseTicketRepo
         return CourseTicketEntity(studentId = courseTicket.studentId, courseId = courseTicket.courseId, applicationDate = courseTicket.applicationDate)
     }
 
+    fun deleteAll(ids: List<Long>) {
+        this.courseTicketRepository.deleteByIdIn(ids)
+    }
+
 }

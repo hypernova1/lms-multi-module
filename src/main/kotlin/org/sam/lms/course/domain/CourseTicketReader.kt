@@ -24,4 +24,9 @@ class CourseTicketReader(private val courseTicketRepository: CourseTicketReposit
     fun countByCourseId(id: Long): Int {
         return this.courseTicketRepository.countByCourseId(id)
     }
+
+    fun findByStudentId(studentId: Long): List<CourseTicket> {
+        return this.courseTicketRepository.findByStudentId(studentId)
+            .map { it.toDomain() }
+    }
 }
