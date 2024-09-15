@@ -31,7 +31,6 @@ class DistributedLockAop(
                 distributedLock.key
             )
 
-        println("key:" + key)
         val rLock = redissonClient.getLock(key)
 
         return try {
@@ -40,7 +39,6 @@ class DistributedLockAop(
                 distributedLock.leaseTime,
                 distributedLock.timeUnit
             )
-            println("acquire lock")
 
             if (!available) {
                 return false
@@ -52,7 +50,6 @@ class DistributedLockAop(
         } finally {
             try {
                 rLock.unlock()
-                println("release lock")
             } catch (e: IllegalMonitorStateException) {
                 log.info(
                     "Redisson Lock Already UnLock serviceName: {}, key: {}",

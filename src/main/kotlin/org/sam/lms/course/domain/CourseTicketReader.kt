@@ -14,8 +14,8 @@ class CourseTicketReader(private val courseTicketRepository: CourseTicketReposit
         }
     }
 
-    fun checkAlreadyEnrolled(studentId: Long) {
-        val alreadyEnrolled = this.courseTicketRepository.existsByStudentId(studentId)
+    fun checkAlreadyEnrolled(courseId: Long, studentId: Long) {
+        val alreadyEnrolled = this.courseTicketRepository.existsByCourseIdAndStudentId(courseId, studentId)
         if (alreadyEnrolled) {
             throw ConflictException(ErrorCode.ALREADY_JOINED_STUDENT)
         }

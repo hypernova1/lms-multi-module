@@ -82,7 +82,6 @@ class Course(
             return
         }
 
-        println("hello" + this.numberOfStudents)
         if (this.offlineInfo?.maxEnrollment != null && this.offlineInfo?.maxEnrollment!! == this.numberOfStudents) {
             throw BadRequestException(ErrorCode.ENROLLMENT_FULL)
         }

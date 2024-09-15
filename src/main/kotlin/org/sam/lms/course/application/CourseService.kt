@@ -98,11 +98,9 @@ class CourseService(
      * @param studentId 수강할 학생 아이디
      * */
     @DistributedLock(key = "#id")
-    @Transactional
     fun enroll(id: Long, studentId: Long): CourseTicketSummary {
         val course = this.courseReader.findOne(id)
-        println("numberOfStudents:" + course.numberOfStudents)
-        this.courseTicketReader.checkAlreadyEnrolled(studentId)
+        this.courseTicketReader.checkAlreadyEnrolled(id, studentId)
         val courseTicket = course.enroll(studentId)
         this.courseProcessor.save(course)
         this.courseTicketProcessor.save(courseTicket)

@@ -4,9 +4,13 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.sam.lms.common.exception.BadRequestException
+import org.sam.lms.common.exception.NotFoundException
 import org.sam.lms.course.domain.*
+import org.sam.lms.course.infrastructure.persistence.entity.CategoryEntity
+import org.sam.lms.course.infrastructure.persistence.repository.CategoryJpaRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.transaction.annotation.Transactional
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicInteger
@@ -20,6 +24,9 @@ class EnrollmentDistributeTest {
     private lateinit var courseReader: CourseReader
 
     @Autowired
+    private lateinit var categoryRepository: CategoryJpaRepository
+
+    @Autowired
     private lateinit var courseProcessor: CourseProcessor
 
     @Autowired
@@ -28,21 +35,22 @@ class EnrollmentDistributeTest {
     @Autowired
     private lateinit var courseTicketReader: CourseTicketReader
 
+
     @Test
     @DisplayName("분산락 테스트")
     fun test() {
+        val categoryEntity = this.categoryRepository.save(CategoryEntity(name = "테스트 카테고리"))
+
         val course = Course(
-            id = 1L,
             title = "테스트 강의",
             description = "",
             numberOfStudents = 0,
-            category = Category(1L, "테스트 카테고리"),
             price = 0,
             teacherId = 1L,
-            type = CourseType.OFFLINE
+            type = CourseType.OFFLINE,
+            category = Category(id = categoryEntity.id, name = "테스트 카테고리"),
+            offlineInfo = OfflineCourseInfo(maxEnrollment = 10)
         )
-
-        course.offlineInfo = OfflineCourseInfo(maxEnrollment = 10)
 
         courseProcessor.save(course)
 
@@ -57,6 +65,8 @@ class EnrollmentDistributeTest {
                     courseService.enroll(course.id, i)
                 } catch (e: BadRequestException) {
                     numberOfThrows.incrementAndGet()
+                } catch (e: NotFoundException) {
+                    println("hello!!!!")
                 } finally {
                     latch.countDown()
                 }
@@ -68,7 +78,7 @@ class EnrollmentDistributeTest {
         val numberOfTickets = courseTicketReader.countByCourseId(course.id)
 
         assertEquals(10, numberOfTickets)
-        assertEquals(90, numberOfThrows)
+        assertEquals(90, numberOfThrows.get())
     }
 
 }

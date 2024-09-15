@@ -143,7 +143,7 @@ class CourseServiceTest {
         )
 
         `when`(courseReader.findOne(course.id)).thenReturn(course)
-        doNothing().`when`(courseTicketReader).checkAlreadyEnrolled(studentId)
+        doNothing().`when`(courseTicketReader).checkAlreadyEnrolled(courseId = course.id, studentId = studentId)
         `when`(courseTicketProcessor.save(any())).thenReturn(courseTicket)
         `when`(courseProcessor.save(any())).thenReturn(course)
 

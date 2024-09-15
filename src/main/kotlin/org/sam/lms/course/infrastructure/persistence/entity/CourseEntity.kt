@@ -9,7 +9,7 @@ import org.sam.lms.infra.persistence.AuditEntity
 class CourseEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long = 0L,
+    var id: Long = 0L,
 
     @Column(nullable = false, columnDefinition = "varchar")
     var title: String,
@@ -31,25 +31,25 @@ class CourseEntity(
     @Column(nullable = false, columnDefinition = "integer")
     val accountId: Long,
 
-    @OneToOne(mappedBy = "courseEntity", cascade = [CascadeType.ALL])
+    @OneToOne(mappedBy = "courseEntity", cascade = [CascadeType.PERSIST, CascadeType.MERGE])
     var offlineCourseEntity: OfflineCourseEntity? = null,
 
-    @OneToMany(mappedBy = "courseEntity", cascade = [CascadeType.ALL])
+    @OneToMany(mappedBy = "courseEntity", cascade = [CascadeType.PERSIST, CascadeType.MERGE])
     val courseCategories: MutableList<CourseCategoryEntity> = mutableListOf()
 ) : AuditEntity() {
     fun toDomain(): Course {
         val course = Course(
             id = this.id,
             title = this.title,
+            type = this.type,
+            status = this.status,
             description = this.description,
             numberOfStudents = this.numberOfStudents,
             category = Category(
                 this.courseCategories[0].categoryEntity.id,
                 this.courseCategories[0].categoryEntity.name
             ),
-            status = this.status,
             teacherId = this.accountId,
-            type = this.type,
         )
 
         if (this.offlineCourseEntity != null) {
@@ -64,12 +64,13 @@ class CourseEntity(
     }
 
     fun update(course: Course, categoryEntity: CategoryEntity) {
+        this.id = course.id
+        this.status = course.status
+        this.type = course.type
         this.title = course.title
         this.description = course.description
         this.numberOfStudents = course.numberOfStudents
-        this.status = course.status
         this.courseCategories.first().id.categoryId = categoryEntity.id
-        this.type = course.type
 
         if (course.offlineInfo == null) {
             return
@@ -81,15 +82,23 @@ class CourseEntity(
                 addressId = course.offlineInfo!!.addressId,
                 courseEntity = this
             )
-        } else {
-            this.offlineCourseEntity!!.update(course.offlineInfo!!)
+            return
         }
+
+        this.offlineCourseEntity!!.update(course.offlineInfo!!)
     }
 
     companion object {
         fun from(course: Course): CourseEntity {
             val courseEntity =
-                CourseEntity(title = course.title, description = course.description, accountId = course.teacherId)
+                CourseEntity(
+                    id = course.id,
+                    type = course.type,
+                    title = course.title,
+                    description = course.description,
+                    status = course.status,
+                    accountId = course.teacherId,
+                )
             if (course.offlineInfo != null) {
                 courseEntity.offlineCourseEntity = OfflineCourseEntity(
                     maxEnrollment = course.offlineInfo!!.maxEnrollment,
