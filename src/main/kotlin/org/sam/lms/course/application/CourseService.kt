@@ -49,9 +49,9 @@ class CourseService(
             category = category,
             accountId = accountId,
             addressId = addressId
-        );
-        this.courseWriter.save(course)
-        return course
+        )
+
+        return this.courseWriter.save(course)
     }
 
     /**
@@ -71,8 +71,8 @@ class CourseService(
             0
         }
         course.update(updateCourseDto, category, accountId, addressId)
-        this.courseWriter.save(course)
-        return course
+
+        return this.courseWriter.save(course)
     }
 
     /**
@@ -108,8 +108,8 @@ class CourseService(
         this.courseTicketReader.checkAlreadyEnrolled(id, studentId)
         val courseTicket = course.enroll(studentId)
         this.courseWriter.save(course)
-        this.courseTicketWriter.save(courseTicket)
-        return CourseTicketSummary(courseTicket.id, DateUtil.toString(courseTicket.applicationDate))
+        val savedCourseTicket = this.courseTicketWriter.save(courseTicket)
+        return CourseTicketSummary(savedCourseTicket.id, DateUtil.toString(courseTicket.applicationDate))
     }
 
     fun findAll(paging: Paging): Page<CourseSummaryView> {

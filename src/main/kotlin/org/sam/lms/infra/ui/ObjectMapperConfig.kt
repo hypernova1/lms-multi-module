@@ -1,4 +1,4 @@
-package org.sam.lms.infra
+package org.sam.lms.infra.ui
 
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper

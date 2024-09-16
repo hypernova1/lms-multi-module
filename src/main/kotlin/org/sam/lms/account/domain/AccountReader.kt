@@ -8,7 +8,6 @@ class AccountReader(private val accountRepository: AccountRepository) {
     fun findByEmail(email: String): Account? {
         val accountEntity = this.accountRepository.findByEmail(email)
             .orElse(null)
-
         return accountEntity?.toDomain();
     }
 

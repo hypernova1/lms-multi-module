@@ -15,23 +15,29 @@ import java.util.*
 
 interface CourseJpaRepository : JpaRepository<CourseEntity, Long>, CourseRepository {
 
-    @Query("SELECT course, category, offlineCourse " +
-            "FROM CourseEntity course " +
-            "JOIN FETCH course.courseCategories courseCategory " +
-            "JOIN FETCH courseCategory.categoryEntity category " +
-            "LEFT JOIN FETCH course.offlineCourseEntity offlineCourse " +
-            "WHERE course.id = :id")
+    @Query("""
+        SELECT course, category, offlineCourse 
+        FROM CourseEntity course 
+        JOIN FETCH course.courseCategories courseCategory 
+        JOIN FETCH courseCategory.categoryEntity category 
+        LEFT JOIN FETCH course.offlineCourseEntity offlineCourse 
+        WHERE course.id = :id
+        """
+    )
     override fun findById(id: Long): Optional<CourseEntity>
 
     override fun deleteById(id: Long)
 
     @Lock(LockModeType.PESSIMISTIC_READ)
-    @Query("SELECT course, category, offlineCourse " +
-            "FROM CourseEntity course " +
-            "JOIN FETCH course.courseCategories courseCategory " +
-            "JOIN FETCH courseCategory.categoryEntity category " +
-            "LEFT JOIN FETCH course.offlineCourseEntity offlineCourse " +
-            "WHERE course.id IN (:ids)")
+    @Query("""
+        SELECT course, category, offlineCourse
+        FROM CourseEntity course
+        JOIN FETCH course.courseCategories courseCategory 
+        JOIN FETCH courseCategory.categoryEntity category 
+        LEFT JOIN FETCH course.offlineCourseEntity offlineCourse 
+        WHERE course.id IN (:ids)
+        """
+    )
     override fun findByIdsWithPessimisticLock(ids: List<Long>): List<CourseEntity>
 
     @Query("""
@@ -39,10 +45,12 @@ interface CourseJpaRepository : JpaRepository<CourseEntity, Long>, CourseReposit
         FROM CourseEntity course
         JOIN course.offlineCourseEntity offlineCourse
         JOIN AccountEntity account ON account.id = course.accountId
-    """)
+    """
+    )
     override fun findSummaryView(status: CourseStatus, pageable: Pageable): Page<CourseSummaryView>
 
-    @Query("""
+    @Query(
+        """
         SELECT new org.sam.lms.course.application.payload.out.CourseDetailView(course.id, course.title, course.description, course.price, category.id, category.name, account.id, account.name, offlineCourse.maxEnrollment)
         FROM CourseEntity course
         JOIN course.offlineCourseEntity offlineCourse
@@ -50,7 +58,8 @@ interface CourseJpaRepository : JpaRepository<CourseEntity, Long>, CourseReposit
         JOIN courseCategory.categoryEntity category
         JOIN AccountEntity account ON account.id = course.accountId
         WHERE course.id = :id
-    """)
+    """
+    )
     override fun findDetailView(id: Long): Optional<CourseDetailView>
 
 }

@@ -2,8 +2,8 @@ package org.sam.lms.address.domain
 
 import org.sam.lms.address.application.payload.`in`.AddressRequest
 
-class Address(
-    var id: Long = 0,
+data class Address(
+    val id: Long = 0,
     var zipcode: String,
     var si: String,
     var gugun: String,

@@ -7,17 +7,17 @@ import org.sam.lms.common.exception.ForbiddenException
 import org.sam.lms.course.application.payload.`in`.CreateCourseDto
 import org.sam.lms.course.application.payload.`in`.UpdateCourseDto
 
-class Course(
-    var id: Long = 0L,
+data class Course(
+    val id: Long = 0L,
     var title: String,
     var description: String,
     var numberOfStudents: Int = 0,
     var category: Category,
     var price: Int = 0,
-    var status: CourseStatus = CourseStatus.HIDDEN,
     var type: CourseType,
-    val teacherId: Long,
-    var offlineInfo: OfflineCourseInfo? = null
+    var status: CourseStatus = CourseStatus.HIDDEN,
+    var offlineInfo: OfflineCourseInfo? = null,
+    val teacherId: Long
 ) {
 
     /**

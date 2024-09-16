@@ -28,7 +28,12 @@ class CourseReader(private val courseRepository: CourseRepository) {
                 PageRequest.of(paging.page - 1, paging.size, Sort.by(Sort.Direction.DESC, "id"))
             )
 
-        return Page(page = paging.page, size = paging.size, totalPage = courseEntityPage.totalPages, items = courseEntityPage.content)
+        return Page(
+            page = paging.page,
+            size = paging.size,
+            totalPage = courseEntityPage.totalPages,
+            items = courseEntityPage.content
+        )
     }
 
     fun findDetail(id: Long): CourseDetailView? {

@@ -15,7 +15,7 @@ import org.sam.lms.course.application.payload.out.CourseDetailView
 import org.sam.lms.course.application.payload.out.CourseSummaryView
 import org.sam.lms.course.application.payload.out.CourseTicketSummary
 import org.sam.lms.course.ui.dto.PagingCourseSummaryResponse
-import org.sam.lms.infra.QueryStringArgument
+import org.sam.lms.infra.ui.QueryStringArgument
 import org.sam.lms.infra.security.annotation.AuthUser
 import org.sam.lms.infra.security.annotation.StudentOnly
 import org.sam.lms.infra.security.annotation.TeacherOnly

@@ -1,4 +1,4 @@
-package org.sam.lms.infra
+package org.sam.lms.infra.ui
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.servlet.http.HttpServletRequest

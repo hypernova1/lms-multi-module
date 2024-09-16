@@ -6,14 +6,16 @@ import org.sam.lms.common.exception.UnauthorizedException
 import org.springframework.security.crypto.password.PasswordEncoder
 import java.time.LocalDateTime
 
-class Account(
-    var id: Long = 0,
+data class Account(
+    val id: Long = 0L,
     val email: String,
     var name: String,
     val role: RoleName,
     var password: String,
-    val createdDate: LocalDateTime = LocalDateTime.now()
 ) {
+
+    val createdDate: LocalDateTime = LocalDateTime.now()
+
     fun matchPassword(password: String, passwordEncoder: PasswordEncoder) {
         val matched = passwordEncoder.matches(password, this.password)
         if (!matched) {

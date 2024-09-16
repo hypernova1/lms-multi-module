@@ -13,7 +13,7 @@ import org.sam.lms.infra.persistence.AuditEntity
 class CourseEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long = 0L,
+    val id: Long = 0L,
 
     @Column(nullable = false, columnDefinition = "varchar")
     var title: String,
@@ -71,7 +71,6 @@ class CourseEntity(
     }
 
     fun update(course: Course, categoryEntity: CategoryEntity) {
-        this.id = course.id
         this.status = course.status
         this.type = course.type
         this.title = course.title

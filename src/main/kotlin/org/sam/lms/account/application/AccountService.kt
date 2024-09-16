@@ -26,8 +26,8 @@ class AccountService(
         }
 
         val account = Account.of(accountJoinRequest, passwordEncoder)
-        this.accountWriter.save(account)
-        return AccountSummary(id = account.id, email = account.email, name = account.name)
+        val savedAccount = this.accountWriter.save(account)
+        return AccountSummary(id = savedAccount.id, email = account.email, name = account.name)
     }
 
     fun findOne(email: String): Account? {

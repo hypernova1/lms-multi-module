@@ -18,8 +18,7 @@ class AccountWriter(private val accountRepository: AccountRepository, private va
             )
         )
         val savedEntity = this.accountRepository.save(accountEntity)
-        account.id = savedEntity.id
-        return account
+        return account.copy(id = savedEntity.id)
     }
 
     private fun toEntity(account: Account): AccountEntity {

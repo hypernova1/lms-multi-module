@@ -9,8 +9,7 @@ class CourseTicketWriter(private val courseTicketRepository: CourseTicketReposit
     fun save(courseTicket: CourseTicket): CourseTicket {
         val courseTicketEntity = toEntity(courseTicket)
         this.courseTicketRepository.save(courseTicketEntity)
-        courseTicket.id = courseTicketEntity.id
-        return courseTicket
+        return courseTicket.copy(id = courseTicketEntity.id)
     }
 
     fun deleteAll(ids: List<Long>) {

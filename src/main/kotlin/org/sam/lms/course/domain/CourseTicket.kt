@@ -2,10 +2,10 @@ package org.sam.lms.course.domain
 
 import java.time.LocalDateTime
 
-class CourseTicket(
-    var id: Long = 0,
+data class CourseTicket(
+    val id: Long = 0L,
     val courseId: Long,
     val studentId: Long,
-    var applicationDate: LocalDateTime = LocalDateTime.now(),
 ) {
+    val applicationDate: LocalDateTime = LocalDateTime.now()
 }

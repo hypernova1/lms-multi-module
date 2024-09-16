@@ -6,10 +6,10 @@ import org.springframework.stereotype.Component
 @Component
 class AddressWriter(private val addressRepository: AddressRepository) {
 
-    fun save(address: Address) {
+    fun save(address: Address): Address {
         val addressEntity = toEntity(address)
         this.addressRepository.save(addressEntity)
-        address.id = addressEntity.id
+        return address.copy(id = addressEntity.id)
     }
 
     private fun toEntity(address: Address): AddressEntity {

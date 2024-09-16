@@ -21,14 +21,14 @@ class AddressService(private val addressReader: AddressReader, private val addre
             this.addressReader.findOne(it).apply { update(addressRequest) }
         } ?: Address.from(addressRequest)
 
-        this.addressWriter.save(address)
+        val savedAddress = this.addressWriter.save(address)
         return AddressResponse(
-            id = address.id,
-            zipcode = address.zipcode,
-            si = address.si,
-            gugun = address.gugun,
-            doro = address.doro,
-            detail = address.detail
+            id = savedAddress.id,
+            zipcode = savedAddress.zipcode,
+            si = savedAddress.si,
+            gugun = savedAddress.gugun,
+            doro = savedAddress.doro,
+            detail = savedAddress.detail
         )
     }
 

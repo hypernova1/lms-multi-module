@@ -1,4 +1,4 @@
-package org.sam.lms.infra
+package org.sam.lms.infra.lock
 
 import org.springframework.expression.ExpressionParser
 import org.springframework.expression.spel.standard.SpelExpressionParser

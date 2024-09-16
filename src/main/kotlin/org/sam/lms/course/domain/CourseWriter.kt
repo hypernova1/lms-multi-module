@@ -20,8 +20,7 @@ class CourseWriter(
             .orElseThrow { NotFoundException(ErrorCode.CATEGORY_NOT_FOUND) }
         val courseEntity = toEntity(course, categoryEntity)
         this.courseRepository.save(courseEntity)
-        course.id = courseEntity.id
-        return course
+        return course.copy(id = courseEntity.id)
     }
 
     @Transactional
