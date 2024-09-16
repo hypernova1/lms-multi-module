@@ -14,10 +14,10 @@ import org.springframework.stereotype.Service
 @Service
 class CourseService(
     private val courseReader: CourseReader,
-    private val courseProcessor: CourseProcessor,
+    private val courseWriter: CourseWriter,
     private val categoryReader: CategoryReader,
     private val courseTicketReader: CourseTicketReader,
-    private val courseTicketProcessor: CourseTicketProcessor,
+    private val courseTicketWriter: CourseTicketWriter,
     private val addressService: AddressService,
 ) {
 
@@ -45,7 +45,7 @@ class CourseService(
             accountId = accountId,
             addressId = addressId
         );
-        this.courseProcessor.save(course)
+        this.courseWriter.save(course)
         return CourseSummary(id = course.id, title = course.title)
     }
 
@@ -66,7 +66,7 @@ class CourseService(
             0
         }
         course.update(updateCourseDto, category, accountId, addressId)
-        this.courseProcessor.save(course)
+        this.courseWriter.save(course)
         return CourseSummary(id = course.id, title = course.title)
     }
 
@@ -77,7 +77,7 @@ class CourseService(
     fun open(id: Long, accountId: Long) {
         val course = this.courseReader.findOne(id)
         course.open(accountId)
-        this.courseProcessor.save(course)
+        this.courseWriter.save(course)
     }
 
     /**
@@ -88,7 +88,7 @@ class CourseService(
         val course = this.courseReader.findOne(id)
         course.checkUpdatePermission(accountId)
         this.courseTicketReader.checkEnrolledStudents(id)
-        this.courseProcessor.delete(id)
+        this.courseWriter.delete(id)
     }
 
     /**
@@ -102,8 +102,8 @@ class CourseService(
         val course = this.courseReader.findOne(id)
         this.courseTicketReader.checkAlreadyEnrolled(id, studentId)
         val courseTicket = course.enroll(studentId)
-        this.courseProcessor.save(course)
-        this.courseTicketProcessor.save(courseTicket)
+        this.courseWriter.save(course)
+        this.courseTicketWriter.save(courseTicket)
         return CourseTicketSummary(courseTicket.id, DateUtil.toString(courseTicket.applicationDate))
     }
 

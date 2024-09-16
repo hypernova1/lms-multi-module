@@ -1,6 +1,5 @@
 package org.sam.lms.account.domain
 
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -10,12 +9,12 @@ class AccountReaderTest(
     @Autowired
     private val reader: AccountReader,
     @Autowired
-    private val accountProcessor: AccountProcessor
+    private val accountWriter: AccountWriter
 ) {
 
     @Test
     fun findOne() {
-        this.accountProcessor.save(
+        this.accountWriter.save(
             Account(
                 email = "hypemova@gmail.com",
                 password = "1111",

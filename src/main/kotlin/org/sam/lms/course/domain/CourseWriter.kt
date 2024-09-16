@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
 @Component
-class CourseProcessor(
+class CourseWriter(
     private val courseRepository: CourseRepository,
     private val categoryRepository: CategoryRepository
 ) {

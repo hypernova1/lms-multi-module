@@ -7,7 +7,7 @@ import org.sam.lms.common.exception.NotFoundException
 import org.springframework.stereotype.Component
 
 @Component
-class AccountProcessor(private val accountRepository: AccountRepository, private val roleRepository: RoleRepository) {
+class AccountWriter(private val accountRepository: AccountRepository, private val roleRepository: RoleRepository) {
     fun save(account: Account): Account {
         val roleEntity = this.roleRepository.findByName(account.role.toEntityName())
             .orElseThrow { NotFoundException(ErrorCode.ROLE_NAME_NOT_FOUND) }

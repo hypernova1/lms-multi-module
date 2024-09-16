@@ -30,7 +30,7 @@ class CourseServiceTest {
     private lateinit var courseReader: CourseReader
 
     @Mock
-    private lateinit var courseProcessor: CourseProcessor
+    private lateinit var courseWriter: CourseWriter
 
     @Mock
     private lateinit var categoryReader: CategoryReader
@@ -39,17 +39,17 @@ class CourseServiceTest {
     private lateinit var courseTicketReader: CourseTicketReader
 
     @Mock
-    private lateinit var courseTicketProcessor: CourseTicketProcessor
+    private lateinit var courseTicketWriter: CourseTicketWriter
 
     @BeforeEach
     fun init() {
         this.courseService =
             CourseService(
                 courseReader,
-                courseProcessor,
+                courseWriter,
                 categoryReader,
                 courseTicketReader,
-                courseTicketProcessor,
+                courseTicketWriter,
                 addressService
             )
     }
@@ -144,8 +144,8 @@ class CourseServiceTest {
 
         `when`(courseReader.findOne(course.id)).thenReturn(course)
         doNothing().`when`(courseTicketReader).checkAlreadyEnrolled(courseId = course.id, studentId = studentId)
-        `when`(courseTicketProcessor.save(any())).thenReturn(courseTicket)
-        `when`(courseProcessor.save(any())).thenReturn(course)
+        `when`(courseTicketWriter.save(any())).thenReturn(courseTicket)
+        `when`(courseWriter.save(any())).thenReturn(course)
 
         // when
         val result = courseService.enroll(course.id, studentId)

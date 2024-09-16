@@ -3,7 +3,7 @@ package org.sam.lms.account.application
 import org.sam.lms.account.application.payload.`in`.AccountJoinRequest
 import org.sam.lms.account.application.payload.out.AccountSummary
 import org.sam.lms.account.domain.Account
-import org.sam.lms.account.domain.AccountProcessor
+import org.sam.lms.account.domain.AccountWriter
 import org.sam.lms.account.domain.AccountReader
 import org.sam.lms.account.domain.RoleName
 import org.sam.lms.common.exception.ConflictException
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service
 @Service
 class AccountService(
     private val accountReader: AccountReader,
-    private val accountProcessor: AccountProcessor,
+    private val accountWriter: AccountWriter,
     private val passwordEncoder: PasswordEncoder,
     private val applicationEventPublisher: ApplicationEventPublisher
 ) {
@@ -26,7 +26,7 @@ class AccountService(
         }
 
         val account = Account.of(accountJoinRequest, passwordEncoder)
-        this.accountProcessor.save(account)
+        this.accountWriter.save(account)
         return AccountSummary(id = account.id, email = account.email, name = account.name)
     }
 
@@ -35,7 +35,7 @@ class AccountService(
     }
 
     fun delete(account: Account) {
-        this.accountProcessor.delete(account.id)
+        this.accountWriter.delete(account.id)
         if (account.role === RoleName.STUDENT) {
             applicationEventPublisher.publishEvent(AccountDeleteEvent(account.id))
         }

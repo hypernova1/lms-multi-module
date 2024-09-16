@@ -10,7 +10,6 @@ class AddressReader(private val addressRepository: AddressRepository) {
     fun findOne(id: Long): Address {
         val addressEntity = this.addressRepository.findById(id)
             .orElseThrow { NotFoundException(ErrorCode.ADDRESS_NOT_FOUND) }
-
         return addressEntity.toDomain()
     }
 

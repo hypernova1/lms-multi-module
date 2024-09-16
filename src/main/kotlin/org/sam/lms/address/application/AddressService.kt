@@ -3,12 +3,12 @@ package org.sam.lms.address.application
 import org.sam.lms.address.application.payload.`in`.AddressRequest
 import org.sam.lms.address.application.payload.out.AddressResponse
 import org.sam.lms.address.domain.Address
-import org.sam.lms.address.domain.AddressProcessor
+import org.sam.lms.address.domain.AddressWriter
 import org.sam.lms.address.domain.AddressReader
 import org.springframework.stereotype.Service
 
 @Service
-class AddressService(private val addressReader: AddressReader, private val addressProcessor: AddressProcessor) {
+class AddressService(private val addressReader: AddressReader, private val addressWriter: AddressWriter) {
 
     /**
      * 주소를 저장한다. 요청 데이터에 아이디가 존재하면 업데이트한다.
@@ -21,7 +21,7 @@ class AddressService(private val addressReader: AddressReader, private val addre
             this.addressReader.findOne(it).apply { update(addressRequest) }
         } ?: Address.from(addressRequest)
 
-        this.addressProcessor.save(address)
+        this.addressWriter.save(address)
         return AddressResponse(
             id = address.id,
             zipcode = address.zipcode,
