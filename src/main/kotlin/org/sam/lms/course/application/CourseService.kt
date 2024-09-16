@@ -2,10 +2,15 @@ package org.sam.lms.course.application
 
 import jakarta.transaction.Transactional
 import org.sam.lms.address.application.AddressService
+import org.sam.lms.common.Page
+import org.sam.lms.common.Paging
+import org.sam.lms.common.exception.ErrorCode
+import org.sam.lms.common.exception.NotFoundException
 import org.sam.lms.common.util.DateUtil
 import org.sam.lms.course.application.payload.`in`.CreateCourseDto
 import org.sam.lms.course.application.payload.`in`.UpdateCourseDto
-import org.sam.lms.course.application.payload.out.CourseSummary
+import org.sam.lms.course.application.payload.out.CourseDetailView
+import org.sam.lms.course.application.payload.out.CourseSummaryView
 import org.sam.lms.course.application.payload.out.CourseTicketSummary
 import org.sam.lms.course.domain.*
 import org.sam.lms.infra.lock.DistributedLock
@@ -29,7 +34,7 @@ class CourseService(
      * @return 강의 요약 정보
      * */
     @Transactional
-    fun create(createCourseDto: CreateCourseDto, accountId: Long): CourseSummary {
+    fun create(createCourseDto: CreateCourseDto, accountId: Long): Course {
         val category = this.categoryReader.findOne(createCourseDto.categoryId)
 
         val addressId: Long = if (createCourseDto.address != null) {
@@ -46,7 +51,7 @@ class CourseService(
             addressId = addressId
         );
         this.courseWriter.save(course)
-        return CourseSummary(id = course.id, title = course.title)
+        return course
     }
 
     /**
@@ -56,7 +61,7 @@ class CourseService(
      * @param accountId
      * */
     @Transactional
-    fun update(updateCourseDto: UpdateCourseDto, accountId: Long): CourseSummary {
+    fun update(updateCourseDto: UpdateCourseDto, accountId: Long): Course {
         val course = this.courseReader.findOne(updateCourseDto.id)
         val category = this.categoryReader.findOne(updateCourseDto.categoryId)
         val addressId: Long = if (updateCourseDto.address != null) {
@@ -67,7 +72,7 @@ class CourseService(
         }
         course.update(updateCourseDto, category, accountId, addressId)
         this.courseWriter.save(course)
-        return CourseSummary(id = course.id, title = course.title)
+        return course
     }
 
     /**
@@ -105,6 +110,14 @@ class CourseService(
         this.courseWriter.save(course)
         this.courseTicketWriter.save(courseTicket)
         return CourseTicketSummary(courseTicket.id, DateUtil.toString(courseTicket.applicationDate))
+    }
+
+    fun findAll(paging: Paging): Page<CourseSummaryView> {
+        return this.courseReader.findAllPaging(paging)
+    }
+
+    fun findOne(id: Long): CourseDetailView {
+        return this.courseReader.findDetail(id) ?: throw NotFoundException(ErrorCode.COURSE_NOT_FOUND)
     }
 
 }

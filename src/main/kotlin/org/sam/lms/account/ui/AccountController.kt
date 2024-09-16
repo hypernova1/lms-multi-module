@@ -9,7 +9,6 @@ import org.sam.lms.account.application.AccountService
 import org.sam.lms.account.application.payload.`in`.AccountJoinRequest
 import org.sam.lms.account.application.payload.out.AccountSummary
 import org.sam.lms.account.domain.Account
-import org.sam.lms.course.application.payload.out.CourseSummary
 import org.sam.lms.infra.security.annotation.AuthUser
 import org.sam.lms.infra.swagger.annotation.SwaggerCreatedResponse
 import org.sam.lms.infra.swagger.annotation.SwaggerOkResponse

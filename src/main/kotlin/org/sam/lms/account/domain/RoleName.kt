@@ -11,7 +11,7 @@ enum class RoleName {
     }
 
     companion object {
-        fun fromEntityName(name: String): RoleName {
+        fun from(name: String): RoleName {
             return try {
                 valueOf(name.removePrefix("ROLE_"))
             } catch (e: IllegalArgumentException) {

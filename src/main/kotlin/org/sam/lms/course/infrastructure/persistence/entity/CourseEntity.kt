@@ -22,6 +22,9 @@ class CourseEntity(
     var description: String,
 
     @Column(nullable = false, columnDefinition = "integer")
+    var price: Int,
+
+    @Column(nullable = false, columnDefinition = "integer")
     var numberOfStudents: Int = 0,
 
     @Column(nullable = false, columnDefinition = "varchar")
@@ -72,6 +75,7 @@ class CourseEntity(
         this.status = course.status
         this.type = course.type
         this.title = course.title
+        this.price = course.price
         this.description = course.description
         this.numberOfStudents = course.numberOfStudents
         this.courseCategories.first().id.categoryId = categoryEntity.id
@@ -100,6 +104,7 @@ class CourseEntity(
                     type = course.type,
                     title = course.title,
                     description = course.description,
+                    price = course.price,
                     status = course.status,
                     accountId = course.teacherId,
                 )

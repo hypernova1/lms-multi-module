@@ -33,7 +33,7 @@ class AccountEntity(
             id = this.id,
             email = this.email,
             name = this.name,
-            role = RoleName.fromEntityName(this.accountRoles.first().roleEntity.name),
+            role = RoleName.from(this.accountRoles.first().roleEntity.name),
             password = this.password
         )
     }

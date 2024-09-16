@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.sam.lms.common.exception.BadRequestException
-import org.sam.lms.common.exception.NotFoundException
 import org.sam.lms.course.domain.*
 import org.sam.lms.course.infrastructure.persistence.entity.CategoryEntity
 import org.sam.lms.course.infrastructure.persistence.repository.CategoryJpaRepository
@@ -63,8 +62,6 @@ class EnrollmentDistributeTest {
                     courseService.enroll(course.id, i)
                 } catch (e: BadRequestException) {
                     numberOfThrows.incrementAndGet()
-                } catch (e: NotFoundException) {
-                    println("hello!!!!")
                 } finally {
                     latch.countDown()
                 }
