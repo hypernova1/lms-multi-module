@@ -18,9 +18,8 @@ import org.springframework.stereotype.Service
 
 @Service
 class CourseService(
-    private val courseReader: CourseReader,
-    private val courseWriter: CourseWriter,
-    private val categoryReader: CategoryReader,
+    private val courseRepository: CourseRepository,
+    private val categoryService: CategoryService,
     private val courseTicketReader: CourseTicketReader,
     private val courseTicketWriter: CourseTicketWriter,
     private val addressService: AddressService,
@@ -35,7 +34,10 @@ class CourseService(
      * */
     @Transactional
     fun create(createCourseDto: CreateCourseDto, accountId: Long): Course {
-        val category = this.categoryReader.findOne(createCourseDto.categoryId)
+        val existsCategory = this.categoryService.existsById(createCourseDto.categoryId)
+        if (!existsCategory) {
+            throw NotFoundException(ErrorCode.CATEGORY_NOT_FOUND)
+        }
 
         val addressId: Long = if (createCourseDto.address != null) {
             val address = this.addressService.save(createCourseDto.address)
@@ -46,12 +48,11 @@ class CourseService(
 
         val course = Course.of(
             createCourseDto = createCourseDto,
-            category = category,
             accountId = accountId,
             addressId = addressId
         )
 
-        return this.courseWriter.save(course)
+        return this.courseRepository.save(course)
     }
 
     /**
@@ -62,17 +63,26 @@ class CourseService(
      * */
     @Transactional
     fun update(updateCourseDto: UpdateCourseDto, accountId: Long): Course {
-        val course = this.courseReader.findOne(updateCourseDto.id)
-        val category = this.categoryReader.findOne(updateCourseDto.categoryId)
+        val course = this.courseRepository.findById(updateCourseDto.id)
+
+        if (course == null) {
+            throw NotFoundException(ErrorCode.COURSE_NOT_FOUND)
+        }
+
+        val existsCategory = this.categoryService.existsById(updateCourseDto.categoryId)
+        if (!existsCategory) {
+            throw NotFoundException(ErrorCode.CATEGORY_NOT_FOUND)
+        }
+
         val addressId: Long = if (updateCourseDto.address != null) {
             val address = this.addressService.save(updateCourseDto.address)
             address.id
         } else {
             0
         }
-        course.update(updateCourseDto, category, accountId, addressId)
+        course.update(updateCourseDto, accountId, addressId)
 
-        return this.courseWriter.save(course)
+        return this.courseRepository.save(course)
     }
 
     /**
@@ -80,9 +90,9 @@ class CourseService(
      * */
     @Transactional
     fun open(id: Long, accountId: Long) {
-        val course = this.courseReader.findOne(id)
+        val course = this.courseRepository.findById(id) ?: throw NotFoundException(ErrorCode.COURSE_NOT_FOUND)
         course.open(accountId)
-        this.courseWriter.save(course)
+        this.courseRepository.save(course)
     }
 
     /**
@@ -90,10 +100,10 @@ class CourseService(
      * */
     @Transactional
     fun delete(id: Long, accountId: Long) {
-        val course = this.courseReader.findOne(id)
+        val course = this.courseRepository.findById(id) ?: throw NotFoundException(ErrorCode.COURSE_NOT_FOUND)
         course.checkUpdatePermission(accountId)
         this.courseTicketReader.checkEnrolledStudents(id)
-        this.courseWriter.delete(id)
+        this.courseRepository.deleteById(id)
     }
 
     /**
@@ -104,20 +114,20 @@ class CourseService(
      * */
     @DistributedLock(key = "#id")
     fun enroll(id: Long, studentId: Long): CourseTicketSummary {
-        val course = this.courseReader.findOne(id)
+        val course = this.courseRepository.findById(id) ?: throw NotFoundException(ErrorCode.COURSE_NOT_FOUND)
         this.courseTicketReader.checkAlreadyEnrolled(id, studentId)
         val courseTicket = course.enroll(studentId)
-        this.courseWriter.save(course)
+        this.courseRepository.save(course)
         val savedCourseTicket = this.courseTicketWriter.save(courseTicket)
         return CourseTicketSummary(savedCourseTicket.id, DateUtil.toString(courseTicket.applicationDate))
     }
 
     fun findAll(paging: Paging): Page<CourseSummaryView> {
-        return this.courseReader.findAllPaging(paging)
+        return this.courseRepository.findSummaryView(CourseStatus.VISIBLE, paging)
     }
 
     fun findOne(id: Long): CourseDetailView {
-        return this.courseReader.findDetail(id) ?: throw NotFoundException(ErrorCode.COURSE_NOT_FOUND)
+        return this.courseRepository.findDetailView(id) ?: throw NotFoundException(ErrorCode.COURSE_NOT_FOUND)
     }
 
 }

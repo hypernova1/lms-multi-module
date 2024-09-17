@@ -1,6 +1,7 @@
 package org.sam.lms.course.ui
 
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.media.ArraySchema
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -8,9 +9,11 @@ import jakarta.validation.Valid
 import org.sam.lms.account.domain.Account
 import org.sam.lms.common.Page
 import org.sam.lms.common.Paging
+import org.sam.lms.course.application.CategoryService
 import org.sam.lms.course.application.CourseService
 import org.sam.lms.course.application.payload.`in`.CreateCourseDto
 import org.sam.lms.course.application.payload.`in`.UpdateCourseDto
+import org.sam.lms.course.application.payload.out.CategorySummary
 import org.sam.lms.course.application.payload.out.CourseDetailView
 import org.sam.lms.course.application.payload.out.CourseSummaryView
 import org.sam.lms.course.application.payload.out.CourseTicketSummary
@@ -29,7 +32,7 @@ import java.net.URI
 @Tag(name = "강의")
 @RestController
 @RequestMapping("/api/v1/courses")
-class CourseController(private val courseService: CourseService) {
+class CourseController(private val courseService: CourseService, private val categoryService: CategoryService) {
 
     @Operation(summary = "강의 생성")
     @SwaggerCreatedResponse(summary = "강의 생성 성공", content = [Content(schema = Schema(implementation = CourseSummaryView::class))])
@@ -76,6 +79,14 @@ class CourseController(private val courseService: CourseService) {
     fun findAll(@PathVariable id: Long): ResponseEntity<CourseDetailView> {
         val courseDetail = this.courseService.findOne(id)
         return ResponseEntity.ok(courseDetail)
+    }
+
+    @Operation(summary = "카테고리 목록 조회")
+    @SwaggerOkResponse(summary = "카테고리 조회 성공", content = [Content(array = ArraySchema(schema = Schema(implementation = CategorySummary::class)))])
+    @GetMapping("/categories")
+    fun findCategories(): ResponseEntity<List<CategorySummary>> {
+        val categories = this.categoryService.findAll()
+        return ResponseEntity.ok(categories.map { CategorySummary(it.id, it.name) })
     }
 
 

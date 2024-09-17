@@ -27,6 +27,5 @@ class CourseTicketReader(private val courseTicketRepository: CourseTicketReposit
 
     fun findByStudentId(studentId: Long): List<CourseTicket> {
         return this.courseTicketRepository.findByStudentId(studentId)
-            .map { it.toDomain() }
     }
 }

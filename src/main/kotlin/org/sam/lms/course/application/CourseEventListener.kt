@@ -1,10 +1,7 @@
 package org.sam.lms.course.application
 
 import org.sam.lms.account.application.AccountDeleteEvent
-import org.sam.lms.course.domain.CourseWriter
-import org.sam.lms.course.domain.CourseReader
-import org.sam.lms.course.domain.CourseTicketWriter
-import org.sam.lms.course.domain.CourseTicketReader
+import org.sam.lms.course.domain.*
 import org.springframework.context.event.EventListener
 import org.springframework.retry.annotation.Retryable
 import org.springframework.scheduling.annotation.Async
@@ -14,8 +11,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @Component
 class CourseEventListener(
-    private val courseReader: CourseReader,
-    private val courseWriter: CourseWriter,
+    private val courseRepository: CourseRepository,
     private val courseTicketReader: CourseTicketReader,
     private val courseTicketWriter: CourseTicketWriter,
     private val courseService: CourseService,
@@ -32,9 +28,9 @@ class CourseEventListener(
     fun deleteCourseTickets(accountDeleteEvent: AccountDeleteEvent) {
         val courseTickets = this.courseTicketReader.findByStudentId(accountDeleteEvent.studentId)
         val courseIds = courseTickets.map { it.courseId }
-        val courses = courseReader.findAllWithLock(courseIds)
+        val courses = courseRepository.findByIdsWithPessimisticLock(courseIds)
         courses.forEach { it.decreaseNumberOfStudents() }
-        this.courseWriter.saveAll(courses)
+        this.courseRepository.saveAll(courses)
         this.courseTicketWriter.deleteAll(courseTickets.map { it.id })
     }
 

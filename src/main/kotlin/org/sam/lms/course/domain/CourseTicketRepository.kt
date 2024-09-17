@@ -1,12 +1,10 @@
 package org.sam.lms.course.domain
 
-import org.sam.lms.course.infrastructure.persistence.entity.CourseTicketEntity
-
 interface CourseTicketRepository {
     fun existsByCourseId(courseId: Long): Boolean
     fun existsByCourseIdAndStudentId(courseId: Long, studentId: Long): Boolean
-    fun save(courseTicketEntity: CourseTicketEntity): CourseTicketEntity
+    fun save(courseTicket: CourseTicket): CourseTicket
     fun countByCourseId(courseId: Long): Int
-    fun findByStudentId(studentId: Long): List<CourseTicketEntity>
+    fun findByStudentId(studentId: Long): List<CourseTicket>
     fun deleteByIdIn(ids: List<Long>)
 }

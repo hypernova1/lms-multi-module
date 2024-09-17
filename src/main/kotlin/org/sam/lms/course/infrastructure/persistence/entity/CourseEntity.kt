@@ -41,8 +41,8 @@ class CourseEntity(
     @OneToOne(mappedBy = "courseEntity", cascade = [CascadeType.PERSIST, CascadeType.MERGE])
     var offlineCourseEntity: OfflineCourseEntity? = null,
 
-    @OneToMany(mappedBy = "courseEntity", cascade = [CascadeType.PERSIST, CascadeType.MERGE])
-    val courseCategories: MutableList<CourseCategoryEntity> = mutableListOf()
+    @Column(nullable = false, columnDefinition = "integer")
+    var categoryId: Long,
 ) : AuditEntity() {
     fun toDomain(): Course {
         val course = Course(
@@ -52,10 +52,7 @@ class CourseEntity(
             status = this.status,
             description = this.description,
             numberOfStudents = this.numberOfStudents,
-            category = Category(
-                this.courseCategories[0].categoryEntity.id,
-                this.courseCategories[0].categoryEntity.name
-            ),
+            categoryId = this.categoryId,
             teacherId = this.accountId,
         )
 
@@ -70,14 +67,14 @@ class CourseEntity(
         return course
     }
 
-    fun update(course: Course, categoryEntity: CategoryEntity) {
+    fun update(course: Course) {
         this.status = course.status
         this.type = course.type
         this.title = course.title
         this.price = course.price
         this.description = course.description
-        this.numberOfStudents = course.numberOfStudents
-        this.courseCategories.first().id.categoryId = categoryEntity.id
+        this.numberOfStudents = course.numberOfStudents;
+        this.categoryId = course.categoryId
 
         if (course.offlineInfo == null) {
             return
@@ -105,6 +102,7 @@ class CourseEntity(
                     description = course.description,
                     price = course.price,
                     status = course.status,
+                    categoryId = course.categoryId,
                     accountId = course.teacherId,
                 )
             if (course.offlineInfo != null) {

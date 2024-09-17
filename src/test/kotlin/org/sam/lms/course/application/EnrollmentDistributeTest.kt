@@ -18,13 +18,10 @@ import java.util.concurrent.atomic.AtomicInteger
 class EnrollmentDistributeTest {
 
     @Autowired
-    private lateinit var courseReader: CourseReader
+    private lateinit var courseRepository: CourseRepository
 
     @Autowired
     private lateinit var categoryRepository: CategoryJpaRepository
-
-    @Autowired
-    private lateinit var courseWriter: CourseWriter
 
     @Autowired
     private lateinit var courseService: CourseService
@@ -49,7 +46,7 @@ class EnrollmentDistributeTest {
             offlineInfo = OfflineCourseInfo(maxEnrollment = 10)
         )
 
-        courseWriter.save(course)
+        courseRepository.save(course)
 
         val numberOfThreads = 100L
         val executorService = Executors.newFixedThreadPool(numberOfThreads.toInt())

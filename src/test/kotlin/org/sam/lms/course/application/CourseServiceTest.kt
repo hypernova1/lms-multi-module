@@ -27,13 +27,10 @@ class CourseServiceTest {
     private lateinit var addressService: AddressService
 
     @Mock
-    private lateinit var courseReader: CourseReader
+    private lateinit var courseRepository: CourseRepository
 
     @Mock
-    private lateinit var courseWriter: CourseWriter
-
-    @Mock
-    private lateinit var categoryReader: CategoryReader
+    private lateinit var categoryRepository: CategoryRepository
 
     @Mock
     private lateinit var courseTicketReader: CourseTicketReader
@@ -45,9 +42,8 @@ class CourseServiceTest {
     fun init() {
         this.courseService =
             CourseService(
-                courseReader,
-                courseWriter,
-                categoryReader,
+                courseRepository,
+                categoryRepository,
                 courseTicketReader,
                 courseTicketWriter,
                 addressService
@@ -60,7 +56,7 @@ class CourseServiceTest {
         //given
         val dto = CreateCourseDto(title = "테스트 강의", description = "테스트 강의 설명입니다.", categoryId = 1, price = 1_000)
 
-        `when`(categoryReader.findOne(1L)).thenReturn(Category(1L, "테스트 카테고리"))
+        `when`(categoryRepository.findById(1L)).thenReturn(Category(1L, "테스트 카테고리"))
 
         //when
         val categorySummary = courseService.create(dto, 1)
@@ -87,8 +83,8 @@ class CourseServiceTest {
             )
 
 
-        `when`(categoryReader.findOne(2L)).thenReturn(Category(2L, "카테고리 2"))
-        `when`(courseReader.findOne(1L)).thenReturn(course)
+        `when`(categoryRepository.findById(2L)).thenReturn(Category(2L, "카테고리 2"))
+        `when`(courseRepository.findById(1L)).thenReturn(course)
 
         //when
         val categorySummary = courseService.update(dto, 1)
@@ -115,8 +111,8 @@ class CourseServiceTest {
             )
 
 
-        `when`(categoryReader.findOne(2L)).thenReturn(Category(2L, "카테고리 2"))
-        `when`(courseReader.findOne(1L)).thenReturn(course)
+        `when`(categoryRepository.findById(2L)).thenReturn(Category(2L, "카테고리 2"))
+        `when`(courseRepository.findById(1L)).thenReturn(course)
 
         //when, then
         assertThrows<ForbiddenException> { courseService.update(dto, 2) }
@@ -142,10 +138,10 @@ class CourseServiceTest {
             studentId = 1L,
         )
 
-        `when`(courseReader.findOne(course.id)).thenReturn(course)
+        `when`(courseRepository.findById(course.id)).thenReturn(course)
         doNothing().`when`(courseTicketReader).checkAlreadyEnrolled(courseId = course.id, studentId = studentId)
         `when`(courseTicketWriter.save(any())).thenReturn(courseTicket)
-        `when`(courseWriter.save(any())).thenReturn(course)
+        `when`(courseRepository.save(any())).thenReturn(course)
 
         // when
         val result = courseService.enroll(course.id, studentId)

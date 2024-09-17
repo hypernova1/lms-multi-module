@@ -12,11 +12,11 @@ data class Course(
     var title: String,
     var description: String,
     var numberOfStudents: Int = 0,
-    var category: Category,
     var price: Int = 0,
     var type: CourseType,
     var status: CourseStatus = CourseStatus.HIDDEN,
     var offlineInfo: OfflineCourseInfo? = null,
+    var categoryId: Long,
     val teacherId: Long
 ) {
 
@@ -24,17 +24,16 @@ data class Course(
      * 강의 정보를 수정한다.
      *
      * @param updateCourseDto 업데이트할 정보
-     * @param category 카테고리
      * @param accountId 수정할 강사 아이디
      * */
-    fun update(updateCourseDto: UpdateCourseDto, category: Category, accountId: Long, addressId: Long) {
+    fun update(updateCourseDto: UpdateCourseDto, accountId: Long, addressId: Long) {
         this.checkUpdatePermission(accountId)
 
         this.title = updateCourseDto.title
         this.description = updateCourseDto.description
         this.type = updateCourseDto.type
         this.price = updateCourseDto.price
-        this.category = category
+        this.categoryId = updateCourseDto.categoryId
 
         if (this.type == CourseType.OFFLINE) {
             this.offlineInfo = OfflineCourseInfo(maxEnrollment = updateCourseDto.maxEnrollment, addressId = addressId)
@@ -96,11 +95,11 @@ data class Course(
     }
 
     companion object {
-        fun of(createCourseDto: CreateCourseDto, category: Category, accountId: Long, addressId: Long): Course {
+        fun of(createCourseDto: CreateCourseDto, accountId: Long, addressId: Long): Course {
             val course = Course(
                 title = createCourseDto.title,
                 description = createCourseDto.description,
-                category = category,
+                categoryId = createCourseDto.categoryId,
                 teacherId = accountId,
                 price = createCourseDto.price,
                 type = createCourseDto.type,
