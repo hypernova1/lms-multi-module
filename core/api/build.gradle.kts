@@ -6,6 +6,10 @@ tasks.getByName("jar") {
     enabled = false
 }
 
+tasks.withType<org.springframework.boot.gradle.tasks.bundling.BootJar> {
+    mainClass.set("org.sam.lms.ApplicationKt")
+}
+
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")

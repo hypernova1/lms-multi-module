@@ -29,17 +29,17 @@ class CourseEntityRepository(private val courseJpaRepository: CourseJpaRepositor
 
     override fun findSummaryView(
         status: CourseStatus,
-        page: Paging
+        pageable: Paging
     ): Page<CourseSummaryView> {
         val courseEntityPage =
             this.courseJpaRepository.findSummaryView(
                 status,
-                PageRequest.of(page.page - 1, page.size, Sort.by(Sort.Direction.DESC, "id"))
+                PageRequest.of(pageable.page - 1, pageable.size, Sort.by(Sort.Direction.DESC, "id"))
             )
 
         return Page(
-            page = page.page,
-            size = page.size,
+            page = pageable.page,
+            size = pageable.size,
             totalPage = courseEntityPage.totalPages,
             items = courseEntityPage.content
         )
