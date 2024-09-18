@@ -1,4 +1,4 @@
-package org.sam.domain.account.domain
+package org.sam.lms.domain.account.domain
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
@@ -19,7 +19,7 @@ class AccountWriterTest(
                 email = "hypemova@gmail.com",
                 password = "1111",
                 name = "sam",
-                role = Role(name = org.sam.lms.domain.account.domain.RoleName.STUDENT)
+                role = Role(name = RoleName.STUDENT)
             )
         )
 

@@ -1,4 +1,4 @@
-package org.sam.domain.course.domain
+package org.sam.lms.domain.course.domain
 
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test

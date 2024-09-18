@@ -1,27 +1,33 @@
-package org.sam.domain.course.application
+package org.sam.lms.domain.course.application
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
+import org.mockito.junit.jupiter.MockitoExtension
 import org.sam.lms.common.exception.BadRequestException
-import org.sam.domain.address.application.AddressService
-import org.sam.domain.course.domain.*
+import org.sam.lms.TestConfig
+import org.sam.lms.domain.address.application.AddressService
+import org.sam.lms.domain.course.domain.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.context.ContextConfiguration
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicInteger
 
 
-@SpringBootTest
+@ContextConfiguration(classes = [TestConfig::class])
+@ExtendWith(MockitoExtension::class)
+@SpringBootTest()
 class EnrollmentDistributeTest(
     @Mock
     val categoryService: CategoryService,
     @Autowired
-    val courseRepository: org.sam.lms.domain.course.domain.CourseRepository,
+    val courseRepository: CourseRepository,
 
     @Autowired
     val courseTicketReader: CourseTicketReader,

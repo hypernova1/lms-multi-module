@@ -1,11 +1,11 @@
 package org.sam.lms.persistence.course.repository
 
 import org.sam.lms.domain.course.domain.Category
+import org.sam.lms.domain.course.domain.CategoryRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-class CategoryEntityRepository(private val categoryJpaRepository: CategoryJpaRepository) :
-    org.sam.lms.domain.course.domain.CategoryRepository {
+class CategoryEntityRepository(private val categoryJpaRepository: CategoryJpaRepository) : CategoryRepository {
 
     override fun existsById(id: Long): Boolean {
         return this.categoryJpaRepository.existsById(id)

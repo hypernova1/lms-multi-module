@@ -1,4 +1,4 @@
-package org.sam.domain.account.domain
+package org.sam.lms.domain.account.domain
 
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -20,7 +20,7 @@ class AccountReaderTest(
                 email = "hypemova@gmail.com",
                 password = "1111",
                 name = "sam",
-                role = Role(name = org.sam.lms.domain.account.domain.RoleName.STUDENT)
+                role = Role(name = RoleName.STUDENT)
             )
         )
 

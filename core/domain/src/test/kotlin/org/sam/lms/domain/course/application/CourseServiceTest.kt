@@ -1,4 +1,4 @@
-package org.sam.domain.course.application
+package org.sam.lms.domain.course.application
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -14,9 +14,10 @@ import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.any
 import org.sam.lms.common.exception.ForbiddenException
-import org.sam.domain.address.application.AddressService
-import org.sam.domain.course.application.payload.`in`.UpdateCourseDto
-import org.sam.domain.course.domain.*
+import org.sam.lms.domain.address.application.AddressService
+import org.sam.lms.domain.course.application.payload.`in`.CreateCourseDto
+import org.sam.lms.domain.course.application.payload.`in`.UpdateCourseDto
+import org.sam.lms.domain.course.domain.*
 
 @ExtendWith(MockitoExtension::class)
 class CourseServiceTest {
@@ -27,7 +28,7 @@ class CourseServiceTest {
     private lateinit var addressService: AddressService
 
     @Mock
-    private lateinit var courseRepository: org.sam.lms.domain.course.domain.CourseRepository
+    private lateinit var courseRepository: CourseRepository
 
     @Mock
     private lateinit var categoryService: CategoryService
@@ -43,7 +44,7 @@ class CourseServiceTest {
         this.courseService =
             CourseService(
                 courseRepository = courseRepository,
-                categoryService =  categoryService,
+                categoryService = categoryService,
                 courseTicketReader = courseTicketReader,
                 courseTicketWriter = courseTicketWriter,
                 addressService = addressService
@@ -54,7 +55,7 @@ class CourseServiceTest {
     @DisplayName("강의를 등록한다")
     fun create_course() {
         //given
-        val dto = org.sam.lms.domain.course.application.payload.`in`.CreateCourseDto(
+        val dto = CreateCourseDto(
             title = "테스트 강의",
             description = "테스트 강의 설명입니다.",
             categoryId = 1,
@@ -62,12 +63,23 @@ class CourseServiceTest {
         )
 
         `when`(categoryService.existsById(1L)).thenReturn(true)
+        `when`(courseRepository.save(any())).thenReturn(
+            Course(
+                id = 1L,
+                title = dto.title,
+                dto.description,
+                price = dto.price,
+                categoryId = dto.categoryId,
+                teacherId = 1L,
+                type = dto.type
+            )
+        )
 
         //when
-        val categorySummary = courseService.create(dto, 1)
+        val course = courseService.create(dto, 1)
 
         //then
-        assertEquals(categorySummary.title, dto.title)
+        assertEquals(course.title, dto.title)
     }
 
     @Test
@@ -87,8 +99,19 @@ class CourseServiceTest {
                 type = CourseType.ONLINE
             )
 
-
         `when`(courseRepository.findById(1L)).thenReturn(course)
+        `when`(categoryService.existsById(2L)).thenReturn(true)
+        `when`(courseRepository.save(any())).thenReturn(
+            Course(
+                id = 1L,
+                title = dto.title,
+                dto.description,
+                price = dto.price,
+                categoryId = dto.categoryId,
+                teacherId = 1L,
+                type = dto.type
+            )
+        )
 
         //when
         val categorySummary = courseService.update(dto, 1)
