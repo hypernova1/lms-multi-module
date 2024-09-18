@@ -1,12 +1,12 @@
 package org.sam.lms.domain.auth.application
 
+import org.sam.lms.common.encrypt.PasswordEncoder
 import org.sam.lms.common.exception.ErrorCode
 import org.sam.lms.common.exception.UnauthorizedException
 import org.sam.lms.common.util.JwtTokenProvider
 import org.sam.lms.domain.account.application.AccountService
 import org.sam.lms.domain.auth.application.payload.`in`.LoginRequest
 import org.sam.lms.domain.auth.application.payload.out.TokenDto
-import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
 @Service

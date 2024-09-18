@@ -28,7 +28,6 @@ class EnrollmentDistributeTest(
     val categoryService: CategoryService,
     @Autowired
     val courseRepository: CourseRepository,
-
     @Autowired
     val courseTicketReader: CourseTicketReader,
 
@@ -38,7 +37,6 @@ class EnrollmentDistributeTest(
     @Mock
     val addressService: AddressService
 ) {
-
     private lateinit var courseService: CourseService
 
     @BeforeEach

@@ -1,5 +1,6 @@
 package org.sam.lms.domain.account.application
 
+import org.sam.lms.common.encrypt.PasswordEncoder
 import org.sam.lms.common.exception.ConflictException
 import org.sam.lms.common.exception.ErrorCode
 import org.sam.lms.domain.account.application.payload.`in`.AccountJoinRequest
@@ -8,7 +9,6 @@ import org.sam.lms.domain.account.domain.Account
 import org.sam.lms.domain.account.domain.AccountReader
 import org.sam.lms.domain.account.domain.AccountWriter
 import org.springframework.context.ApplicationEventPublisher
-import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
 @Service
