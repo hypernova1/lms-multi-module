@@ -14,8 +14,6 @@ dependencies {
 
     implementation(project(":common"))
     implementation(project(":infrastructure"))
-}
 
-tasks.withType<Test> {
-    useJUnitPlatform()
+    testApi(project(":persistence"))
 }
