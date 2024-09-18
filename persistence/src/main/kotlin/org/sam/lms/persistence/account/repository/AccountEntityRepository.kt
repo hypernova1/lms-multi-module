@@ -25,7 +25,7 @@ class AccountEntityRepository(
     }
 
     override fun save(account: Account): Account {
-        val roleEntity = this.roleJpaRepository.findByName(account.role.name.toEntityName()) ?: throw NotFoundException(
+        val roleEntity = this.roleJpaRepository.findByName("ROLE_" + account.role.name) ?: throw NotFoundException(
             ErrorCode.ROLE_NAME_NOT_FOUND
         )
         val accountEntity = toEntity(account, roleEntity.id)

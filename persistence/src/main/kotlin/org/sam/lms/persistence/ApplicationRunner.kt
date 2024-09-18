@@ -18,9 +18,9 @@ class DataRunner(
         if (numberOfRoleEntities == 0L) {
             roleRepository.saveAll(
                 listOf(
-                    RoleEntity(name = RoleName.ADMIN.toEntityName()),
-                    RoleEntity(name = RoleName.TEACHER.toEntityName()),
-                    RoleEntity(name = RoleName.STUDENT.toEntityName())
+                    RoleEntity(name = "ROLE_" + RoleName.ADMIN.toString()),
+                    RoleEntity(name = "ROLE_" + RoleName.TEACHER.toString()),
+                    RoleEntity(name = "ROLE_" + RoleName.STUDENT.toString())
                 )
             )
         }

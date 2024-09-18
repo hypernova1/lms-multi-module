@@ -35,7 +35,7 @@ class AccountEntity(
             email = this.email,
             name = this.name,
             password = this.password,
-            role = Role(id = roleEntity.id, name = RoleName.from(roleEntity.name))
+            role = Role(id = roleEntity.id, name = RoleName.from(roleEntity.name.removePrefix("ROLE_")))
         )
     }
 

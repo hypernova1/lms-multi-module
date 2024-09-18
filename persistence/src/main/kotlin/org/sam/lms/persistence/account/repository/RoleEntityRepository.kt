@@ -6,9 +6,8 @@ import org.sam.lms.domain.account.domain.RoleRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-class RoleEntityRepository(private val roleJpaRepository: RoleJpaRepository) :
-    RoleRepository {
+class RoleEntityRepository(private val roleJpaRepository: RoleJpaRepository) : RoleRepository {
     override fun findByName(name: RoleName): Role? {
-        return this.roleJpaRepository.findByName(name.toEntityName())?.toDomain()
+        return this.roleJpaRepository.findByName("ROLE_$name")?.toDomain()
     }
 }

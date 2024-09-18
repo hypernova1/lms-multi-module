@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails
 class CustomUserDetails(val account: Account) : UserDetails {
 
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
-        return mutableSetOf(SimpleGrantedAuthority(account.role.name.toEntityName()))
+        return mutableSetOf(SimpleGrantedAuthority("ROLE_" + account.role.name))
     }
 
     override fun getPassword(): String {

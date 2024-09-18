@@ -16,6 +16,6 @@ class RoleEntity(
     val name: String,
 ) : AuditEntity() {
     fun toDomain(): Role {
-        return Role(name = RoleName.from(this.name))
+        return Role(name = RoleName.from(this.name.removePrefix("ROLE_")))
     }
 }
