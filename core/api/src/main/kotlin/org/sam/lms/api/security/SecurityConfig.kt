@@ -31,10 +31,7 @@ class SecurityConfig(
             .httpBasic { it.disable() }
             .authorizeHttpRequests { authorizeRequests ->
                 authorizeRequests
-                    .requestMatchers(
-                        AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/api/v1/accounts"),
-                        AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/api/v1/auth")
-                    ).permitAll()
+                    .requestMatchers(AntPathRequestMatcher.antMatcher( "/api/**/**")).permitAll()
                     .requestMatchers(
                         "/h2-console/**",
                         "/swagger*/**", "/api-docs/**"

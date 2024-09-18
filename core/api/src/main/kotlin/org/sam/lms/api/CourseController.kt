@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
 import org.sam.lms.api.security.annotation.AuthUser
+import org.sam.lms.api.security.annotation.StudentOnly
 import org.sam.lms.api.security.annotation.TeacherOnly
 import org.sam.lms.api.swagger.annotation.SwaggerCreatedResponse
 import org.sam.lms.api.swagger.annotation.SwaggerOkResponse
@@ -70,9 +71,9 @@ class CourseController(private val courseService: CourseService, private val cat
     @Operation(summary = "수강 신청")
     @SwaggerOkResponse(
         summary = "수강 신청 성공",
-        content = [Content(schema = Schema(implementation = PagingCourseSummaryResponse::class))]
+        content = [Content(schema = Schema(implementation = CourseTicketSummary::class))]
     )
-    @org.sam.lms.api.security.annotation.StudentOnly
+    @StudentOnly
     @PostMapping("/{id}/enroll")
     fun enroll(@PathVariable id: Long, @AuthUser account: Account): ResponseEntity<CourseTicketSummary> {
         val courseTicketSummary = this.courseService.enroll(id, account.id)
@@ -80,6 +81,10 @@ class CourseController(private val courseService: CourseService, private val cat
     }
 
     @Operation(summary = "강의 목록 조회")
+    @SwaggerOkResponse(
+        summary = "강의 목록 조회 성공",
+        content = [Content(schema = Schema(implementation = PagingCourseSummaryResponse::class))]
+    )
     @GetMapping
     fun findAll(@QueryStringArgument paging: Paging): ResponseEntity<Page<CourseSummaryView>> {
         val courseSummaryPage = this.courseService.findAll(paging)

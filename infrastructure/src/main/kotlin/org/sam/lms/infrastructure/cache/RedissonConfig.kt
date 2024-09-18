@@ -1,4 +1,4 @@
-package org.sam.lms.infrastructure.lock
+package org.sam.lms.infrastructure.cache
 
 import org.redisson.Redisson
 import org.redisson.api.RedissonClient
