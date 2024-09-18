@@ -1,4 +1,0 @@
-package org.sam.lms.auth.application.payload.out
-
-class TokenDto(val accessToken: String = "", val refreshToken: String = "", val type: String = "Bearer") {
-}
