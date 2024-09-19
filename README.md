@@ -1,18 +1,18 @@
-# LMS SpringBoot
+# LMS Playground
+강의 API 제작 & 놀이터
 ## 목적
-도메인, 엔티티가 격리된 환경에서의 개발
+모든 것을 집어 삼키는 프로젝트
+* 서비스 출시 목표가 아님. 따라서 재밌어 보이는 기술은 모두 흡수한다.
+* 사용할 수 있는 모든 기술을 학습하는 용도로 사용한다.
 
-## 설명
-* Entity는 데이터베이스 관련된 작업만 한다.
-* Domain은 비지니스 관련된 작업만 한다.
-* Repository는 엔티티를 반환한다.
-* Application Layer는 Repository가 아닌 Reader, Writer를 의존한다.
-  * Reader: Repository에서 읽어온 데이터를 Domain으로 변환한 후 반환한다.
-  * Writer: Application Layer에서 받아온 Domain을 Entity로 변환한 후 저장한다. 
-
-## TODO
-  * [ ] 기본적인 API 기능 완성
-    * 강의, 수강, 교사, 학생
-  * [ ] 오프라인 강의 수강 기능에 분산락 적용
-  * [ ] 각 애그리거트를 모듈로 분리
-  * [ ] MSA 적용
+## 적용할 기술, 기능
+* [x] 멀티 모듈
+* [ ] MSA
+  * [ ] API GateWay
+* Framework
+  * [x] Spring MVC
+  * [ ] Spring Webflux
+* [ ] Elasticsearch
+* Redis
+  * [ ] 분산락
+  * [ ] Redis Caching
