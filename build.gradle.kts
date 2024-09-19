@@ -19,6 +19,16 @@ repositories {
     mavenCentral()
 }
 
+ext {
+    set("springCloudVersion", "2023.0.2")
+}
+
+dependencyManagement {
+    imports {
+        mavenBom("org.springframework.cloud:spring-cloud-dependencies:${ext.get("springCloudVersion")}")
+    }
+}
+
 subprojects {
     apply(plugin = "org.jetbrains.kotlin.jvm")
     apply(plugin = "org.jetbrains.kotlin.plugin.spring")
@@ -29,8 +39,17 @@ subprojects {
     repositories {
         mavenCentral()
     }
-}
 
+    ext {
+        set("springCloudVersion", "2023.0.2")
+    }
+
+    dependencyManagement {
+        imports {
+            mavenBom("org.springframework.cloud:spring-cloud-dependencies:${ext.get("springCloudVersion")}")
+        }
+    }
+}
 
 allprojects {
     dependencies {

@@ -4,10 +4,12 @@ plugins {
 rootProject.name = "lms"
 
 include("common")
+include("infrastructure")
+include("gateway")
+include("eureka-server")
+
 include("core:api")
 include("core:domain")
 include("core:persistence")
-include("infrastructure")
-include("core-store")
 include("core-store:domain")
 include("core-store:api")

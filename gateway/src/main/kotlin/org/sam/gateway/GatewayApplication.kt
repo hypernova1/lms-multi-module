@@ -1,4 +1,4 @@
-package org.sam.store
+package org.sam.gateway
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
@@ -6,8 +6,8 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient
 
 @EnableDiscoveryClient
 @SpringBootApplication
-class StoreApplication
+class GatewayApplication
 
 fun main(args: Array<String>) {
-    runApplication<StoreApplication>(*args)
+    runApplication<GatewayApplication>(*args)
 }

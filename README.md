@@ -9,12 +9,22 @@
 * [x] 멀티 모듈
   * [x] Entity, Domain 분리
 * [ ] MSA
-  * [ ] API GateWay
+  * [ ] Spring Cloud Gateway GateWay
 * Framework
   * [x] Spring MVC
   * [ ] Spring Webflux
+  * [ ] Spring Security
+  * [ ] Spring Data JPA
+  * [ ] QueryDSL
+
 * [ ] Elasticsearch
 * Redis
   * [ ] 분산락
   * [ ] Redis Caching
 * [ ] Mock 결제 모듈 적용
+* [ ] Apache Kafka
+* 컨테이너
+  * [ ] Docker
+  * [ ] k8s
+* 모니터링
+  * [ ] Prometheus & Grafana
