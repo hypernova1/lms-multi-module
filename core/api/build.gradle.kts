@@ -19,8 +19,8 @@ dependencies {
 
     implementation(project(":infrastructure"))
     implementation(project(":common"))
-    implementation(project(":persistence"))
     implementation(project(":core:domain"))
+    implementation(project(":core:persistence"))
 
     testImplementation("org.springframework.security:spring-security-test")
 }

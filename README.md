@@ -7,6 +7,7 @@
 
 ## 적용할 기술, 기능
 * [x] 멀티 모듈
+  * [x] Entity, Domain 분리
 * [ ] MSA
   * [ ] API GateWay
 * Framework
@@ -16,3 +17,4 @@
 * Redis
   * [ ] 분산락
   * [ ] Redis Caching
+* [ ] Mock 결제 모듈 적용

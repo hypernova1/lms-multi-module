@@ -14,6 +14,4 @@ dependencies {
 
     implementation(project(":common"))
     implementation(project(":infrastructure"))
-
-    testApi(project(":persistence"))
 }
