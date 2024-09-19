@@ -10,13 +10,20 @@ spring:
         - id: lms-service
           uri: lb://lms-service
           predicates:
-            - Path=/api/lms/**
+            - Path=/lms/api/**
         - id: store-service
-          uri: lm://store-service
+          uri: lb://store-service
           predicates:
-            - Path=/api/store/**
+            - Path=/store/api/**
     discovery:
       enabled: true
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/lms?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Seoul
+    username: postgres
+    password: 1111
+  sql:
+    init:
+      mode: always
 eureka:
   instance:
     prefer-ip-address: true
@@ -31,3 +38,14 @@ management:
     web:
       exposure:
         include: "*"
+
+secret:
+  x-api-key: aXC8zK6puHIf9l53L8TiQg==
+  aes-secret: secret-key-12345
+  jwt:
+    security-key: tkaWjatkaRhrqnxrhtlvtmqslekwkqkwjdakfwkfgkfwktlsdlTtmqslekrkatkgkqslek
+
+logging:
+  level:
+    io.r2dbc.postgresql.QUERY: DEBUG # for queries
+    io.r2dbc.postgresql.PARAM: DEBUG # for parameters

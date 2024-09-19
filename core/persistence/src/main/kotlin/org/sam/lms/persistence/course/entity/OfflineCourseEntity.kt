@@ -14,7 +14,7 @@ class OfflineCourseEntity(
     @Column(nullable = false, columnDefinition = "integer")
     var maxEnrollment: Int = 0,
 
-    @Column(nullable = false, columnDefinition = "integer")
+    @Column(nullable = false, columnDefinition = "bigint")
     var addressId: Long = 0,
 
     @OneToOne

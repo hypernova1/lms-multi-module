@@ -1,6 +1,6 @@
 spring:
   application:
-    name: lms
+    name: lms-service
 
   config:
     import:

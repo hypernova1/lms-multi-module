@@ -3,6 +3,7 @@ package org.sam.lms.domain.account.application
 import org.sam.lms.common.encrypt.PasswordEncoder
 import org.sam.lms.common.exception.ConflictException
 import org.sam.lms.common.exception.ErrorCode
+import org.sam.lms.domain.account.domain.Provider
 import org.sam.lms.domain.account.application.payload.`in`.AccountJoinRequest
 import org.sam.lms.domain.account.application.payload.out.AccountSummary
 import org.sam.lms.domain.account.domain.Account
@@ -37,10 +38,10 @@ class AccountService(
         return this.accountReader.findByEmail(email)
     }
 
-    fun delete(account: Account) {
-        this.accountWriter.delete(account.id)
-        if (account.isStudent()) {
-            applicationEventPublisher.publishEvent(AccountDeleteEvent(account.id))
+    fun delete(provider: Provider) {
+        this.accountWriter.delete(provider.id)
+        if (provider.isStudent()) {
+            applicationEventPublisher.publishEvent(AccountDeleteEvent(provider.id))
         }
     }
 }

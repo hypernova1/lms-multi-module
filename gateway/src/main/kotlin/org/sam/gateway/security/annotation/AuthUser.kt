@@ -1,4 +1,4 @@
-package org.sam.lms.api.security.annotation
+package org.sam.gateway.security.annotation
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 

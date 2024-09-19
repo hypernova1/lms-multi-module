@@ -37,13 +37,13 @@ class CourseEntity(
     @Enumerated(EnumType.STRING)
     var type: CourseType = CourseType.ONLINE,
 
-    @Column(nullable = false, columnDefinition = "integer")
+    @Column(nullable = false, columnDefinition = "bigint")
     val accountId: Long,
 
     @OneToOne(mappedBy = "courseEntity", cascade = [CascadeType.PERSIST, CascadeType.MERGE])
     var offlineCourseEntity: OfflineCourseEntity? = null,
 
-    @Column(nullable = false, columnDefinition = "integer")
+    @Column(nullable = false, columnDefinition = "bigint")
     var categoryId: Long,
 ) : AuditEntity() {
     fun toDomain(): Course {

@@ -1,12 +1,10 @@
-package org.sam.lms.api
+package org.sam.lms.api.common
 
 import org.sam.lms.common.exception.ErrorCode
 import org.sam.lms.common.exception.ErrorResult
 import org.sam.lms.common.exception.HttpException
 import org.slf4j.Logger
-import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.security.authorization.AuthorizationDeniedException
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
@@ -46,10 +44,10 @@ class GlobalExceptionHandler(
         return ResponseEntity.notFound().build<Any>()
     }
 
-    @ExceptionHandler(AuthorizationDeniedException::class)
-    protected fun authorizationDeniedException(e: AuthorizationDeniedException): ResponseEntity<*> {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ErrorResult("4001", "권한이 없습니다."))
-    }
+//    @ExceptionHandler(AuthorizationDeniedException::class)
+//    protected fun authorizationDeniedException(e: AuthorizationDeniedException): ResponseEntity<*> {
+//        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ErrorResult("4001", "권한이 없습니다."))
+//    }
 
     @ExceptionHandler(Exception::class)
     protected fun exception(e: Exception): ResponseEntity<*> {

@@ -6,13 +6,11 @@ import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
-import org.sam.lms.api.security.annotation.AuthUser
-import org.sam.lms.api.security.annotation.StudentOnly
-import org.sam.lms.api.security.annotation.TeacherOnly
+import org.sam.lms.api.config.RequireAuth
+import org.sam.lms.domain.account.domain.Provider
 import org.sam.lms.api.swagger.annotation.SwaggerCreatedResponse
 import org.sam.lms.api.swagger.annotation.SwaggerOkResponse
-import org.sam.lms.api.ui.QueryStringArgument
-import org.sam.lms.domain.account.domain.Account
+import org.sam.lms.api.common.ui.QueryStringArgument
 import org.sam.lms.domain.common.Page
 import org.sam.lms.domain.common.Paging
 import org.sam.lms.domain.course.application.CategoryService
@@ -30,7 +28,7 @@ import java.net.URI
 
 @Tag(name = "강의")
 @RestController
-@RequestMapping("/api/v1/courses")
+@RequestMapping("/lms/api/v1/courses")
 class CourseController(private val courseService: CourseService, private val categoryService: CategoryService) {
 
     @Operation(summary = "강의 생성")
@@ -38,13 +36,12 @@ class CourseController(private val courseService: CourseService, private val cat
         summary = "강의 생성 성공",
         content = [Content(schema = Schema(implementation = CourseSummaryView::class))]
     )
-    @TeacherOnly
     @PostMapping
     fun create(
         @Valid @RequestBody createCourseDto: CreateCourseDto,
-        @AuthUser account: Account
+        @RequireAuth provider: Provider
     ): ResponseEntity<CourseSummaryView> {
-        val courseSummary = this.courseService.create(createCourseDto, account.id)
+        val courseSummary = this.courseService.create(createCourseDto, provider.id)
         val location: URI = ServletUriComponentsBuilder
             .fromCurrentRequest()
             .replacePath("/api/v1/courses/{id}")
@@ -58,13 +55,12 @@ class CourseController(private val courseService: CourseService, private val cat
         summary = "강의 수정 성공",
         content = [Content(schema = Schema(implementation = CourseSummaryView::class))]
     )
-    @TeacherOnly
     @PutMapping("/{id}")
     fun update(
         @Valid @RequestBody updateCourseDto: UpdateCourseDto,
-        @AuthUser account: Account
+        provider: Provider
     ): ResponseEntity<CourseSummaryView> {
-        val courseSummary = this.courseService.update(updateCourseDto, account.id)
+        val courseSummary = this.courseService.update(updateCourseDto, provider.id)
         return ResponseEntity.ok().build()
     }
 
@@ -73,10 +69,9 @@ class CourseController(private val courseService: CourseService, private val cat
         summary = "수강 신청 성공",
         content = [Content(schema = Schema(implementation = CourseTicketSummary::class))]
     )
-    @StudentOnly
     @PostMapping("/{id}/enroll")
-    fun enroll(@PathVariable id: Long, @AuthUser account: Account): ResponseEntity<CourseTicketSummary> {
-        val courseTicketSummary = this.courseService.enroll(id, account.id)
+    fun enroll(@PathVariable id: Long, provider: Provider): ResponseEntity<CourseTicketSummary> {
+        val courseTicketSummary = this.courseService.enroll(id, provider.id)
         return ResponseEntity.ok(courseTicketSummary)
     }
 
@@ -86,7 +81,7 @@ class CourseController(private val courseService: CourseService, private val cat
         content = [Content(schema = Schema(implementation = PagingCourseSummaryResponse::class))]
     )
     @GetMapping
-    fun findAll(@QueryStringArgument paging: Paging): ResponseEntity<Page<CourseSummaryView>> {
+    fun findAll(@RequireAuth provider: Provider, @QueryStringArgument paging: Paging): ResponseEntity<Page<CourseSummaryView>> {
         val courseSummaryPage = this.courseService.findAll(paging)
         return ResponseEntity.ok(courseSummaryPage)
     }

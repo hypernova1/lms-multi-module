@@ -1,4 +1,4 @@
-package org.sam.lms.api.ui
+package org.sam.lms.api.common.ui
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.servlet.http.HttpServletRequest

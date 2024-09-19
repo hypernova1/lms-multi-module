@@ -5,13 +5,12 @@ import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
-import org.sam.lms.api.security.annotation.AuthUser
+import org.sam.lms.domain.account.domain.Provider
 import org.sam.lms.api.swagger.annotation.SwaggerCreatedResponse
 import org.sam.lms.api.swagger.annotation.SwaggerOkResponse
 import org.sam.lms.domain.account.application.AccountService
 import org.sam.lms.domain.account.application.payload.`in`.AccountJoinRequest
 import org.sam.lms.domain.account.application.payload.out.AccountSummary
-import org.sam.lms.domain.account.domain.Account
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
@@ -20,7 +19,7 @@ import java.net.URI
 
 @Tag(name = "회원")
 @RestController
-@RequestMapping("/api/v1/accounts")
+@RequestMapping("/lms/api/v1/accounts")
 class AccountController(private val accountService: AccountService) {
 
     @Operation(summary = "회원 가입")
@@ -43,8 +42,9 @@ class AccountController(private val accountService: AccountService) {
     @SwaggerOkResponse(summary = "탈퇴 성공")
     @DeleteMapping("/me")
     fun delete(
-        @AuthUser account: Account): ResponseEntity<Void> {
-        accountService.delete(account)
+        provider: Provider
+    ): ResponseEntity<Void> {
+        accountService.delete(provider)
         return ResponseEntity.ok().build()
     }
 

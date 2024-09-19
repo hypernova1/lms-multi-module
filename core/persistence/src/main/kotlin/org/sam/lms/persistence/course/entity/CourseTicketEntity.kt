@@ -16,10 +16,10 @@ class CourseTicketEntity(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
 
-    @Column(nullable = false, columnDefinition = "integer")
+    @Column(nullable = false, columnDefinition = "bigint")
     val studentId: Long,
 
-    @Column(nullable = false, columnDefinition = "integer")
+    @Column(nullable = false, columnDefinition = "bigint")
     val courseId: Long,
 
     @Column(nullable = true, columnDefinition = "timestamp")
