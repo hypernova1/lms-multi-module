@@ -11,10 +11,15 @@ import org.springframework.web.context.request.NativeWebRequest
 import org.springframework.web.method.support.HandlerMethodArgumentResolver
 import org.springframework.web.method.support.ModelAndViewContainer
 
+/**
+ * Gateway 에서 인증한 유저의 정보를 체크해서 핸들러에 주입해주는 클래스
+ *  - 인증이 필요 없는 핸들러여도 인증된 유저를 구분해서 데이터를 제공해야할 때 사용
+ * */
 @Configuration
 class ProviderArgumentResolver : HandlerMethodArgumentResolver {
+
     override fun supportsParameter(parameter: MethodParameter): Boolean {
-        return parameter.hasParameterAnnotation(RequireAuth::class.java)
+        return parameter.parameterType.equals(Provider::class.java)
     }
 
     override fun resolveArgument(
@@ -31,7 +36,7 @@ class ProviderArgumentResolver : HandlerMethodArgumentResolver {
             provider = Provider(userId.toLong(), role = RoleName.from(userRole.removePrefix("ROLE_")))
         }
 
-        if (provider == null) {
+        if (parameter.hasMethodAnnotation(RequireAuth::class.java) && provider == null) {
             throw UnauthorizedException(ErrorCode.UNAUTHORIZED_TOKEN)
         }
 
