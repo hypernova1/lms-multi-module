@@ -17,18 +17,18 @@ class AccountRepository(private val databaseClient: DatabaseClient) {
             AND a.deleted_date is null
         """).bind<String>("email", email)
             .map { row ->
-                val accountId = row.get("account_id", Long::class.java)
+                val accountId: Long = row.get("account_id") as Long
                 val accountEmail = row.get("email", String::class.java)
                 val accountPassword = row.get("password", String::class.java)
-                val roleId = row.get("role_id", Long::class.java)
+                val roleId = row.get("role_id") as Long
                 val roleName = row.get("role_name", String::class.java)
 
                 AccountWithRole(
-                    Account(id = accountId, email = accountEmail, password = accountPassword, roleId = roleId),
-                    Role(id = roleId, name = roleName)
+                    Account(id = accountId, email = accountEmail!!, password = accountPassword!!, roleId = roleId),
+                    Role(id = roleId, name = roleName!!)
                 )
             }
-            .one() // 결과가 하나일 경우
+            .one()
     }
 
 }

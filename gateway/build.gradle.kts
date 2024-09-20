@@ -17,7 +17,7 @@ dependencies {
 
     implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
     runtimeOnly("org.postgresql:postgresql")
-    runtimeOnly("io.r2dbc:r2dbc-postgresql:0.8.13.RELEASE")
+    runtimeOnly("org.postgresql:r2dbc-postgresql:1.0.5.RELEASE")
 
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2")

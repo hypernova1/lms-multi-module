@@ -21,6 +21,8 @@ spring:
     url: r2dbc:postgresql://localhost:5432/lms?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Seoul
     username: postgres
     password: 1111
+    pool:
+      enabled: true
   sql:
     init:
       mode: always
