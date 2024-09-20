@@ -6,6 +6,7 @@
 
 ## 프로젝트 모듈 구조
 * common: 인프라에 관련 없는 공용 유틸
+* client: 각 서버별 통신하기 위한 모듈
 * core: 기본 도메인
   * api
   * domain
@@ -25,6 +26,7 @@
   * [x] Spring Eureka
   * [x] Spring Cloud Gateway
   * [ ] 보상 트랜잭션
+  * [ ] Apache Kafka
   * [ ] ...
 * Framework
   * [x] Spring MVC
@@ -38,10 +40,10 @@
 * Redis
   * [x] 분산락
   * [x] Redis Caching
-* [ ] Mock 결제 모듈 적용
-* [ ] Apache Kafka
 * 컨테이너
   * [ ] Docker
   * [ ] k8s
 * 모니터링
   * [ ] Prometheus & Grafana
+* 기타
+  * [ ] Mock 결제 모듈 적용

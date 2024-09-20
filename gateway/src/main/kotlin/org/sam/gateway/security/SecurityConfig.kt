@@ -23,7 +23,7 @@ class SecurityConfig(
             .authorizeExchange { exchange ->
                 exchange
                     .pathMatchers("/lms/api/**").permitAll()
-                    .pathMatchers("/lms/api/**").permitAll()
+                    .pathMatchers("/store/api/**").permitAll()
                     .pathMatchers("/h2-console/**", "/swagger*/**", "/api-docs/**").permitAll()
                     .anyExchange().authenticated()
             }

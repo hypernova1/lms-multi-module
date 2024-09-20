@@ -19,6 +19,7 @@ dependencies {
 
     implementation(project(":common"))
     implementation(project(":infrastructure"))
+    implementation(project(":client"))
 }
 
 allOpen {

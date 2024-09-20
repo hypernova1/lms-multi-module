@@ -1,4 +1,4 @@
-package org.sam.store.domain.order
+package org.sam.lms.store.domain.order
 
 import jakarta.persistence.*
 
