@@ -1,6 +1,6 @@
 package org.sam.lms.domain.address.domain
 
-import org.sam.lms.domain.address.application.payload.`in`.AddressRequest
+import org.sam.lms.domain.address.application.payload.`in`.CreateAddressDto
 
 data class Address(
     val id: Long = 0,
@@ -14,17 +14,17 @@ data class Address(
         return "$doro $detail"
     }
 
-    fun update(addressRequest: AddressRequest) {
-        this.zipcode = addressRequest.zipcode
-        this.si = addressRequest.si
-        this.gugun = addressRequest.gugun
-        this.doro  = addressRequest.doro
-        this.detail = addressRequest.detail
+    fun update(createAddressDto: CreateAddressDto) {
+        this.zipcode = createAddressDto.zipcode
+        this.si = createAddressDto.si
+        this.gugun = createAddressDto.gugun
+        this.doro  = createAddressDto.doro
+        this.detail = createAddressDto.detail
     }
 
     companion object {
-        fun from(addressRequest: AddressRequest): Address {
-            return Address(zipcode = addressRequest.zipcode, si = addressRequest.si, gugun = addressRequest.gugun, detail = addressRequest.detail, doro = addressRequest.doro)
+        fun from(createAccountDto: CreateAddressDto): Address {
+            return Address(zipcode = createAccountDto.zipcode, si = createAccountDto.si, gugun = createAccountDto.gugun, detail = createAccountDto.detail, doro = createAccountDto.doro)
         }
     }
 }

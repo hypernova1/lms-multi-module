@@ -1,4 +1,4 @@
-package org.sam.lms.api
+package org.sam.lms.api.course
 
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.ArraySchema
@@ -6,12 +6,16 @@ import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
-import jakarta.ws.rs.Path
+import org.sam.lms.api.PagingCourseSummaryResponse
+import org.sam.lms.api.common.ui.QueryStringArgument
 import org.sam.lms.api.config.RequireAuth
-import org.sam.lms.domain.account.domain.Provider
+import org.sam.lms.api.course.request.CreateCourseRequest
+import org.sam.lms.api.course.request.ReviewRequest
+import org.sam.lms.api.course.request.UpdateCourseRequest
 import org.sam.lms.api.swagger.annotation.SwaggerCreatedResponse
 import org.sam.lms.api.swagger.annotation.SwaggerOkResponse
-import org.sam.lms.api.common.ui.QueryStringArgument
+import org.sam.lms.domain.account.domain.Provider
+import org.sam.lms.domain.address.application.payload.`in`.CreateAddressDto
 import org.sam.lms.domain.common.Page
 import org.sam.lms.domain.common.Paging
 import org.sam.lms.domain.course.application.CategoryService
@@ -22,7 +26,7 @@ import org.sam.lms.domain.course.application.payload.out.CategorySummary
 import org.sam.lms.domain.course.application.payload.out.CourseDetailView
 import org.sam.lms.domain.course.application.payload.out.CourseSummaryView
 import org.sam.lms.domain.course.application.payload.out.CourseTicketSummary
-import org.sam.lms.domain.review.ReviewRequest
+import org.sam.lms.domain.review.CreateReviewDto
 import org.sam.lms.domain.review.ReviewService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -45,10 +49,31 @@ class CourseController(
     )
     @PostMapping
     fun create(
-        @Valid @RequestBody createCourseDto: CreateCourseDto,
+        @Valid @RequestBody createCourseRequest: CreateCourseRequest,
         @RequireAuth provider: Provider
     ): ResponseEntity<CourseSummaryView> {
-        val courseSummary = this.courseService.create(createCourseDto, provider.id)
+        val courseSummary = this.courseService.create(
+            CreateCourseDto(
+                title = createCourseRequest.title,
+                description = createCourseRequest.description,
+                price = createCourseRequest.price,
+                categoryId = createCourseRequest.categoryId,
+                type = createCourseRequest.type,
+                maxEnrollment = createCourseRequest.maxEnrollment,
+                address = if (createCourseRequest.address != null) {
+                    CreateAddressDto(
+                        si = createCourseRequest.address.si,
+                        gugun = createCourseRequest.address.gugun,
+                        doro = createCourseRequest.address.doro,
+                        detail = createCourseRequest.address.detail,
+                        zipcode = createCourseRequest.address.zipcode,
+                    )
+                } else {
+                    null
+                }
+            ),
+            accountId = provider.id
+        )
         val location: URI = ServletUriComponentsBuilder
             .fromCurrentRequest()
             .replacePath("/api/v1/courses/{id}")
@@ -64,10 +89,30 @@ class CourseController(
     )
     @PutMapping("/{id}")
     fun update(
-        @Valid @RequestBody updateCourseDto: UpdateCourseDto,
+        @Valid @RequestBody updateCourseRequest: UpdateCourseRequest,
         provider: Provider
     ): ResponseEntity<CourseSummaryView> {
-        val courseSummary = this.courseService.update(updateCourseDto, provider.id)
+        this.courseService.update(
+            UpdateCourseDto(
+                title = updateCourseRequest.title,
+                description = updateCourseRequest.description,
+                price = updateCourseRequest.price,
+                categoryId = updateCourseRequest.categoryId,
+                type = updateCourseRequest.type,
+                maxEnrollment = updateCourseRequest.maxEnrollment,
+                address = if (updateCourseRequest.address != null) {
+                    CreateAddressDto(
+                        si = updateCourseRequest.address.si,
+                        gugun = updateCourseRequest.address.gugun,
+                        doro = updateCourseRequest.address.doro,
+                        detail = updateCourseRequest.address.detail,
+                        zipcode = updateCourseRequest.address.zipcode,
+                    )
+                } else {
+                    null
+                }
+            ), provider.id
+        )
         return ResponseEntity.ok().build()
     }
 
@@ -119,8 +164,16 @@ class CourseController(
     }
 
     @PostMapping("/{id}/reviews")
-    fun createReview(@PathVariable id: Long, provider: Provider, @RequestBody reviewRequest: ReviewRequest): ResponseEntity<Any> {
-        this.reviewService.registerReview(id, provider, reviewRequest)
+    fun createReview(
+        @PathVariable id: Long,
+        provider: Provider,
+        @RequestBody reviewRequest: ReviewRequest
+    ): ResponseEntity<Any> {
+        this.reviewService.registerReview(
+            id,
+            provider,
+            CreateReviewDto(content = reviewRequest.content, score = reviewRequest.score)
+        )
         return ResponseEntity.ok().build()
     }
 

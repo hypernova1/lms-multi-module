@@ -14,16 +14,16 @@ class ReviewService(private val courseService: CourseService, private val review
      *
      * @param courseId 강의 아이디
      * @param provider 유저
-     * @param reviewRequest 리뷰 내용
+     * @param createReviewDto 리뷰 내용
      * @return 리뷰 아이디
      * */
-    fun registerReview(courseId: Long, provider: Provider, reviewRequest: ReviewRequest): Long {
+    fun registerReview(courseId: Long, provider: Provider, createReviewDto: CreateReviewDto): Long {
         val existsCourse = this.courseService.existsById(courseId)
         if (!existsCourse) {
             throw NotFoundException(ErrorCode.COURSE_NOT_FOUND)
         }
 
-        val review = Review.of(courseId = courseId, reviewRequest = reviewRequest, provider = provider)
+        val review = Review.of(courseId = courseId, reviewRequest = createReviewDto, provider = provider)
         val savedReview = reviewRepository.save(review)
         return savedReview.id
     }

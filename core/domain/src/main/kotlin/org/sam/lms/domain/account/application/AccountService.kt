@@ -4,7 +4,7 @@ import org.sam.lms.common.encrypt.PasswordEncoder
 import org.sam.lms.common.exception.ConflictException
 import org.sam.lms.common.exception.ErrorCode
 import org.sam.lms.domain.account.domain.Provider
-import org.sam.lms.domain.account.application.payload.`in`.AccountJoinRequest
+import org.sam.lms.domain.account.application.payload.`in`.CreateAccountDto
 import org.sam.lms.domain.account.application.payload.out.AccountSummary
 import org.sam.lms.domain.account.domain.Account
 import org.sam.lms.domain.account.domain.AccountReader
@@ -19,13 +19,13 @@ class AccountService(
     private val passwordEncoder: PasswordEncoder,
     private val applicationEventPublisher: ApplicationEventPublisher
 ) {
-    fun create(accountJoinRequest: AccountJoinRequest): AccountSummary {
-        val existsAccount = this.accountReader.existsByEmail(accountJoinRequest.email)
+    fun create(createAccountDto: CreateAccountDto): AccountSummary {
+        val existsAccount = this.accountReader.existsByEmail(createAccountDto.email)
         if (existsAccount) {
             throw ConflictException(ErrorCode.ALREADY_EXISTED_USER_ID)
         }
 
-        val account = Account.of(accountJoinRequest, passwordEncoder)
+        val account = Account.of(createAccountDto, passwordEncoder)
         val savedAccount = this.accountWriter.save(account)
         return AccountSummary(
             id = savedAccount.id,

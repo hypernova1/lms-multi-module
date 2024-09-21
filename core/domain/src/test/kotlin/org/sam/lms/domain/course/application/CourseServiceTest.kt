@@ -15,8 +15,8 @@ import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.any
 import org.sam.lms.common.exception.ForbiddenException
 import org.sam.lms.domain.address.application.AddressService
-import org.sam.lms.domain.course.application.payload.`in`.CreateCourseDto
-import org.sam.lms.domain.course.application.payload.`in`.UpdateCourseDto
+import org.sam.lms.domain.course.application.payload.`in`.CreateCourseRequest
+import org.sam.lms.domain.course.application.payload.`in`.UpdateCourseRequest
 import org.sam.lms.domain.course.domain.*
 
 @ExtendWith(MockitoExtension::class)
@@ -55,7 +55,7 @@ class CourseServiceTest {
     @DisplayName("강의를 등록한다")
     fun create_course() {
         //given
-        val dto = CreateCourseDto(
+        val dto = CreateCourseRequest(
             title = "테스트 강의",
             description = "테스트 강의 설명입니다.",
             categoryId = 1,
@@ -88,7 +88,7 @@ class CourseServiceTest {
         //given
         val preTitle = "테스트 강의1"
         val dto =
-            UpdateCourseDto(id = 1L, title = "테스트 강의2", description = "테스트 강의2 설명입니다.", categoryId = 2L, price = 1_000)
+            UpdateCourseRequest(id = 1L, title = "테스트 강의2", description = "테스트 강의2 설명입니다.", categoryId = 2L, price = 1_000)
         val course =
             Course(
                 1L,
@@ -126,7 +126,7 @@ class CourseServiceTest {
         //given
         val preTitle = "테스트 강의1"
         val dto =
-            UpdateCourseDto(id = 1L, title = "테스트 강의2", description = "테스트 강의2 설명입니다.", categoryId = 2L, price = 1_000)
+            UpdateCourseRequest(id = 1L, title = "테스트 강의2", description = "테스트 강의2 설명입니다.", categoryId = 2L, price = 1_000)
         val course =
             Course(
                 1L,

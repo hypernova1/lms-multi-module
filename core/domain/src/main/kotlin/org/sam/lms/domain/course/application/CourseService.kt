@@ -3,7 +3,6 @@ package org.sam.lms.domain.course.application
 import org.sam.lms.common.exception.ErrorCode
 import org.sam.lms.common.exception.NotFoundException
 import org.sam.lms.common.util.DateUtil
-import org.sam.lms.domain.account.domain.Provider
 import org.sam.lms.domain.address.application.AddressService
 import org.sam.lms.domain.common.Page
 import org.sam.lms.domain.common.Paging
@@ -13,8 +12,6 @@ import org.sam.lms.domain.course.application.payload.out.CourseDetailView
 import org.sam.lms.domain.course.application.payload.out.CourseSummaryView
 import org.sam.lms.domain.course.application.payload.out.CourseTicketSummary
 import org.sam.lms.domain.course.domain.*
-import org.sam.lms.domain.review.Review
-import org.sam.lms.domain.review.ReviewRequest
 import org.sam.lms.infrastructure.lock.DistributedLock
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -61,29 +58,29 @@ class CourseService(
     /**
      * 강의 정보를 수정한다.
      *
-     * @param updateCourseDto 수정 정보
+     * @param updateCourseRequest 수정 정보
      * @param accountId
      * */
     @Transactional
-    fun update(updateCourseDto: UpdateCourseDto, accountId: Long): Course {
-        val course = this.courseRepository.findById(updateCourseDto.id)
+    fun update(updateCourseRequest: UpdateCourseDto, accountId: Long): Course {
+        val course = this.courseRepository.findById(updateCourseRequest.id)
 
         if (course == null) {
             throw NotFoundException(ErrorCode.COURSE_NOT_FOUND)
         }
 
-        val existsCategory = this.categoryService.existsById(updateCourseDto.categoryId)
+        val existsCategory = this.categoryService.existsById(updateCourseRequest.categoryId)
         if (!existsCategory) {
             throw NotFoundException(ErrorCode.CATEGORY_NOT_FOUND)
         }
 
-        val addressId: Long = if (updateCourseDto.address != null) {
-            val address = this.addressService.save(updateCourseDto.address)
+        val addressId: Long = if (updateCourseRequest.address != null) {
+            val address = this.addressService.save(updateCourseRequest.address)
             address.id
         } else {
             0
         }
-        course.update(updateCourseDto, accountId, addressId)
+        course.update(updateCourseRequest, accountId, addressId)
 
         return this.courseRepository.save(course)
     }

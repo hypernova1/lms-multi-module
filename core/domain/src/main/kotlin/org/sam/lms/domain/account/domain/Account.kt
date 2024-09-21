@@ -3,7 +3,7 @@ package org.sam.lms.domain.account.domain
 import org.sam.lms.common.encrypt.PasswordEncoder
 import org.sam.lms.common.exception.ErrorCode
 import org.sam.lms.common.exception.UnauthorizedException
-import org.sam.lms.domain.account.application.payload.`in`.AccountJoinRequest
+import org.sam.lms.domain.account.application.payload.`in`.CreateAccountDto
 import java.time.LocalDateTime
 
 data class Account(
@@ -28,12 +28,12 @@ data class Account(
     }
 
     companion object {
-        fun of(accountJoinRequest: AccountJoinRequest, passwordEncoder: PasswordEncoder): Account {
+        fun of(createAccountDto: CreateAccountDto, passwordEncoder: PasswordEncoder): Account {
             return Account(
-                email = accountJoinRequest.email,
-                name = accountJoinRequest.name,
-                password = passwordEncoder.encrypt(accountJoinRequest.password),
-                role = Role(name = accountJoinRequest.role)
+                email = createAccountDto.email,
+                name = createAccountDto.name,
+                password = passwordEncoder.encrypt(createAccountDto.password),
+                role = Role(name = createAccountDto.role)
             )
         }
     }

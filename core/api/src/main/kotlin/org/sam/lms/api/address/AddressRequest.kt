@@ -1,4 +1,4 @@
-package org.sam.lms.domain.address.application.payload.`in`
+package org.sam.lms.api.address
 
 import io.swagger.v3.oas.annotations.media.Schema
 

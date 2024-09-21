@@ -5,7 +5,7 @@ import org.sam.lms.common.exception.ErrorCode
 import org.sam.lms.common.exception.UnauthorizedException
 import org.sam.lms.common.util.JwtTokenProvider
 import org.sam.lms.domain.account.application.AccountService
-import org.sam.lms.domain.auth.application.payload.`in`.LoginRequest
+import org.sam.lms.domain.auth.application.payload.`in`.LoginDto
 import org.sam.lms.domain.auth.application.payload.out.TokenDto
 import org.springframework.stereotype.Service
 
@@ -16,7 +16,7 @@ class AuthService(
     private val tokenProvider: JwtTokenProvider
 ) {
 
-    fun login(loginRequest: LoginRequest): TokenDto {
+    fun login(loginRequest: LoginDto): TokenDto {
         val account = this.accountService.findOne(loginRequest.email)
             ?: throw UnauthorizedException(ErrorCode.ACCOUNT_NOT_FOUND)
 

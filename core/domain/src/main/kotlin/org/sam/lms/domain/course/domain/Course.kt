@@ -4,6 +4,7 @@ import org.sam.lms.common.exception.BadRequestException
 import org.sam.lms.common.exception.ConflictException
 import org.sam.lms.common.exception.ErrorCode
 import org.sam.lms.common.exception.ForbiddenException
+import org.sam.lms.domain.course.application.payload.`in`.CreateCourseDto
 import org.sam.lms.domain.course.application.payload.`in`.UpdateCourseDto
 
 data class Course(
@@ -22,20 +23,20 @@ data class Course(
     /**
      * 강의 정보를 수정한다.
      *
-     * @param updateCourseDto 업데이트할 정보
+     * @param updateCourseRequest 업데이트할 정보
      * @param accountId 수정할 강사 아이디
      * */
-    fun update(updateCourseDto: UpdateCourseDto, accountId: Long, addressId: Long) {
+    fun update(updateCourseRequest: UpdateCourseDto, accountId: Long, addressId: Long) {
         this.checkUpdatePermission(accountId)
 
-        this.title = updateCourseDto.title
-        this.description = updateCourseDto.description
-        this.type = updateCourseDto.type
-        this.price = updateCourseDto.price
-        this.categoryId = updateCourseDto.categoryId
+        this.title = updateCourseRequest.title
+        this.description = updateCourseRequest.description
+        this.type = updateCourseRequest.type
+        this.price = updateCourseRequest.price
+        this.categoryId = updateCourseRequest.categoryId
 
         if (this.type == CourseType.OFFLINE) {
-            this.offlineInfo = OfflineCourseInfo(maxEnrollment = updateCourseDto.maxEnrollment, addressId = addressId)
+            this.offlineInfo = OfflineCourseInfo(maxEnrollment = updateCourseRequest.maxEnrollment, addressId = addressId)
         }
     }
 
@@ -94,7 +95,7 @@ data class Course(
     }
 
     companion object {
-        fun of(createCourseDto: org.sam.lms.domain.course.application.payload.`in`.CreateCourseDto, accountId: Long, addressId: Long): Course {
+        fun of(createCourseDto: CreateCourseDto, accountId: Long, addressId: Long): Course {
             val course = Course(
                 title = createCourseDto.title,
                 description = createCourseDto.description,

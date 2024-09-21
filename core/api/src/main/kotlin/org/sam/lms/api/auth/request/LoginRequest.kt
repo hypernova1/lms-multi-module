@@ -1,10 +1,9 @@
-package org.sam.lms.domain.auth.application.payload.`in`
+package org.sam.lms.api.auth.request
 
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size
-import org.hibernate.validator.constraints.Length
 
 class LoginRequest(
     @field:Schema(description = "이메일", example = "hypemova@gmail.com", required = true)

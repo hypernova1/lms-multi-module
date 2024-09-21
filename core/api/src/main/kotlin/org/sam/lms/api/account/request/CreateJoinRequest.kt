@@ -1,4 +1,4 @@
-package org.sam.lms.domain.account.application.payload.`in`
+package org.sam.lms.api.account.request
 
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.constraints.NotBlank
@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Size
 import org.sam.lms.domain.account.domain.RoleName
 
-class AccountJoinRequest(
+class CreateJoinRequest(
 
     @field:Schema(description = "이메일", example = "hypemova@gmail.com", required = true)
     @field:NotBlank(message = "이메일은 필수입니다.")

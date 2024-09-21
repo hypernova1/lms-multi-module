@@ -10,7 +10,7 @@ data class Review(
     val courseId: Long,
 ) {
     companion object {
-        fun of(reviewRequest: ReviewRequest, provider: Provider, courseId: Long): Review {
+        fun of(reviewRequest: CreateReviewDto, provider: Provider, courseId: Long): Review {
             return Review(
                 studentId = provider.id,
                 content = reviewRequest.content,
