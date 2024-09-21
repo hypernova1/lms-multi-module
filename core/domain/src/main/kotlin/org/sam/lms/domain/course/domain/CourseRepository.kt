@@ -14,4 +14,5 @@ interface CourseRepository {
     fun findSummaryView(status: CourseStatus, pageable: Paging): Page<CourseSummaryView>
     fun findByIdsWithPessimisticLock(ids: List<Long>): List<Course>
     fun saveAll(courses: List<Course>): List<Course>
+    fun existsById(id: Long): Boolean
 }

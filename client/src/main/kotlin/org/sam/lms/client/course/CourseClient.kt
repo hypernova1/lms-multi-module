@@ -11,5 +11,4 @@ interface CourseClient {
     @GetMapping("/lms/api/v1/courses/{id}")
     fun getCourseDetail(@PathVariable id: Long): CourseDetail
 
-
 }

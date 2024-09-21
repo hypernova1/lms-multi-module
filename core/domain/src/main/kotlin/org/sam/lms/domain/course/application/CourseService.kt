@@ -3,6 +3,7 @@ package org.sam.lms.domain.course.application
 import org.sam.lms.common.exception.ErrorCode
 import org.sam.lms.common.exception.NotFoundException
 import org.sam.lms.common.util.DateUtil
+import org.sam.lms.domain.account.domain.Provider
 import org.sam.lms.domain.address.application.AddressService
 import org.sam.lms.domain.common.Page
 import org.sam.lms.domain.common.Paging
@@ -12,6 +13,8 @@ import org.sam.lms.domain.course.application.payload.out.CourseDetailView
 import org.sam.lms.domain.course.application.payload.out.CourseSummaryView
 import org.sam.lms.domain.course.application.payload.out.CourseTicketSummary
 import org.sam.lms.domain.course.domain.*
+import org.sam.lms.domain.review.Review
+import org.sam.lms.domain.review.ReviewRequest
 import org.sam.lms.infrastructure.lock.DistributedLock
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -128,6 +131,10 @@ class CourseService(
 
     fun findOne(id: Long): CourseDetailView {
         return this.courseRepository.findDetailView(id) ?: throw NotFoundException(ErrorCode.COURSE_NOT_FOUND)
+    }
+
+    fun existsById(courseId: Long): Boolean {
+        return this.courseRepository.existsById(courseId)
     }
 
 }

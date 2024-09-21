@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
+import jakarta.ws.rs.Path
 import org.sam.lms.api.config.RequireAuth
 import org.sam.lms.domain.account.domain.Provider
 import org.sam.lms.api.swagger.annotation.SwaggerCreatedResponse
@@ -21,6 +22,8 @@ import org.sam.lms.domain.course.application.payload.out.CategorySummary
 import org.sam.lms.domain.course.application.payload.out.CourseDetailView
 import org.sam.lms.domain.course.application.payload.out.CourseSummaryView
 import org.sam.lms.domain.course.application.payload.out.CourseTicketSummary
+import org.sam.lms.domain.review.ReviewRequest
+import org.sam.lms.domain.review.ReviewService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
@@ -29,7 +32,11 @@ import java.net.URI
 @Tag(name = "강의")
 @RestController
 @RequestMapping("/lms/api/v1/courses")
-class CourseController(private val courseService: CourseService, private val categoryService: CategoryService) {
+class CourseController(
+    private val courseService: CourseService,
+    private val reviewService: ReviewService,
+    private val categoryService: CategoryService
+) {
 
     @Operation(summary = "강의 생성")
     @SwaggerCreatedResponse(
@@ -81,7 +88,10 @@ class CourseController(private val courseService: CourseService, private val cat
         content = [Content(schema = Schema(implementation = PagingCourseSummaryResponse::class))]
     )
     @GetMapping
-    fun findAll(@RequireAuth provider: Provider, @QueryStringArgument paging: Paging): ResponseEntity<Page<CourseSummaryView>> {
+    fun findAll(
+        @RequireAuth provider: Provider,
+        @QueryStringArgument paging: Paging
+    ): ResponseEntity<Page<CourseSummaryView>> {
         val courseSummaryPage = this.courseService.findAll(paging)
         return ResponseEntity.ok(courseSummaryPage)
     }
@@ -108,5 +118,10 @@ class CourseController(private val courseService: CourseService, private val cat
         return ResponseEntity.ok(categories.map { CategorySummary(it.id, it.name) })
     }
 
+    @PostMapping("/{id}/reviews")
+    fun createReview(@PathVariable id: Long, provider: Provider, @RequestBody reviewRequest: ReviewRequest): ResponseEntity<Any> {
+        this.reviewService.registerReview(id, provider, reviewRequest)
+        return ResponseEntity.ok().build()
+    }
 
 }

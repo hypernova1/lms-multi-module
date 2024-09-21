@@ -61,6 +61,10 @@ class CourseEntityRepository(private val courseJpaRepository: CourseJpaRepositor
         return courses.map { save(it) }
     }
 
+    override fun existsById(id: Long): Boolean {
+        return this.courseJpaRepository.existsById(id)
+    }
+
     override fun deleteById(id: Long) {
         this.courseJpaRepository.deleteById(id)
     }
