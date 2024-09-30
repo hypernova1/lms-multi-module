@@ -1,4 +1,4 @@
-package org.sam.lms.domain.review
+package org.sam.lms.domain.review.domain
 
 class Score {
     private var _value: Int = 0

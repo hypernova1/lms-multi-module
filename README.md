@@ -7,11 +7,11 @@
 ## 프로젝트 모듈 구조
 * common: 인프라에 관련 없는 공용 유틸
 * client: 각 서버별 통신하기 위한 모듈
-* core: 기본 도메인
+* core: 기본 도메인 (엔티티, 도메인 분리)
   * api
   * domain
   * persistence
-* core-store: 스토어 도메인
+* core-store: 스토어 도메인 (엔티티를 도메인으로 사용)
   * api
   * domain
 * eureka-server: Eureka 서버
@@ -47,3 +47,7 @@
   * [ ] Prometheus & Grafana
 * 기타
   * [ ] Mock 결제 모듈 적용
+
+## Reference
+* 분산락: https://helloworld.kurly.com/blog/distributed-redisson-lock
+* 

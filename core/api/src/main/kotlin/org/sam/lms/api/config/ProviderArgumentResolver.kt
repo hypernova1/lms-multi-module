@@ -32,11 +32,19 @@ class ProviderArgumentResolver : HandlerMethodArgumentResolver {
 
         val userId: String? = webRequest.getHeader("X-User-ID")
         val userRole: String? = webRequest.getHeader("X-User-Role")
+
         if (userId != null && userRole != null) {
             provider = Provider(userId.toLong(), role = RoleName.from(userRole.removePrefix("ROLE_")))
         }
 
-        if (parameter.hasMethodAnnotation(RequireAuth::class.java) && provider == null) {
+        val requiredAnnotations = listOf(
+            RequireAuth::class.java,
+            TeacherUser::class.java,
+            StudentUser::class.java,
+            AdminUser::class.java
+        )
+
+        if (provider == null && requiredAnnotations.any { parameter.hasParameterAnnotation(it) }) {
             throw UnauthorizedException(ErrorCode.UNAUTHORIZED_TOKEN)
         }
 

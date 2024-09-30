@@ -1,7 +1,9 @@
 package org.sam.lms.domain.course.application
 
+import org.sam.lms.domain.course.application.payload.CreateCategoryDto
 import org.sam.lms.domain.course.domain.Category
 import org.sam.lms.domain.course.domain.CategoryRepository
+import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
 
@@ -27,5 +29,15 @@ class CategoryService(private val categoryRepository: CategoryRepository) {
     @Cacheable(value = ["categoryCache"], key = "'categoryList'")
     fun findAll(): List<Category> {
         return this.categoryRepository.findAll()
+    }
+
+    /**
+     * 카테고리를 등록한다.
+     * - 카테고리 캐시를 비운다.
+     * */
+    @CacheEvict(value = ["categoryCache"], key = "'categoryList'")
+    fun create(createCategoryDto: CreateCategoryDto) {
+        val category = Category.from(name = createCategoryDto.name)
+        this.categoryRepository.save(category)
     }
 }

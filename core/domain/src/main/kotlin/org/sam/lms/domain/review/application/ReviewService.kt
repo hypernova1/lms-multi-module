@@ -1,9 +1,12 @@
-package org.sam.lms.domain.review
+package org.sam.lms.domain.review.application
 
 import org.sam.lms.common.exception.ErrorCode
 import org.sam.lms.common.exception.NotFoundException
 import org.sam.lms.domain.account.domain.Provider
 import org.sam.lms.domain.course.application.CourseService
+import org.sam.lms.domain.review.application.`in`.CreateReviewDto
+import org.sam.lms.domain.review.domain.Review
+import org.sam.lms.domain.review.domain.ReviewRepository
 import org.springframework.stereotype.Service
 
 @Service

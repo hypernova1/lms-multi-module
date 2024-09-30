@@ -1,7 +1,7 @@
 package org.sam.lms.persistence.review
 
-import org.sam.lms.domain.review.Review
-import org.sam.lms.domain.review.ReviewRepository
+import org.sam.lms.domain.review.domain.Review
+import org.sam.lms.domain.review.domain.ReviewRepository
 import org.springframework.stereotype.Repository
 
 @Repository

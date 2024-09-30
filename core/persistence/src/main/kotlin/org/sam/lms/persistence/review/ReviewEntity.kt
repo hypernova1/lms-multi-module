@@ -2,8 +2,8 @@ package org.sam.lms.persistence.review
 
 import jakarta.persistence.*
 import org.hibernate.annotations.Comment
-import org.sam.lms.domain.review.Review
-import org.sam.lms.domain.review.Score
+import org.sam.lms.domain.review.domain.Review
+import org.sam.lms.domain.review.domain.Score
 import org.sam.lms.persistence.AuditEntity
 
 @Table(

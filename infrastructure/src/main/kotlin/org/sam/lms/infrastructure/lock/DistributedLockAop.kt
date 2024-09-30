@@ -20,7 +20,6 @@ class DistributedLockAop(
 
     @Around("@annotation(org.sam.lms.infrastructure.lock.DistributedLock)")
     fun lock(joinPoint: ProceedingJoinPoint): Any? {
-        println(1111111)
         val signature = joinPoint.signature as MethodSignature
         val method = signature.method
         val distributedLock = method.getAnnotation(DistributedLock::class.java)
@@ -32,9 +31,6 @@ class DistributedLockAop(
             )
 
         val rLock = redissonClient.getLock(key)
-
-        println("hello")
-        println(key)
 
         return try {
             val available = rLock.tryLock(

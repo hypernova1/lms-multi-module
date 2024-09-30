@@ -21,4 +21,10 @@ class CategoryEntity(
     fun toDomain(): Category {
         return Category(id, name)
     }
+
+    companion object {
+        fun from(category: Category): CategoryEntity {
+            return CategoryEntity(id = category.id, name = category.name)
+        }
+    }
 }

@@ -6,9 +6,13 @@ import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
-import org.sam.lms.api.PagingCourseSummaryResponse
+import org.sam.lms.api.course.response.PagingCourseSummaryResponse
 import org.sam.lms.api.common.ui.QueryStringArgument
+import org.sam.lms.api.config.AdminUser
 import org.sam.lms.api.config.RequireAuth
+import org.sam.lms.api.config.StudentUser
+import org.sam.lms.api.config.TeacherUser
+import org.sam.lms.api.course.request.CreateCategoryRequest
 import org.sam.lms.api.course.request.CreateCourseRequest
 import org.sam.lms.api.course.request.ReviewRequest
 import org.sam.lms.api.course.request.UpdateCourseRequest
@@ -20,14 +24,15 @@ import org.sam.lms.domain.common.Page
 import org.sam.lms.domain.common.Paging
 import org.sam.lms.domain.course.application.CategoryService
 import org.sam.lms.domain.course.application.CourseService
+import org.sam.lms.domain.course.application.payload.CreateCategoryDto
 import org.sam.lms.domain.course.application.payload.`in`.CreateCourseDto
 import org.sam.lms.domain.course.application.payload.`in`.UpdateCourseDto
 import org.sam.lms.domain.course.application.payload.out.CategorySummary
 import org.sam.lms.domain.course.application.payload.out.CourseDetailView
 import org.sam.lms.domain.course.application.payload.out.CourseSummaryView
 import org.sam.lms.domain.course.application.payload.out.CourseTicketSummary
-import org.sam.lms.domain.review.CreateReviewDto
-import org.sam.lms.domain.review.ReviewService
+import org.sam.lms.domain.review.application.`in`.CreateReviewDto
+import org.sam.lms.domain.review.application.ReviewService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
@@ -50,7 +55,7 @@ class CourseController(
     @PostMapping
     fun create(
         @Valid @RequestBody createCourseRequest: CreateCourseRequest,
-        @RequireAuth provider: Provider
+        @TeacherUser provider: Provider
     ): ResponseEntity<CourseSummaryView> {
         val courseSummary = this.courseService.create(
             CreateCourseDto(
@@ -90,7 +95,7 @@ class CourseController(
     @PutMapping("/{id}")
     fun update(
         @Valid @RequestBody updateCourseRequest: UpdateCourseRequest,
-        provider: Provider
+        @TeacherUser provider: Provider
     ): ResponseEntity<CourseSummaryView> {
         this.courseService.update(
             UpdateCourseDto(
@@ -122,7 +127,7 @@ class CourseController(
         content = [Content(schema = Schema(implementation = CourseTicketSummary::class))]
     )
     @PostMapping("/{id}/enroll")
-    fun enroll(@PathVariable id: Long, provider: Provider): ResponseEntity<CourseTicketSummary> {
+    fun enroll(@PathVariable id: Long, @StudentUser provider: Provider): ResponseEntity<CourseTicketSummary> {
         val courseTicketSummary = this.courseService.enroll(id, provider.id)
         return ResponseEntity.ok(courseTicketSummary)
     }
@@ -133,10 +138,7 @@ class CourseController(
         content = [Content(schema = Schema(implementation = PagingCourseSummaryResponse::class))]
     )
     @GetMapping
-    fun findAll(
-        @RequireAuth provider: Provider,
-        @QueryStringArgument paging: Paging
-    ): ResponseEntity<Page<CourseSummaryView>> {
+    fun findAll(@QueryStringArgument paging: Paging): ResponseEntity<Page<CourseSummaryView>> {
         val courseSummaryPage = this.courseService.findAll(paging)
         return ResponseEntity.ok(courseSummaryPage)
     }
@@ -161,6 +163,14 @@ class CourseController(
     fun findCategories(): ResponseEntity<List<CategorySummary>> {
         val categories = this.categoryService.findAll()
         return ResponseEntity.ok(categories.map { CategorySummary(it.id, it.name) })
+    }
+
+    @Operation(summary = "카테고리 등록")
+    @SwaggerOkResponse(summary = "카테고리 등록 성공")
+    @PostMapping("/categories")
+    fun createCategory(@Valid @RequestBody createCategoryRequest: CreateCategoryRequest, @AdminUser provider: Provider): ResponseEntity<Void> {
+        this.categoryService.create(CreateCategoryDto(createCategoryRequest.name))
+        return ResponseEntity.ok().build()
     }
 
     @PostMapping("/{id}/reviews")
