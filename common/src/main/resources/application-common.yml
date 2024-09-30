@@ -1,0 +1,5 @@
+secret:
+  x-api-key: aXC8zK6puHIf9l53L8TiQg==
+  aes-secret: secret-key-12345
+  jwt:
+    security-key: tkaWjatkaRhrqnxrhtlvtmqslekwkqkwjdakfwkfgkfwktlsdlTtmqslekrkatkgkqslek

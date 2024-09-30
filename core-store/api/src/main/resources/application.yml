@@ -13,8 +13,6 @@ spring:
   config:
     import:
       - application-domain.yml
-      - application-infrastructure.yml
-      - application-client.yml
 
 springdoc:
   api-docs:
@@ -36,12 +34,6 @@ logging:
     org.sam.lms: DEBUG
     org.hibernate.orm.jdbc.bind: trace
     org.springframework.orm.jpa: TRACE
-
-secret:
-  x-api-key: aXC8zK6puHIf9l53L8TiQg==
-  aes-secret: secret-key-12345
-  jwt:
-    security-key: tkaWjatkaRhrqnxrhtlvtmqslekwkqkwjdakfwkfgkfwktlsdlTtmqslekrkatkgkqslek
 
 eureka:
   instance:

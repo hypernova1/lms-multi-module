@@ -17,3 +17,8 @@ spring:
         show_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
         default_batch_fetch_size: 1000
+
+  config:
+    import:
+      - application-infrastructure.yml
+      - application-client.yml

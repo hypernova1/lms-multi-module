@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service
 @Service
 class OrderService(
     private val orderRepository: OrderRepository,
-    private val courseClient: CourseClient
+    private val courseClient: CourseClient,
 ) {
     fun order(createOrderDto: CreateOrderDto): CreateOrderResultDto {
         val courseDetail = courseClient.getCourseDetail(createOrderDto.courseId)
