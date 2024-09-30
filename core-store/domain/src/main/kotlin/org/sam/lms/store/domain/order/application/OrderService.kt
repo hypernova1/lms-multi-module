@@ -7,6 +7,7 @@ import org.sam.lms.store.domain.order.application.`in`.CreateOrderDto
 import org.sam.lms.store.domain.order.application.out.CreateOrderResultDto
 import org.sam.lms.store.domain.order.domain.Order
 import org.sam.lms.store.domain.order.domain.OrderRepository
+import org.sam.lms.store.domain.provider.Provider
 import org.springframework.stereotype.Service
 
 @Service
@@ -14,13 +15,13 @@ class OrderService(
     private val orderRepository: OrderRepository,
     private val courseClient: CourseClient,
 ) {
-    fun order(createOrderDto: CreateOrderDto): CreateOrderResultDto {
+    fun order(createOrderDto: CreateOrderDto, provider: Provider): CreateOrderResultDto {
         val courseDetail = courseClient.getCourseDetail(createOrderDto.courseId)
         if (courseDetail.maxEnrollments <= courseDetail.numberOfStudents) {
             throw BadRequestException(ErrorCode.COURSE_FULL)
         }
 
-        val order = Order.create(createOrderDto)
+        val order = Order.create(createOrderDto, provider)
         this.orderRepository.save(order)
         return CreateOrderResultDto(
             orderNo = order.orderNo,

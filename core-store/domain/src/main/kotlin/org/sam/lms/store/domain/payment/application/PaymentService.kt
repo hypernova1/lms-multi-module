@@ -5,7 +5,7 @@ import org.sam.lms.common.exception.BadRequestException
 import org.sam.lms.common.exception.ErrorCode
 import org.sam.lms.common.exception.NotFoundException
 import org.sam.lms.store.domain.order.application.OrderService
-import org.sam.lms.store.domain.order.domain.PaymentGateway
+import org.sam.lms.store.domain.payment.domain.PaymentGateway
 import org.sam.lms.store.domain.payment.application.`in`.CreatePaymentDto
 import org.sam.lms.store.domain.payment.application.`in`.PaymentFailureDto
 import org.sam.lms.store.domain.payment.application.`in`.PaymentSuccessDto

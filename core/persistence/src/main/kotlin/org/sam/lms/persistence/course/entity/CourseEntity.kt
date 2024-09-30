@@ -1,15 +1,18 @@
 package org.sam.lms.persistence.course.entity
 
 import jakarta.persistence.*
-import org.hibernate.annotations.Filter
-import org.hibernate.annotations.SQLDelete
+import jakarta.persistence.CascadeType
+import jakarta.persistence.Table
+import org.hibernate.annotations.*
 import org.sam.lms.domain.course.domain.Course
 import org.sam.lms.domain.course.domain.CourseType
 import org.sam.lms.domain.course.domain.OfflineCourseInfo
 import org.sam.lms.persistence.AuditEntity
 
-@Filter(name = "deletedAccountFilter", condition = "deleted_date IS NULL OR :deletedDate = true")
+@FilterDef(name = "deletedCourseFilter", parameters = [ParamDef(name = "deletedDate", type = Boolean::class)])
+@Filter(name = "deletedCourseFilter", condition = "deleted_date IS NULL")
 @SQLDelete(sql = "UPDATE course SET deleted_date = current_timestamp WHERE id = ?")
+@SQLRestriction("deleted_date is null")
 @Table(name = "course")
 @Entity
 class CourseEntity(

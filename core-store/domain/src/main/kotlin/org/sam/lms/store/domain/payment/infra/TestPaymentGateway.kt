@@ -1,6 +1,6 @@
 package org.sam.lms.store.domain.payment.infra
 
-import org.sam.lms.store.domain.order.domain.PaymentGateway
+import org.sam.lms.store.domain.payment.domain.PaymentGateway
 import org.springframework.stereotype.Component
 
 @Component

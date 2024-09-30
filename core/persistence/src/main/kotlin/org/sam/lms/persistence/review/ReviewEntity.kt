@@ -1,11 +1,17 @@
 package org.sam.lms.persistence.review
 
 import jakarta.persistence.*
-import org.hibernate.annotations.Comment
+import jakarta.persistence.Index
+import jakarta.persistence.Table
+import org.hibernate.annotations.*
 import org.sam.lms.domain.review.domain.Review
 import org.sam.lms.domain.review.domain.Score
 import org.sam.lms.persistence.AuditEntity
 
+@FilterDef(name = "deletedReviewFilter", parameters = [ParamDef(name = "deletedDate", type = Boolean::class)])
+@Filter(name = "deletedReviewFilter", condition = "deleted_date IS NULL")
+@SQLDelete(sql = "UPDATE review SET deleted_date = current_timestamp WHERE id = ?")
+@SQLRestriction("deleted_date is null")
 @Table(
     name = "review",
     indexes = [Index(name = "review_course_id_idx", columnList = "course_id"), Index(

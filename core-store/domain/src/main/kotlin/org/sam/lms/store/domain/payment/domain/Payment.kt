@@ -1,6 +1,10 @@
 package org.sam.lms.store.domain.payment.domain
 
 import jakarta.persistence.*
+import jakarta.persistence.CascadeType
+import jakarta.persistence.Index
+import jakarta.persistence.Table
+import org.hibernate.annotations.*
 import org.sam.lms.common.exception.BadRequestException
 import org.sam.lms.common.exception.ErrorCode
 import org.sam.lms.store.domain.payment.application.`in`.CreatePaymentDto
@@ -9,6 +13,10 @@ import org.sam.lms.store.domain.payment.application.`in`.PaymentSuccessDto
 import org.sam.lms.store.domain.persistence.AuditEntity
 import org.sam.lms.store.domain.provider.Provider
 
+@FilterDef(name = "deletedPaymentFilter", parameters = [ParamDef(name = "deletedDate", type = Boolean::class)])
+@Filter(name = "deletedPaymentFilter", condition = "deleted_date IS NULL")
+@SQLDelete(sql = "UPDATE payment SET deleted_date = current_timestamp WHERE id = ?")
+@SQLRestriction("deleted_date is null")
 @Table(
     name = "payment", indexes = [
         Index(name = "payment_order_no_idx", columnList = "order_no"),

@@ -1,9 +1,15 @@
 package org.sam.lms.persistence.course.entity
 
 import jakarta.persistence.*
+import jakarta.persistence.Table
+import org.hibernate.annotations.*
 import org.sam.lms.domain.course.domain.OfflineCourseInfo
 import org.sam.lms.persistence.AuditEntity
 
+@FilterDef(name = "deletedOfflineCourseFilter", parameters = [ParamDef(name = "deletedDate", type = Boolean::class)])
+@Filter(name = "deletedOfflineCourseFilter", condition = "deleted_date IS NULL")
+@SQLDelete(sql = "UPDATE offline_course SET deleted_date = current_timestamp WHERE id = ?")
+@SQLRestriction("deleted_date is null")
 @Table(name = "offline_course")
 @Entity
 class OfflineCourseEntity(

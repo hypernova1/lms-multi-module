@@ -1,4 +1,4 @@
-package org.sam.lms.store.domain.order.domain
+package org.sam.lms.store.domain.payment.domain
 
 interface PaymentGateway {
     fun confirm(paymentKey: String)

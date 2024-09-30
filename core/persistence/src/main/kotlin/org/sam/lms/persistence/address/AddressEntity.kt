@@ -1,9 +1,15 @@
 package org.sam.lms.persistence.address
 
 import jakarta.persistence.*
+import jakarta.persistence.Table
+import org.hibernate.annotations.*
 import org.sam.lms.domain.address.domain.Address
 import org.sam.lms.persistence.AuditEntity
 
+@FilterDef(name = "deletedAddressFilter", parameters = [ParamDef(name = "deletedDate", type = Boolean::class)])
+@Filter(name = "deletedAddressFilter", condition = "deleted_date IS NULL")
+@SQLDelete(sql = "UPDATE address SET deleted_date = current_timestamp WHERE id = ?")
+@SQLRestriction("deleted_date is null")
 @Table(name = "address")
 @Entity
 class AddressEntity(
