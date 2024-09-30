@@ -3,7 +3,6 @@ package org.sam.lms.store.domain.payment.application
 import org.sam.lms.client.course.CourseClient
 import org.sam.lms.common.exception.ErrorCode
 import org.sam.lms.common.exception.NotFoundException
-import org.sam.lms.infrastructure.lock.DistributedLock
 import org.sam.lms.store.domain.order.application.OrderService
 import org.sam.lms.store.domain.order.domain.PaymentGateway
 import org.sam.lms.store.domain.payment.application.`in`.CreatePaymentDto
@@ -36,7 +35,6 @@ class PaymentService(
         return payment
     }
 
-    @DistributedLock(key = "#id")
     @Transactional
     fun complete(paymentSuccessDto: PaymentSuccessDto): PaymentResultDto {
         val payment = this.paymentRepository.findByOrderNo(paymentSuccessDto.paymentKey)
