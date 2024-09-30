@@ -5,9 +5,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.InjectMocks
-import org.mockito.Mock
-import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
 import org.sam.lms.common.exception.BadRequestException
 import org.sam.lms.domain.address.application.AddressService
@@ -15,10 +12,8 @@ import org.sam.lms.domain.course.application.CategoryService
 import org.sam.lms.domain.course.application.CourseService
 import org.sam.lms.domain.course.domain.*
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
-import org.springframework.test.context.ContextConfiguration
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicInteger
@@ -60,7 +55,7 @@ class EnrollmentDistributeTest(
             teacherId = 1L,
             type = CourseType.OFFLINE,
             categoryId = 1L,
-            offlineInfo = OfflineCourseInfo(maxEnrollment = 10)
+            offlineInfo = OfflineCourseInfo(maxEnrollments = 10)
         ))
 
 //        `when`(categoryService.existsById(1L)).thenReturn(true)

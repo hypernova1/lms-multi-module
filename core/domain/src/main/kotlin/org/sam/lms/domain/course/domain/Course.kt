@@ -36,7 +36,7 @@ data class Course(
         this.categoryId = updateCourseRequest.categoryId
 
         if (this.type == CourseType.OFFLINE) {
-            this.offlineInfo = OfflineCourseInfo(maxEnrollment = updateCourseRequest.maxEnrollment, addressId = addressId)
+            this.offlineInfo = OfflineCourseInfo(maxEnrollments = updateCourseRequest.maxEnrollments, addressId = addressId)
         }
     }
 
@@ -89,7 +89,7 @@ data class Course(
             return
         }
 
-        if (this.offlineInfo?.maxEnrollment != null && this.offlineInfo?.maxEnrollment!! == this.numberOfStudents) {
+        if (this.offlineInfo?.maxEnrollments != null && this.offlineInfo?.maxEnrollments!! == this.numberOfStudents) {
             throw BadRequestException(ErrorCode.ENROLLMENT_FULL)
         }
     }
@@ -106,7 +106,7 @@ data class Course(
             )
 
             if (createCourseDto.type == CourseType.OFFLINE) {
-                course.offlineInfo = OfflineCourseInfo(maxEnrollment = createCourseDto.maxEnrollment, addressId = addressId)
+                course.offlineInfo = OfflineCourseInfo(maxEnrollments = createCourseDto.maxEnrollments, addressId = addressId)
             }
 
             return course

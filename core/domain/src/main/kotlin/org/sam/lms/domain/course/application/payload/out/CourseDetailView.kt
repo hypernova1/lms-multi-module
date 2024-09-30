@@ -10,4 +10,5 @@ class CourseDetailView(
     val accountId: Long,
     val teacherName: String,
     val maxEnrollments: Int,
+    val numberOfStudents: Int,
 )

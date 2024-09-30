@@ -1,6 +1,7 @@
 package org.sam.lms.store.domain.payment.application
 
 import org.sam.lms.client.course.CourseClient
+import org.sam.lms.common.exception.BadRequestException
 import org.sam.lms.common.exception.ErrorCode
 import org.sam.lms.common.exception.NotFoundException
 import org.sam.lms.store.domain.order.application.OrderService
@@ -27,9 +28,12 @@ class PaymentService(
     @Transactional
     fun create(createPaymentDto: CreatePaymentDto, provider: Provider): Payment {
         val order = orderService.findOne(createPaymentDto.orderNo) ?: throw NotFoundException(ErrorCode.ORDER_NOT_FOUND)
+        if (order.isPaymentEligible) {
+            throw BadRequestException(ErrorCode.PAYMENT_TIME_OUT)
+        }
+
         val payment = Payment.from(createPaymentDto, provider)
         paymentRepository.save(payment)
-
         courseClient.enrollCourse(order.orderLines[0].courseId, provider.id)
 
         return payment
@@ -37,17 +41,14 @@ class PaymentService(
 
     @Transactional
     fun complete(paymentSuccessDto: PaymentSuccessDto): PaymentResultDto {
-        val payment = this.paymentRepository.findByOrderNo(paymentSuccessDto.paymentKey)
+        val payment = this.paymentRepository.findByOrderNo(paymentSuccessDto.orderNo)
             ?: return PaymentResultDto(
                 status = PaymentStatus.PAID,
                 message = "결제 정보가 존재하지 않습니다."
             )
 
         payment.complete(paymentSuccessDto)
-
         paymentGateway.confirm(paymentSuccessDto.paymentKey)
-
-        //TODO: 강의 수강생 수 증가 API 호출
 
         return PaymentResultDto(
             status = PaymentStatus.PAID,

@@ -34,7 +34,7 @@ class UpdateCourseRequest(
 
     @field:Schema(description = "최대 수강 가능 인원 (오프라인 강의일시)", example = "10", required = false)
     @field:Min(1, message = "최대 수강 가능 인원은 최소 한명 이상입니다.")
-    val maxEnrollment: Int = 0,
+    val maxEnrollments: Int = 0,
 
     @field:Schema(description = "오프라인 강의 주소 (오프라인 강의일시", required = false)
     val address: AddressRequest? = null

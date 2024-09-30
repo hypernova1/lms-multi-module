@@ -36,8 +36,9 @@ interface CourseJpaRepository : JpaRepository<CourseEntity, Long> {
     )
     fun findByIdsWithPessimisticLock(ids: List<Long>): List<CourseEntity>
 
-    @Query("""
-        SELECT new org.sam.lms.domain.course.application.payload.out.CourseSummaryView(course.id, course.title, course.price, offlineCourse.maxEnrollment, account.name)
+    @Query(
+        """
+        SELECT new org.sam.lms.domain.course.application.payload.out.CourseSummaryView(course.id, course.title, course.price, offlineCourse.maxEnrollments, account.name)
         FROM CourseEntity course
         JOIN course.offlineCourseEntity offlineCourse
         JOIN AccountEntity account ON account.id = course.accountId
@@ -47,7 +48,7 @@ interface CourseJpaRepository : JpaRepository<CourseEntity, Long> {
 
     @Query(
         """
-        SELECT new org.sam.lms.domain.course.application.payload.out.CourseDetailView(course.id, course.title, course.description, course.price, category.id, category.name, account.id, account.name, offlineCourse.maxEnrollment)
+        SELECT new org.sam.lms.domain.course.application.payload.out.CourseDetailView(course.id, course.title, course.description, course.price, category.id, category.name, account.id, account.name, offlineCourse.maxEnrollments, course.numberOfStudents)
         FROM CourseEntity course
         JOIN course.offlineCourseEntity offlineCourse
         JOIN CategoryEntity category ON course.categoryId = category.id

@@ -12,15 +12,15 @@ abstract class AuditEntity {
 
     @CreatedDate
     @ColumnDefault("current_timestamp")
-    @Column(nullable = false, columnDefinition = "timestamp")
+    @Column(name = "created_date", nullable = false, columnDefinition = "timestamp")
     val createdDate: LocalDateTime = LocalDateTime.now()
 
     @LastModifiedDate
     @ColumnDefault("current_timestamp")
-    @Column(nullable = false, columnDefinition = "timestamp")
+    @Column(name = "updated_date", nullable = false, columnDefinition = "timestamp")
     val updatedDate: LocalDateTime = LocalDateTime.now()
 
-    @Column(nullable = true)
+    @Column(name = "deleted_date", nullable = true)
     var deletedDate: LocalDateTime? = null
 
 

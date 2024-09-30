@@ -9,7 +9,6 @@ import jakarta.validation.Valid
 import org.sam.lms.api.course.response.PagingCourseSummaryResponse
 import org.sam.lms.api.common.ui.QueryStringArgument
 import org.sam.lms.api.config.AdminUser
-import org.sam.lms.api.config.RequireAuth
 import org.sam.lms.api.config.StudentUser
 import org.sam.lms.api.config.TeacherUser
 import org.sam.lms.api.course.request.CreateCategoryRequest
@@ -64,7 +63,7 @@ class CourseController(
                 price = createCourseRequest.price,
                 categoryId = createCourseRequest.categoryId,
                 type = createCourseRequest.type,
-                maxEnrollment = createCourseRequest.maxEnrollment,
+                maxEnrollments = createCourseRequest.maxEnrollments,
                 address = if (createCourseRequest.address != null) {
                     CreateAddressDto(
                         si = createCourseRequest.address.si,
@@ -104,7 +103,7 @@ class CourseController(
                 price = updateCourseRequest.price,
                 categoryId = updateCourseRequest.categoryId,
                 type = updateCourseRequest.type,
-                maxEnrollment = updateCourseRequest.maxEnrollment,
+                maxEnrollments = updateCourseRequest.maxEnrollments,
                 address = if (updateCourseRequest.address != null) {
                     CreateAddressDto(
                         si = updateCourseRequest.address.si,

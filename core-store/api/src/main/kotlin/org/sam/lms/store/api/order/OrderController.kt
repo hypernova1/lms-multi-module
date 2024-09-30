@@ -1,5 +1,6 @@
 package org.sam.lms.store.api.order
 
+import jakarta.validation.Valid
 import org.sam.lms.store.api.order.request.CreateOrderRequest
 import org.sam.lms.store.api.order.response.OrderResponse
 import org.sam.lms.store.domain.order.application.OrderService
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController
 class OrderController(private val orderService: OrderService) {
 
     @PostMapping
-    fun order(@RequestBody createOrderRequest: CreateOrderRequest): ResponseEntity<OrderResponse> {
+    fun order(@Valid @RequestBody createOrderRequest: CreateOrderRequest): ResponseEntity<OrderResponse> {
         val result = this.orderService.order(CreateOrderDto(courseId = createOrderRequest.courseId))
         return ResponseEntity.ok(OrderResponse(orderNo = result.orderNo, paidPrice = result.paidPrice))
     }

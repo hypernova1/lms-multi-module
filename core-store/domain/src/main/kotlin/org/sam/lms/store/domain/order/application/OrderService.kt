@@ -16,7 +16,7 @@ class OrderService(
 ) {
     fun order(createOrderDto: CreateOrderDto): CreateOrderResultDto {
         val courseDetail = courseClient.getCourseDetail(createOrderDto.courseId)
-        if (!courseDetail.available) {
+        if (courseDetail.maxEnrollments <= courseDetail.numberOfStudents) {
             throw BadRequestException(ErrorCode.COURSE_FULL)
         }
 

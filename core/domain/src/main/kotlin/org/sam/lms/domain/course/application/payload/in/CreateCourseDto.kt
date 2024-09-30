@@ -9,6 +9,6 @@ class CreateCourseDto(
     val categoryId: Long = 0,
     val price: Int = 0,
     val type: CourseType = CourseType.ONLINE,
-    val maxEnrollment: Int = 0,
+    val maxEnrollments: Int = 0,
     val address: CreateAddressDto? = null
 )

@@ -3,6 +3,7 @@ package org.sam.lms.api.course.request
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.constraints.Min
 import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.NotNull
 import org.sam.lms.domain.address.application.payload.`in`.CreateAddressDto
 import org.sam.lms.domain.course.domain.CourseType
 
@@ -16,7 +17,7 @@ data class CreateCourseRequest(
     val description: String = "",
 
     @field:Schema(description = "카테고리 아이디", example = "1", required = true)
-    @field:NotBlank(message = "상세 설명은 필수입니다.")
+    @field:Min(1, message = "잘못된 카테고리 아이디입니다.")
     val categoryId: Long = 0,
 
     @field:Schema(description = "강의 가격", example = "1000", required = true)
@@ -24,12 +25,12 @@ data class CreateCourseRequest(
     val price: Int = 0,
 
     @field:Schema(description = "강의 타입", example = "1000", allowableValues = ["ONLINE", "OFFLINE"], required = true)
-    @field:NotBlank(message = "강의 타입은 필수입니다.")
+    @field:NotNull(message = "강의 타입은 필수입니다.")
     val type: CourseType = CourseType.ONLINE,
 
     @field:Schema(description = "최대 수강 가능 인원 (오프라인 강의일시)", example = "10", required = false)
     @field:Min(1, message = "최대 수강 가능 인원은 최소 한명 이상입니다.")
-    val maxEnrollment: Int = 0,
+    val maxEnrollments: Int = 0,
 
     @field:Schema(description = "오프라인 강의 주소 (오프라인 강의일시", required = false)
     val address: CreateAddressDto? = null

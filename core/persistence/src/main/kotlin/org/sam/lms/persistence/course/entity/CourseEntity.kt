@@ -61,7 +61,7 @@ class CourseEntity(
         if (this.offlineCourseEntity != null) {
             course.offlineInfo = OfflineCourseInfo(
                 id = this.offlineCourseEntity!!.id,
-                maxEnrollment = this.offlineCourseEntity!!.maxEnrollment,
+                maxEnrollments = this.offlineCourseEntity!!.maxEnrollments,
                 addressId = this.offlineCourseEntity!!.addressId
             )
         }
@@ -84,7 +84,7 @@ class CourseEntity(
 
         if (this.offlineCourseEntity == null) {
             this.offlineCourseEntity = OfflineCourseEntity(
-                maxEnrollment = course.offlineInfo!!.maxEnrollment,
+                maxEnrollments = course.offlineInfo!!.maxEnrollments,
                 addressId = course.offlineInfo!!.addressId,
                 courseEntity = this
             )
@@ -109,7 +109,7 @@ class CourseEntity(
                 )
             if (course.offlineInfo != null) {
                 courseEntity.offlineCourseEntity = OfflineCourseEntity(
-                    maxEnrollment = course.offlineInfo!!.maxEnrollment,
+                    maxEnrollments = course.offlineInfo!!.maxEnrollments,
                     addressId = course.offlineInfo!!.addressId,
                     courseEntity = courseEntity
                 )

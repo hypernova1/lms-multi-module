@@ -14,8 +14,11 @@ class PaymentLog(
     val status: PaymentStatus,
 
     @Column(name = "result_code", columnDefinition = "varchar", nullable = true)
-    var resultCode: String,
+    var resultCode: String? = "",
 
     @Column(name = "result_message", columnDefinition = "varchar", nullable = true)
     var resultMessage: String? = "",
+
+    @ManyToOne
+    val payment: Payment
 ) : AuditEntity()

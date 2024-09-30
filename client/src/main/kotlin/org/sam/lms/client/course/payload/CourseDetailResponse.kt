@@ -1,9 +1,10 @@
 package org.sam.lms.client.course.payload
 
-class CourseDetail(
+class CourseDetailResponse(
     val id: Long,
     val title: String,
     val price: Int,
-    val available: Boolean,
+    val maxEnrollments: Int,
+    val numberOfStudents: Int,
 ) {
 }

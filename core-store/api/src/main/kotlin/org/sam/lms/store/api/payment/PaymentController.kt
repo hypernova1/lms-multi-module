@@ -40,7 +40,7 @@ class PaymentController(private val paymentService: PaymentService) {
 
     @Operation(summary = "결제 성공")
     @PostMapping("/success")
-    fun completePayment(@RequestBody paymentSuccessRequest: PaymentSuccessRequest): ResponseEntity<Void> {
+    fun completePayment(@Valid @RequestBody paymentSuccessRequest: PaymentSuccessRequest): ResponseEntity<Void> {
         val result = this.paymentService.complete(
             PaymentSuccessDto(
                 orderNo = paymentSuccessRequest.orderNo,

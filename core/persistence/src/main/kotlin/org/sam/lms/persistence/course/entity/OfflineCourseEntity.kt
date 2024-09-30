@@ -12,7 +12,7 @@ class OfflineCourseEntity(
     val id: Long = 0,
 
     @Column(nullable = false, columnDefinition = "integer")
-    var maxEnrollment: Int = 0,
+    var maxEnrollments: Int = 0,
 
     @Column(nullable = false, columnDefinition = "bigint")
     var addressId: Long = 0,
@@ -23,7 +23,7 @@ class OfflineCourseEntity(
 
     ) : AuditEntity() {
     fun update(offlineInfo: OfflineCourseInfo) {
-        this.maxEnrollment = offlineInfo.maxEnrollment
+        this.maxEnrollments = offlineInfo.maxEnrollments
         this.addressId = offlineInfo.addressId
     }
 }

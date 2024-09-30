@@ -1,14 +1,16 @@
 package org.sam.lms.persistence.account.entity
 
 import jakarta.persistence.*
-import org.hibernate.annotations.Filter
-import org.hibernate.annotations.SQLDelete
+import jakarta.persistence.Table
+import org.hibernate.annotations.*
 import org.sam.lms.domain.account.domain.Account
 import org.sam.lms.domain.account.domain.Role
 import org.sam.lms.domain.account.domain.RoleName
 import org.sam.lms.persistence.AuditEntity
 
-@Filter(name = "deletedAccountFilter", condition = "deleted_date IS NULL OR :deletedDate = true")
+@FilterDef(name = "deletedAccountFilter", parameters = [ParamDef(name = "deletedDate", type = Boolean::class)])
+@Filter(name = "deletedAccountFilter", condition = "deleted_date IS NULL")
+@SQLRestriction("deleted_date is null")
 @SQLDelete(sql = "UPDATE account SET deleted_date = current_timestamp WHERE id = ?")
 @Table(name = "account")
 @Entity

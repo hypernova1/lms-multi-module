@@ -44,6 +44,25 @@ class ProviderArgumentResolver : HandlerMethodArgumentResolver {
             AdminUser::class.java
         )
 
+        when (provider?.role) {
+            RoleName.TEACHER -> {
+                if (!parameter.hasParameterAnnotation(TeacherUser::class.java)) {
+                    throw UnauthorizedException(ErrorCode.UNAUTHORIZED_TOKEN)
+                }
+            }
+            RoleName.STUDENT -> {
+                if (!parameter.hasParameterAnnotation(StudentUser::class.java)) {
+                    throw UnauthorizedException(ErrorCode.UNAUTHORIZED_TOKEN)
+                }
+            }
+            RoleName.ADMIN -> {
+                if (!parameter.hasParameterAnnotation(AdminUser::class.java)) {
+                    throw UnauthorizedException(ErrorCode.UNAUTHORIZED_TOKEN)
+                }
+            }
+            null -> {}
+        }
+
         if (provider == null && requiredAnnotations.any { parameter.hasParameterAnnotation(it) }) {
             throw UnauthorizedException(ErrorCode.UNAUTHORIZED_TOKEN)
         }
