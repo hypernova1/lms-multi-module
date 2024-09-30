@@ -39,7 +39,7 @@ class PaymentController(private val paymentService: PaymentService) {
     }
 
     @Operation(summary = "결제 성공")
-    @PostMapping()
+    @PostMapping("/success")
     fun completePayment(@RequestBody paymentSuccessRequest: PaymentSuccessRequest): ResponseEntity<Void> {
         val result = this.paymentService.complete(
             PaymentSuccessDto(
@@ -53,7 +53,7 @@ class PaymentController(private val paymentService: PaymentService) {
     }
 
     @Operation(summary = "결제 실패")
-    @PostMapping()
+    @PostMapping("/failure")
     fun failurePayment(@RequestBody paymentFailureRequest: PaymentFailureRequest): ResponseEntity<Void> {
         val result = this.paymentService.failure(
             PaymentFailureDto(

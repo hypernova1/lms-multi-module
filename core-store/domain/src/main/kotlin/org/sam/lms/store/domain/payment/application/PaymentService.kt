@@ -1,5 +1,6 @@
 package org.sam.lms.store.domain.payment.application
 
+import org.sam.lms.client.course.CourseClient
 import org.sam.lms.common.exception.ErrorCode
 import org.sam.lms.common.exception.NotFoundException
 import org.sam.lms.infrastructure.lock.DistributedLock
@@ -21,6 +22,7 @@ class PaymentService(
     private val paymentRepository: PaymentRepository,
     private val paymentGateway: PaymentGateway,
     private val orderService: OrderService,
+    private val courseClient: CourseClient,
 ) {
 
     @Transactional
@@ -28,6 +30,9 @@ class PaymentService(
         val order = orderService.findOne(createPaymentDto.orderNo) ?: throw NotFoundException(ErrorCode.ORDER_NOT_FOUND)
         val payment = Payment.from(createPaymentDto, provider)
         paymentRepository.save(payment)
+
+        courseClient.enrollCourse(order.orderLines[0].courseId, provider.id)
+
         return payment
     }
 

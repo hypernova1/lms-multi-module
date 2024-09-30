@@ -1,6 +1,6 @@
 package org.sam.lms.store.api.order
 
-import org.sam.lms.store.api.order.request.OrderRequest
+import org.sam.lms.store.api.order.request.CreateOrderRequest
 import org.sam.lms.store.api.order.response.OrderResponse
 import org.sam.lms.store.domain.order.application.OrderService
 import org.sam.lms.store.domain.order.application.`in`.CreateOrderDto
@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RestController
 class OrderController(private val orderService: OrderService) {
 
     @PostMapping
-    fun order(@RequestBody orderRequest: OrderRequest): ResponseEntity<OrderResponse> {
-        val orderNo = this.orderService.order(CreateOrderDto(courseId = orderRequest.courseId))
-        return ResponseEntity.ok(OrderResponse(orderNo = orderNo))
+    fun order(@RequestBody createOrderRequest: CreateOrderRequest): ResponseEntity<OrderResponse> {
+        val result = this.orderService.order(CreateOrderDto(courseId = createOrderRequest.courseId))
+        return ResponseEntity.ok(OrderResponse(orderNo = result.orderNo, paidPrice = result.paidPrice))
     }
 
 }

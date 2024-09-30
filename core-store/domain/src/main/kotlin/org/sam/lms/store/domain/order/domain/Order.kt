@@ -9,14 +9,20 @@ import org.sam.lms.store.domain.persistence.AuditEntity
 class Order(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val orderNo: String
+    val orderNo: String,
+
+    @OneToMany(mappedBy = "order", cascade = [CascadeType.ALL])
+    val orderLines: MutableList<OrderLine> = mutableListOf()
+
 ) : AuditEntity() {
 
     companion object {
         fun create(createOrderDto: CreateOrderDto): Order {
-            return Order(
-                orderNo = OrderNoCreator.create()
-            )
+            val order = Order(
+                orderNo = OrderNoCreator.create())
+
+            order.orderLines.add(OrderLine(courseId = createOrderDto.courseId, order = order))
+            return order
         }
     }
 

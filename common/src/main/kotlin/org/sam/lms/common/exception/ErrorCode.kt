@@ -24,6 +24,7 @@ enum class ErrorCode(val code: String, val message: String) {
     MISMATCH_PARAMETER("9999", ""),
     ADDRESS_NOT_FOUND("", "주소를 찾을 수 없습니다."),
     ENROLLMENT_FULL("", "더 이상 수강 할 수 없는 강의입니다."),
-    ORDER_NOT_FOUND("", "주문을 찾을 수 없습니다.")
+    ORDER_NOT_FOUND("", "주문을 찾을 수 없습니다."),
+    COURSE_FULL("", "수강 가능한 인원이 마감되었습니다.")
 
 }
