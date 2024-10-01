@@ -12,7 +12,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-aop")
     implementation("org.springframework.kafka:spring-kafka")
 
-
     compileOnly("org.springframework:spring-tx")
 
     implementation(project(":common"))

@@ -40,6 +40,7 @@
 * Redis
   * [x] 분산락
   * [x] Redis Caching
+    * 재고 캐시
 * 컨테이너
   * [ ] Docker
   * [ ] k8s
