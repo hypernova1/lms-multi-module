@@ -13,8 +13,4 @@ class CourseTicketWriter(private val courseTicketRepository: CourseTicketReposit
         this.courseTicketRepository.deleteByIdIn(ids)
     }
 
-    fun delete(courseTicket: CourseTicket) {
-        this.courseTicketRepository.delete(courseTicket)
-    }
-
 }

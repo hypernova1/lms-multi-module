@@ -11,10 +11,7 @@ import org.sam.lms.api.common.ui.QueryStringArgument
 import org.sam.lms.api.config.AdminUser
 import org.sam.lms.api.config.StudentUser
 import org.sam.lms.api.config.TeacherUser
-import org.sam.lms.api.course.request.CreateCategoryRequest
-import org.sam.lms.api.course.request.CreateCourseRequest
-import org.sam.lms.api.course.request.ReviewRequest
-import org.sam.lms.api.course.request.UpdateCourseRequest
+import org.sam.lms.api.course.request.*
 import org.sam.lms.api.swagger.annotation.SwaggerCreatedResponse
 import org.sam.lms.api.swagger.annotation.SwaggerOkResponse
 import org.sam.lms.domain.account.domain.Provider
@@ -129,6 +126,12 @@ class CourseController(
     fun enroll(@PathVariable id: Long, @StudentUser provider: Provider): ResponseEntity<CourseTicketSummary> {
         val courseTicketSummary = this.courseService.enroll(id, provider.id)
         return ResponseEntity.ok(courseTicketSummary)
+    }
+
+    @PostMapping("/list")
+    fun getListByIds(@RequestBody courseListSearchRequest: CourseListSearchRequest): ResponseEntity<List<CourseDetailView>> {
+        val courseDetailList = this.courseService.findList(courseListSearchRequest.courseIds)
+        return ResponseEntity.ok(courseDetailList)
     }
 
     @Operation(summary = "수강 인원 감소")

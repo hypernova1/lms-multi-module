@@ -141,4 +141,8 @@ class CourseService(
         return this.courseRepository.existsById(courseId)
     }
 
+    fun findList(ids: List<Long>): List<CourseDetailView> {
+        return this.courseRepository.findDetailViewList(ids)
+    }
+
 }

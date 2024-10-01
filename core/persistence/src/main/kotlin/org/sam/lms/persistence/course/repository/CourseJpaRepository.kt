@@ -58,4 +58,16 @@ interface CourseJpaRepository : JpaRepository<CourseEntity, Long> {
     )
     fun findDetailView(id: Long): Optional<CourseDetailView>
 
+    @Query(
+        """
+        SELECT new org.sam.lms.domain.course.application.payload.out.CourseDetailView(course.id, course.title, course.description, course.price, category.id, category.name, account.id, account.name, offlineCourse.maxEnrollments, course.numberOfStudents)
+        FROM CourseEntity course
+        JOIN course.offlineCourseEntity offlineCourse
+        JOIN CategoryEntity category ON course.categoryId = category.id
+        JOIN AccountEntity account ON account.id = course.accountId
+        WHERE course.id IN (:ids)
+    """
+    )
+    fun findDetailViewList(ids: List<Long>): List<CourseDetailView>
+
 }

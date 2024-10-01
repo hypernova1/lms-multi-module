@@ -15,4 +15,5 @@ interface CourseRepository {
     fun findByIdsWithPessimisticLock(ids: List<Long>): List<Course>
     fun saveAll(courses: List<Course>): List<Course>
     fun existsById(id: Long): Boolean
+    fun findDetailViewList(ids: List<Long>): List<CourseDetailView>
 }

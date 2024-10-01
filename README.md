@@ -26,7 +26,7 @@
   * [x] Spring Eureka
   * [x] Spring Cloud Gateway
   * [ ] 보상 트랜잭션
-  * [ ] Apache Kafka
+  * [x] Apache Kafka
   * [ ] ...
 * Framework
   * [x] Spring MVC
@@ -48,6 +48,12 @@
   * [ ] Prometheus & Grafana
 * 기타
   * [ ] Mock 결제 모듈 적용
+
+## 실행 관련
+* Kafka Broker 서버 실행
+  ```
+    $ docker-compose -f kafka-docker-compose.yml up -d
+    ```
 
 ## Reference
 * 분산락: https://helloworld.kurly.com/blog/distributed-redisson-lock

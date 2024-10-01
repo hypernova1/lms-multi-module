@@ -23,6 +23,7 @@ class PaymentService(
     private val paymentGateway: PaymentGateway,
     private val orderService: OrderService,
     private val courseClient: CourseClient,
+    private val paymentKafkaProducer: PaymentKafkaProducer
 ) {
 
     @Transactional
@@ -34,6 +35,7 @@ class PaymentService(
 
         val payment = Payment.from(createPaymentDto, provider)
         paymentRepository.save(payment)
+
         courseClient.enrollCourse(order.orderLines[0].courseId, provider.id)
 
         return payment
@@ -41,34 +43,46 @@ class PaymentService(
 
     @Transactional
     fun complete(paymentSuccessDto: PaymentSuccessDto): PaymentResultDto {
-        val payment = this.paymentRepository.findByOrderNo(paymentSuccessDto.orderNo)
-            ?: return PaymentResultDto(
+        try {
+            val payment = this.paymentRepository.findByOrderNo(paymentSuccessDto.orderNo)
+                ?: return PaymentResultDto(
+                    status = PaymentStatus.PAID,
+                    message = "결제 정보가 존재하지 않습니다."
+                )
+
+            payment.complete(paymentSuccessDto)
+            paymentGateway.confirm(paymentSuccessDto.paymentKey)
+
+            return PaymentResultDto(
                 status = PaymentStatus.PAID,
-                message = "결제 정보가 존재하지 않습니다."
+                message = "결제가 성공했습니다."
             )
+        } catch (e: RuntimeException) {
+            this.paymentKafkaProducer.paymentFailure(paymentSuccessDto.orderNo)
+            throw RuntimeException(e)
+        }
 
-        payment.complete(paymentSuccessDto)
-        paymentGateway.confirm(paymentSuccessDto.paymentKey)
-
-        return PaymentResultDto(
-            status = PaymentStatus.PAID,
-            message = "결제가 성공했습니다."
-        )
     }
 
     @Transactional
     fun failure(paymentFailureDto: PaymentFailureDto): PaymentResultDto {
-        val payment = this.paymentRepository.findByOrderNo(paymentFailureDto.paymentKey)
-            ?: return PaymentResultDto(
-                status = PaymentStatus.PAID,
-                message = "결제 정보가 존재하지 않습니다."
+        try {
+            val payment = this.paymentRepository.findByOrderNo(paymentFailureDto.paymentKey)
+                ?: return PaymentResultDto(
+                    status = PaymentStatus.PAID,
+                    message = "결제 정보가 존재하지 않습니다."
+                )
+
+            payment.failure(paymentFailureDto)
+
+            return PaymentResultDto(
+                status = PaymentStatus.FAILED,
+                message = "결제가 실패했습니다."
             )
+        } catch (e: RuntimeException) {
+            this.paymentKafkaProducer.paymentFailure(paymentFailureDto.orderNo)
+            throw RuntimeException(e)
+        }
 
-        payment.failure(paymentFailureDto)
-
-        return PaymentResultDto(
-            status = PaymentStatus.FAILED,
-            message = "결제가 실패했습니다."
-        )
     }
 }

@@ -1,6 +1,7 @@
 package org.sam.lms.store.domain.order.application
 
 import org.sam.lms.client.course.CourseClient
+import org.sam.lms.client.course.payload.CourseListRequestDto
 import org.sam.lms.common.exception.BadRequestException
 import org.sam.lms.common.exception.ErrorCode
 import org.sam.lms.store.domain.cart.application.CartService
@@ -23,7 +24,7 @@ class OrderService(
             throw BadRequestException(ErrorCode.CART_EMPTY)
         }
 
-        val courses = courseClient.getCourseList(cart.items.map { it.courseId })
+        val courses = courseClient.getCourseList(CourseListRequestDto(courseIds = cart.items.map { it.courseId }))
         val hasFullSeats = courses.any {
             it.maxEnrollments <= it.numberOfStudents
         }

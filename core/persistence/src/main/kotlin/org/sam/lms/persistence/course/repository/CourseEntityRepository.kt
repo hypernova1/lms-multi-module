@@ -65,6 +65,10 @@ class CourseEntityRepository(private val courseJpaRepository: CourseJpaRepositor
         return this.courseJpaRepository.existsById(id)
     }
 
+    override fun findDetailViewList(ids: List<Long>): List<CourseDetailView> {
+        return this.courseJpaRepository.findDetailViewList(ids)
+    }
+
     override fun deleteById(id: Long) {
         this.courseJpaRepository.deleteById(id)
     }

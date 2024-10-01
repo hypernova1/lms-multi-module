@@ -11,9 +11,11 @@ dependencies {
     compileOnly("org.springframework:spring-tx")
     compileOnly("org.springframework.boot:spring-boot-starter-validation")
     compileOnly("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2")
+    compileOnly("org.springframework.kafka:spring-kafka")
 
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.postgresql:postgresql:42.7.4")
+
 
     testImplementation("com.h2database:h2")
 
