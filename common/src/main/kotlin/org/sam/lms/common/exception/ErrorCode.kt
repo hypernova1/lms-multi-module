@@ -28,6 +28,7 @@ enum class ErrorCode(val code: String, val message: String) {
     COURSE_FULL("", "수강 가능한 인원이 마감되었습니다."),
     ALREADY_PAID("", "잘못된 요청입니다. 결제 성공 후 실패할 수 없습니다."),
     NOT_WAITING_PAYMENT("", "대기 중이 아닌 결제는 결제 완료할 수 없습니다."),
-    PAYMENT_TIME_OUT("", "결제 가능 시간이 초과되었습니다.")
+    PAYMENT_TIME_OUT("", "결제 가능 시간이 초과되었습니다."),
+    ALREADY_ADDED_CART_ITEM("", "이미 추가된 강좌입니다.")
 
 }
