@@ -30,4 +30,12 @@ class Cart(
         this.items.add(CartItem(courseId = courseId, cart = this))
     }
 
+    fun isEmpty(): Boolean {
+        return this.items.isEmpty()
+    }
+
+    fun clear() {
+        this.items.clear()
+    }
+
 }

@@ -131,6 +131,16 @@ class CourseController(
         return ResponseEntity.ok(courseTicketSummary)
     }
 
+    @Operation(summary = "수강 인원 감소")
+    @SwaggerOkResponse(
+        summary = "요청 성공"
+    )
+    @PostMapping("/{id}/decrease-enrollments")
+    fun decreaseEnrollment(@PathVariable id: Long, @StudentUser provider: Provider): ResponseEntity<Void> {
+        this.courseService.decreaseEnrollmentStudent(id, provider.id)
+        return ResponseEntity.ok().build()
+    }
+
     @Operation(summary = "강의 목록 조회")
     @SwaggerOkResponse(
         summary = "강의 목록 조회 성공",

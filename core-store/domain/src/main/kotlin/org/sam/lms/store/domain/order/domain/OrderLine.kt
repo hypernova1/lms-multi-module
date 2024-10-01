@@ -21,6 +21,9 @@ class OrderLine(
     @Column(name = "course_id", columnDefinition = "bigint", nullable = false)
     val courseId: Long,
 
+    @Column(name = "price", columnDefinition = "integer", nullable = false)
+    val price: Int = 0,
+
     @ManyToOne
     @JoinColumn(name = "order_no", foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT))
     val order: Order

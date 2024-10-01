@@ -33,6 +33,15 @@ class CourseTicketEntityRepository(private val courseTicketJpaRepository: Course
         return this.courseTicketJpaRepository.deleteAllById(ids)
     }
 
+    override fun findByCourseIdAndStudentId(courseId: Long, studentId: Long): CourseTicket? {
+        val courseTicketEntity = this.courseTicketJpaRepository.findByCourseIdAndStudentId(courseId, studentId)
+        return courseTicketEntity?.toDomain()
+    }
+
+    override fun deleteByCourseIdAndStudentId(courseId: Long, studentId: Long) {
+        this.courseTicketJpaRepository.deleteByCourseIdAndStudentId(courseId, studentId)
+    }
+
     private fun toEntity(courseTicket: CourseTicket): CourseTicketEntity {
         return CourseTicketEntity(studentId = courseTicket.studentId, courseId = courseTicket.courseId, applicationDate = courseTicket.applicationDate)
     }

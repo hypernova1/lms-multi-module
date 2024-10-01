@@ -21,11 +21,19 @@ class CourseTicketReader(private val courseTicketRepository: CourseTicketReposit
         }
     }
 
-    fun countByCourseId(id: Long): Int {
-        return this.courseTicketRepository.countByCourseId(id)
+    fun countByCourseId(courseId: Long): Int {
+        return this.courseTicketRepository.countByCourseId(courseId)
     }
 
     fun findByStudentId(studentId: Long): List<CourseTicket> {
         return this.courseTicketRepository.findByStudentId(studentId)
+    }
+
+    fun findByCourseIdAndStudentId(courseId: Long, studentId: Long): CourseTicket? {
+        return this.courseTicketRepository.findByCourseIdAndStudentId(courseId, studentId)
+    }
+
+    fun deleteByCourseIdAndStudentId(courseId: Long, studentId: Long) {
+        this.courseTicketRepository.deleteByCourseIdAndStudentId(courseId, studentId)
     }
 }

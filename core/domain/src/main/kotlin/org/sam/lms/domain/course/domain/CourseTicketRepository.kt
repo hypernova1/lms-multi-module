@@ -7,4 +7,6 @@ interface CourseTicketRepository {
     fun countByCourseId(courseId: Long): Int
     fun findByStudentId(studentId: Long): List<CourseTicket>
     fun deleteByIdIn(ids: List<Long>)
+    fun findByCourseIdAndStudentId(courseId: Long, studentId: Long): CourseTicket?
+    fun deleteByCourseIdAndStudentId(courseId: Long, studentId: Long)
 }

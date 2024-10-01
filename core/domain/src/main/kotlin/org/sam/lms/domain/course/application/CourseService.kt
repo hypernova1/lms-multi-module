@@ -122,6 +122,13 @@ class CourseService(
         return CourseTicketSummary(savedCourseTicket.id, DateUtil.toString(courseTicket.applicationDate))
     }
 
+    @DistributedLock(key = "#id")
+    fun decreaseEnrollmentStudent(id: Long, studentId: Long) {
+        val course = this.courseRepository.findById(id) ?: throw NotFoundException(ErrorCode.COURSE_NOT_FOUND)
+        course.decreaseNumberOfStudents()
+        this.courseTicketReader.deleteByCourseIdAndStudentId(id, studentId)
+    }
+
     fun findAll(paging: Paging): Page<CourseSummaryView> {
         return this.courseRepository.findSummaryView(CourseStatus.VISIBLE, paging)
     }

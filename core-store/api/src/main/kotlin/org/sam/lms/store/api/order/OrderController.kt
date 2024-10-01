@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RestController
 class OrderController(private val orderService: OrderService) {
 
     @PostMapping
-    fun order(@Valid @RequestBody createOrderRequest: CreateOrderRequest, provider: Provider): ResponseEntity<OrderResponse> {
-        val result = this.orderService.order(CreateOrderDto(courseId = createOrderRequest.courseId), provider)
+    fun order(provider: Provider): ResponseEntity<OrderResponse> {
+        val result = this.orderService.order(provider)
         return ResponseEntity.ok(OrderResponse(orderNo = result.orderNo, paidPrice = result.paidPrice))
     }
 

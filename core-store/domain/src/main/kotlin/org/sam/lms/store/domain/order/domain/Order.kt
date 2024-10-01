@@ -5,6 +5,7 @@ import jakarta.persistence.CascadeType
 import jakarta.persistence.Index
 import jakarta.persistence.Table
 import org.hibernate.annotations.*
+import org.sam.lms.store.domain.cart.domain.Cart
 import org.sam.lms.store.domain.order.application.`in`.CreateOrderDto
 import org.sam.lms.store.domain.persistence.AuditEntity
 import org.sam.lms.store.domain.provider.Provider
@@ -34,12 +35,16 @@ class Order(
             .isBefore(LocalDateTime.now()) || this.status != OrderStatus.BEFORE_PAYMENT
 
     companion object {
-        fun create(createOrderDto: CreateOrderDto, provider: Provider): Order {
+        fun create(items: List<OrderItemDto>, provider: Provider): Order {
             val order = Order(
                 orderNo = OrderNoCreator.create(),
                 accountId = provider.id,
             )
-            order.orderLines.add(OrderLine(courseId = createOrderDto.courseId, order = order))
+
+            for (orderItem in items) {
+                order.orderLines.add(OrderLine(courseId = orderItem.courseId, price = orderItem.price, order = order))
+            }
+
             return order
         }
     }
