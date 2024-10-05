@@ -1,6 +1,7 @@
 package org.sam.lms.client.course
 
-import org.sam.lms.client.course.payload.CourseDetailResponse
+import org.sam.lms.client.course.payload.CourseDetailViewListResponse
+import org.sam.lms.client.course.payload.CourseDetailViewResponse
 import org.sam.lms.client.course.payload.CourseEnrollResponse
 import org.sam.lms.client.course.payload.CourseListRequestDto
 import org.springframework.cloud.openfeign.FeignClient
@@ -14,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestBody
 interface CourseClient {
 
     @GetMapping("/lms/api/v1/courses/{id}")
-    fun getCourseDetail(@PathVariable id: Long): CourseDetailResponse
+    fun getCourseDetail(@PathVariable id: Long): CourseDetailViewResponse
 
     @PostMapping("/lms/api/v1/courses/list")
-    fun getCourseList(courseIds: CourseListRequestDto): List<CourseDetailResponse>
+    fun getCourseList(courseIds: CourseListRequestDto): CourseDetailViewListResponse
 
     @PostMapping("/lms/api/v1/courses/{id}/enroll")
     fun enrollCourse(@PathVariable id: Long, @RequestBody studentId: Long): CourseEnrollResponse

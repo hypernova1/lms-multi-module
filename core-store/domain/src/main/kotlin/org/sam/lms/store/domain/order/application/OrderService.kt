@@ -24,8 +24,8 @@ class OrderService(
             throw BadRequestException(ErrorCode.CART_EMPTY)
         }
 
-        val courses = courseClient.getCourseList(CourseListRequestDto(courseIds = cart.items.map { it.courseId }))
-        val hasFullSeats = courses.any {
+        val courseListResponse = courseClient.getCourseList(CourseListRequestDto(courseIds = cart.items.map { it.courseId }))
+        val hasFullSeats = courseListResponse.courses.any {
             it.maxEnrollments <= it.numberOfStudents
         }
 
@@ -36,7 +36,7 @@ class OrderService(
         val orderItemDtoList = cart.items.map { cartItem ->
             OrderItemDto(
                 courseId = cartItem.courseId,
-                courses.find { course -> course.id == cartItem.courseId }!!.price
+                courseListResponse.courses.find { course -> course.id == cartItem.courseId }!!.price
             )
         }
 
@@ -44,7 +44,7 @@ class OrderService(
         this.orderRepository.save(order)
         return CreateOrderResultDto(
             orderNo = order.orderNo,
-            paidPrice = courses.sumOf { it.price },
+            paidPrice = courseListResponse.courses.sumOf { it.price },
         )
     }
 

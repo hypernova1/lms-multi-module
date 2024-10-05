@@ -12,6 +12,7 @@ import org.sam.lms.api.config.AdminUser
 import org.sam.lms.api.config.StudentUser
 import org.sam.lms.api.config.TeacherUser
 import org.sam.lms.api.course.request.*
+import org.sam.lms.api.course.response.CourseDetailViewList
 import org.sam.lms.api.swagger.annotation.SwaggerCreatedResponse
 import org.sam.lms.api.swagger.annotation.SwaggerOkResponse
 import org.sam.lms.domain.account.domain.Provider
@@ -128,10 +129,11 @@ class CourseController(
         return ResponseEntity.ok(courseTicketSummary)
     }
 
+    @Operation(summary = "아이디 목록으로 강의 목록 조회 (주문 API 전용)")
     @PostMapping("/list")
-    fun getListByIds(@RequestBody courseListSearchRequest: CourseListSearchRequest): ResponseEntity<List<CourseDetailView>> {
+    fun getListByIds(@RequestBody courseListSearchRequest: CourseListSearchRequest): ResponseEntity<CourseDetailViewList> {
         val courseDetailList = this.courseService.findList(courseListSearchRequest.courseIds)
-        return ResponseEntity.ok(courseDetailList)
+        return ResponseEntity.ok(CourseDetailViewList(courseDetailList))
     }
 
     @Operation(summary = "수강 인원 감소")
@@ -185,6 +187,8 @@ class CourseController(
         return ResponseEntity.ok().build()
     }
 
+    @Operation(summary = "리뷰 등록")
+    @SwaggerOkResponse(summary = "리뷰 등록 성공")
     @PostMapping("/{id}/reviews")
     fun createReview(
         @PathVariable id: Long,
